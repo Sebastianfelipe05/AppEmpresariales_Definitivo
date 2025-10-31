@@ -76,8 +76,8 @@ const ActualizarCarroFormulario: React.FC = () => {
         <h1 className="success-title">Carro Encontrado</h1>
         <div className="action-buttons">
           <button className="btn-actualizar active">✏️ Actualizar</button>
-          <button 
-            className="btn-eliminar" 
+          <button
+            className="btn-eliminar"
             onClick={() => navigate('/eliminar-formulario', { state: { carro: carroEncontrado } })}
           >
             🗑️ Eliminar
@@ -92,7 +92,7 @@ const ActualizarCarroFormulario: React.FC = () => {
         <span className="step active">✏️ 2. Actualizar Datos</span>
       </div>
 
-      <div className="content-container">
+      <form onSubmit={handleSubmit} className="content-container">
         {/* Información Básica */}
         <div className="info-section">
           <h2 className="section-title">
@@ -293,7 +293,6 @@ const ActualizarCarroFormulario: React.FC = () => {
           </button>
           <button
             type="submit"
-            onClick={handleSubmit}
             className="btn btn-primary"
             disabled={isLoading}
           >
@@ -306,7 +305,7 @@ const ActualizarCarroFormulario: React.FC = () => {
             {message}
           </div>
         )}
-      </div>
+      </form>
     </div>
   );
 };

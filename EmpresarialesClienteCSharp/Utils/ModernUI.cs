@@ -66,10 +66,12 @@ namespace EmpresarialesClienteCSharp.Utils
                 BackColor = backgroundColor,
                 ForeColor = textColor,
                 FlatStyle = FlatStyle.Flat,
-                Font = Fonts.Button,
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),  // ✨ Fuente más grande
                 Cursor = Cursors.Hand,
-                Height = 40,
-                AutoSize = false
+                Height = 50,  // ✨ CAMBIO: De 40 a 50 para que el texto se vea completo
+                MinimumSize = new Size(150, 50),  // ✨ NUEVO: Tamaño mínimo
+                AutoSize = false,
+                TextAlign = ContentAlignment.MiddleCenter  // ✨ NUEVO: Centra el texto
             };
 
             button.FlatAppearance.BorderSize = 0;
@@ -89,23 +91,32 @@ namespace EmpresarialesClienteCSharp.Utils
             // Pintar con bordes redondeados
             button.Paint += (s, e) => {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                using (var path = GetRoundedRectangle(button.ClientRectangle, 8))
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;  // ✨ Mejor calidad de texto
+
+                using (var path = GetRoundedRectangle(button.ClientRectangle, 10))  // ✨ Radio mayor (10 en vez de 8)
                 using (var brush = new SolidBrush(button.BackColor))
                 {
                     e.Graphics.FillPath(brush, path);
 
-                    // Texto centrado
+                    // Texto centrado con mejor formato
                     var sf = new StringFormat
                     {
                         Alignment = StringAlignment.Center,
-                        LineAlignment = StringAlignment.Center
+                        LineAlignment = StringAlignment.Center,
+                        Trimming = StringTrimming.None,  // ✨ No recorta el texto
+                        FormatFlags = StringFormatFlags.NoWrap  // ✨ No hace wrap
                     };
                     e.Graphics.DrawString(button.Text, button.Font, new SolidBrush(button.ForeColor),
                         button.ClientRectangle, sf);
                 }
             };
 
-            button.Region = new Region(GetRoundedRectangle(button.ClientRectangle, 8));
+            // ✨ NUEVO: Actualizar la región cuando cambie el tamaño
+            button.Resize += (s, e) => {
+                button.Region = new Region(GetRoundedRectangle(button.ClientRectangle, 10));
+            };
+
+            button.Region = new Region(GetRoundedRectangle(button.ClientRectangle, 10));
 
             return button;
         }

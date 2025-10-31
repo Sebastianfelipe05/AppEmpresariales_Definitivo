@@ -88,7 +88,7 @@ cd C:\src\EmpresarialesProyecto\EmpresarialesBackend
 ### 2.3 Configurar JAVA_HOME (si es necesario)
 
 ```bash
-set JAVA_HOME=C:\Users\TU_USUARIO\.jdks\ms-17.0.16
+set JAVA_HOME=C:\Users\Sebastian\.jdks\ms-17.0.16
 ```
 
 💡 **Nota:** Reemplaza `TU_USUARIO` con tu nombre de usuario de Windows.

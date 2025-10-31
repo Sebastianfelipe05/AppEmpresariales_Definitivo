@@ -278,11 +278,30 @@ namespace EmpresarialesClienteCSharp.Forms
             ));
 
             contentPanel.Controls.Add(CreateModernCard(
-                "📊 Reportes",
-                "Visualizar estadísticas y reportes del sistema",
+                "✏️ Actualizar Mantenimiento",
+                "Modificar registros de mantenimiento existentes",
                 startX + (cardWidth + gap) * 2, startY, cardWidth, cardHeight,
-                Color.FromArgb(236, 72, 153), // Pink
-                (s, e) => MessageBox.Show("Módulo en desarrollo", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Color.FromArgb(251, 146, 60), // Orange
+                (s, e) => AbrirFormActualizarMantenimiento(s, e)
+            ));
+
+            // Fila 4 - Última operación de mantenimiento
+            startY += cardHeight + gap;
+
+            contentPanel.Controls.Add(CreateModernCard(
+                "🗑️ Eliminar Mantenimiento",
+                "Eliminar registros de mantenimiento del sistema",
+                startX, startY, cardWidth, cardHeight,
+                Color.FromArgb(239, 68, 68), // Red
+                (s, e) => AbrirFormEliminarMantenimiento(s, e)
+            ));
+
+            contentPanel.Controls.Add(CreateModernCard(
+                "ℹ️ Acerca de",
+                "Información del sistema y equipo de desarrollo",
+                startX + cardWidth + gap, startY, cardWidth, cardHeight,
+                Color.FromArgb(59, 130, 246), // Blue
+                (s, e) => AbrirFormAcercaDe(s, e)
             ));
 
             // Footer
@@ -504,6 +523,12 @@ namespace EmpresarialesClienteCSharp.Forms
         {
             var formEliminar = new EliminarMantenimientoForm();
             formEliminar.ShowDialog();
+        }
+
+        private void AbrirFormAcercaDe(object? sender, EventArgs e)
+        {
+            var formAcercaDe = new AcercaDeForm();
+            formAcercaDe.ShowDialog();
         }
         #endregion
 
