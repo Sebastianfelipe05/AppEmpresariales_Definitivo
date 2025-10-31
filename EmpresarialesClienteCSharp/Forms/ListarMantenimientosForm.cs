@@ -1,322 +1,446 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 using EmpresarialesClienteCSharp.Models;
 using EmpresarialesClienteCSharp.Services;
+using EmpresarialesClienteCSharp.Utils;
 
 namespace EmpresarialesClienteCSharp.Forms
 {
     public partial class ListarMantenimientosForm : Form
     {
         private readonly MantenimientoService _mantenimientoService;
-        private DataGridView dgvMantenimientos;
-        private TextBox txtFiltroPlaca;
-        private ComboBox cboFiltroTipo;
-        private ComboBox cboFiltroEstado;
-        private Button btnBuscar;
-        private Button btnLimpiar;
-        private Button btnRefrescar;
-        private Label lblTotal;
-        private Label lblCostoTotal;
+        private DataGridView dgvMantenimientos = null!;
+        private TextBox txtFiltroPlaca = null!;
+        private Label lblResultadoInfo;
+        private Label lblEstadisticas;
+        private List<Mantenimiento> todosLosMantenimientos = new List<Mantenimiento>();
+        private List<Mantenimiento> mantenimientosFiltrados = new List<Mantenimiento>();
 
         public ListarMantenimientosForm()
         {
             _mantenimientoService = new MantenimientoService();
             InitializeComponent();
-            ConfigurarFormulario();
+            ModernUI.MakeResponsive(this);
             CargarMantenimientos();
         }
 
         private void InitializeComponent()
         {
-            this.Text = "Lista de Mantenimientos";
-            this.Size = new Size(1200, 700);
+            this.Text = "Lista de Mantenimientos - Filtrar por Placa";
+            this.Size = new Size(1300, 850);
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.BackColor = ModernUI.Colors.Background;
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            this.MinimumSize = new Size(1100, 750);
+
+            // Panel principal con scroll
+            var mainPanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BackColor = ModernUI.Colors.Background,
+                Padding = new Padding(30)
+            };
+
+            // Header
+            var headerPanel = CreateHeader();
+            mainPanel.Controls.Add(headerPanel);
+
+            // Filter Panel
+            var filterPanel = CreateFilterPanel();
+            filterPanel.Location = new Point(30, 120);
+            mainPanel.Controls.Add(filterPanel);
+
+            // Info Labels
+            lblResultadoInfo = new Label
+            {
+                Text = "Cargando mantenimientos...",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray600,
+                AutoSize = true,
+                Location = new Point(30, 260),
+                BackColor = Color.Transparent
+            };
+            mainPanel.Controls.Add(lblResultadoInfo);
+
+            lblEstadisticas = new Label
+            {
+                Text = "Estadísticas: Calculando...",
+                Font = ModernUI.Fonts.BodyBold,
+                ForeColor = ModernUI.Colors.Info,
+                AutoSize = true,
+                Location = new Point(30, 285),
+                BackColor = Color.Transparent
+            };
+            mainPanel.Controls.Add(lblEstadisticas);
+
+            // DataGridView
+            dgvMantenimientos = ModernUI.CreateModernDataGrid();
+            dgvMantenimientos.Location = new Point(30, 320);
+            dgvMantenimientos.Size = new Size(1210, 450);
+            dgvMantenimientos.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            dgvMantenimientos.CellFormatting += DgvMantenimientos_CellFormatting;
+            mainPanel.Controls.Add(dgvMantenimientos);
+
+            this.Controls.Add(mainPanel);
         }
 
-        private void ConfigurarFormulario()
+        private Panel CreateHeader()
         {
-            // Panel de filtros
-            var panelFiltros = new Panel
+            var header = new Panel
             {
-                Dock = DockStyle.Top,
-                Height = 100,
-                Padding = new Padding(10)
+                Location = new Point(0, 0),
+                Size = new Size(1240, 100),
+                BackColor = Color.Transparent
             };
 
+            // Botón volver
+            var btnVolver = CreateBackButton();
+            btnVolver.Location = new Point(0, 10);
+            header.Controls.Add(btnVolver);
+
+            // Título
             var lblTitulo = new Label
             {
-                Text = "LISTA DE MANTENIMIENTOS",
-                Font = new Font("Arial", 16, FontStyle.Bold),
-                Location = new Point(10, 10),
-                AutoSize = true
+                Text = "🔧 Lista de Mantenimientos",
+                Font = ModernUI.Fonts.Heading1,
+                ForeColor = ModernUI.Colors.Gray900,
+                AutoSize = true,
+                Location = new Point(0, 50),
+                BackColor = Color.Transparent
             };
-            panelFiltros.Controls.Add(lblTitulo);
+            header.Controls.Add(lblTitulo);
 
-            // Filtro por placa
-            var lblPlaca = new Label
+            // Subtítulo
+            var lblSubtitulo = new Label
             {
-                Text = "Placa del Carro:",
-                Location = new Point(10, 50),
-                AutoSize = true
+                Text = "Vea y filtre todos los mantenimientos registrados por placa del vehículo",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray600,
+                AutoSize = true,
+                Location = new Point(0, 80),
+                BackColor = Color.Transparent
             };
-            panelFiltros.Controls.Add(lblPlaca);
+            header.Controls.Add(lblSubtitulo);
+
+            return header;
+        }
+
+        private Button CreateBackButton()
+        {
+            var btn = new Button
+            {
+                Text = "← Volver",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Info,
+                BackColor = Color.Transparent,
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(100, 35),
+                Cursor = Cursors.Hand
+            };
+
+            btn.FlatAppearance.BorderSize = 0;
+            btn.FlatAppearance.MouseOverBackColor = ModernUI.Colors.Gray100;
+
+            btn.Click += (s, e) => this.Close();
+
+            return btn;
+        }
+
+        private Panel CreateFilterPanel()
+        {
+            var panel = new Panel
+            {
+                Size = new Size(1210, 120),
+                BackColor = Color.White
+            };
+
+            panel.Paint += (s, e) => {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                // Sombra
+                using (var shadowPath = GetRoundedRectangle(new Rectangle(2, 2, 1206, 116), 12))
+                using (var shadowBrush = new SolidBrush(Color.FromArgb(10, 0, 0, 0)))
+                {
+                    e.Graphics.FillPath(shadowBrush, shadowPath);
+                }
+
+                // Fondo
+                using (var path = GetRoundedRectangle(new Rectangle(0, 0, 1209, 119), 12))
+                using (var brush = new SolidBrush(Color.White))
+                using (var pen = new Pen(ModernUI.Colors.Border, 1))
+                {
+                    e.Graphics.FillPath(brush, path);
+                    e.Graphics.DrawPath(pen, path);
+                }
+            };
+
+            // Label
+            var lblFiltro = new Label
+            {
+                Text = "Filtrar por Placa del Carro",
+                Font = ModernUI.Fonts.BodyBold,
+                ForeColor = ModernUI.Colors.Gray700,
+                AutoSize = true,
+                Location = new Point(25, 25),
+                BackColor = Color.Transparent
+            };
+            panel.Controls.Add(lblFiltro);
+
+            // TextBox Container
+            var txtContainer = new Panel
+            {
+                Location = new Point(25, 50),
+                Size = new Size(450, 45),
+                BackColor = Color.White
+            };
+
+            txtContainer.Paint += (s, e) => {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (var path = GetRoundedRectangle(txtContainer.ClientRectangle, 8))
+                using (var pen = new Pen(ModernUI.Colors.Border, 2))
+                {
+                    e.Graphics.DrawPath(pen, path);
+                }
+            };
 
             txtFiltroPlaca = new TextBox
             {
-                Location = new Point(120, 47),
-                Width = 120,
-                MaxLength = 7
-            };
-            txtFiltroPlaca.CharacterCasing = CharacterCasing.Upper;
-            panelFiltros.Controls.Add(txtFiltroPlaca);
-
-            // Filtro por tipo
-            var lblTipo = new Label
-            {
-                Text = "Tipo:",
-                Location = new Point(260, 50),
-                AutoSize = true
-            };
-            panelFiltros.Controls.Add(lblTipo);
-
-            cboFiltroTipo = new ComboBox
-            {
-                Location = new Point(310, 47),
-                Width = 150,
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-            cboFiltroTipo.Items.AddRange(new object[]
-            {
-                "Todos",
-                "PREVENTIVO",
-                "CORRECTIVO",
-                "REVISION",
-                "CAMBIO_ACEITE",
-                "CAMBIO_LLANTAS",
-                "OTROS"
-            });
-            cboFiltroTipo.SelectedIndex = 0;
-            panelFiltros.Controls.Add(cboFiltroTipo);
-
-            // Filtro por estado
-            var lblEstado = new Label
-            {
-                Text = "Estado:",
-                Location = new Point(480, 50),
-                AutoSize = true
-            };
-            panelFiltros.Controls.Add(lblEstado);
-
-            cboFiltroEstado = new ComboBox
-            {
-                Location = new Point(540, 47),
-                Width = 120,
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-            cboFiltroEstado.Items.AddRange(new object[] { "Todos", "Completados", "Pendientes" });
-            cboFiltroEstado.SelectedIndex = 0;
-            panelFiltros.Controls.Add(cboFiltroEstado);
-
-            // Botones
-            btnBuscar = new Button
-            {
-                Text = "Buscar",
-                Location = new Point(680, 45),
-                Width = 80,
-                Height = 25
-            };
-            btnBuscar.Click += BtnBuscar_Click;
-            panelFiltros.Controls.Add(btnBuscar);
-
-            btnLimpiar = new Button
-            {
-                Text = "Limpiar",
-                Location = new Point(770, 45),
-                Width = 80,
-                Height = 25
-            };
-            btnLimpiar.Click += BtnLimpiar_Click;
-            panelFiltros.Controls.Add(btnLimpiar);
-
-            btnRefrescar = new Button
-            {
-                Text = "Refrescar",
-                Location = new Point(860, 45),
-                Width = 80,
-                Height = 25
-            };
-            btnRefrescar.Click += (s, e) => CargarMantenimientos();
-            panelFiltros.Controls.Add(btnRefrescar);
-
-            this.Controls.Add(panelFiltros);
-
-            // Panel de estadísticas
-            var panelEstadisticas = new Panel
-            {
-                Dock = DockStyle.Top,
-                Height = 40,
-                Padding = new Padding(10)
+                Location = new Point(15, 10),
+                Width = 420,
+                Height = 25,
+                Font = new Font("Segoe UI", 12, FontStyle.Regular),
+                BorderStyle = BorderStyle.None,
+                BackColor = Color.White,
+                ForeColor = ModernUI.Colors.Gray900,
+                CharacterCasing = CharacterCasing.Upper,
+                MaxLength = 10
             };
 
-            lblTotal = new Label
-            {
-                Text = "Total: 0",
-                Location = new Point(10, 10),
-                AutoSize = true,
-                Font = new Font("Arial", 10, FontStyle.Bold)
-            };
-            panelEstadisticas.Controls.Add(lblTotal);
-
-            lblCostoTotal = new Label
-            {
-                Text = "Costo Total: $0",
-                Location = new Point(150, 10),
-                AutoSize = true,
-                Font = new Font("Arial", 10, FontStyle.Bold)
-            };
-            panelEstadisticas.Controls.Add(lblCostoTotal);
-
-            this.Controls.Add(panelEstadisticas);
-
-            // DataGridView
-            dgvMantenimientos = new DataGridView
-            {
-                Dock = DockStyle.Fill,
-                AutoGenerateColumns = false,
-                AllowUserToAddRows = false,
-                AllowUserToDeleteRows = false,
-                ReadOnly = true,
-                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                MultiSelect = false
+            txtFiltroPlaca.KeyPress += (s, e) => {
+                if (e.KeyChar == (char)Keys.Enter)
+                {
+                    e.Handled = true;
+                    AplicarFiltro();
+                }
             };
 
-            dgvMantenimientos.Columns.AddRange(new DataGridViewColumn[]
-            {
-                new DataGridViewTextBoxColumn { HeaderText = "ID", DataPropertyName = "Id", Width = 100 },
-                new DataGridViewTextBoxColumn { HeaderText = "Placa Carro", DataPropertyName = "PlacaCarro", Width = 100 },
-                new DataGridViewTextBoxColumn { HeaderText = "Fecha", DataPropertyName = "FechaMantenimiento", Width = 150 },
-                new DataGridViewTextBoxColumn { HeaderText = "Tipo", DataPropertyName = "TipoMantenimiento", Width = 130 },
-                new DataGridViewTextBoxColumn { HeaderText = "Kilometraje", DataPropertyName = "Kilometraje", Width = 100 },
-                new DataGridViewTextBoxColumn { HeaderText = "Costo", DataPropertyName = "Costo", Width = 120 },
-                new DataGridViewTextBoxColumn { HeaderText = "Estado", Width = 100 },
-                new DataGridViewTextBoxColumn { HeaderText = "Descripción", DataPropertyName = "Descripcion", Width = 300 }
-            });
+            txtContainer.Controls.Add(txtFiltroPlaca);
+            panel.Controls.Add(txtContainer);
 
-            dgvMantenimientos.CellFormatting += DgvMantenimientos_CellFormatting;
-            this.Controls.Add(dgvMantenimientos);
+            // Botón Filtrar
+            var btnFiltrar = ModernUI.CreateButton("🔍 Filtrar", ModernUI.Colors.Info, Color.White, (s, e) => AplicarFiltro());
+            btnFiltrar.Location = new Point(500, 50);
+            btnFiltrar.Size = new Size(150, 45);
+            btnFiltrar.Font = ModernUI.Fonts.Button;
+            panel.Controls.Add(btnFiltrar);
+
+            // Botón Limpiar
+            var btnLimpiar = ModernUI.CreateSecondaryButton("🔄 Limpiar Filtro", (s, e) => LimpiarFiltro());
+            btnLimpiar.Location = new Point(670, 50);
+            btnLimpiar.Size = new Size(170, 45);
+            btnLimpiar.Font = ModernUI.Fonts.Button;
+            panel.Controls.Add(btnLimpiar);
+
+            // Botón Refrescar
+            var btnRefrescar = ModernUI.CreateButton("♻️ Recargar Datos", ModernUI.Colors.Success, Color.White, (s, e) => CargarMantenimientos());
+            btnRefrescar.Location = new Point(860, 50);
+            btnRefrescar.Size = new Size(200, 45);
+            btnRefrescar.Font = ModernUI.Fonts.Button;
+            panel.Controls.Add(btnRefrescar);
+
+            return panel;
         }
 
         private async void CargarMantenimientos()
         {
             try
             {
-                dgvMantenimientos.DataSource = null;
-                var mantenimientos = await _mantenimientoService.ObtenerTodosLosMantenimientosAsync();
-                dgvMantenimientos.DataSource = mantenimientos;
-                ActualizarEstadisticas(mantenimientos);
+                this.Cursor = Cursors.WaitCursor;
+                lblResultadoInfo.Text = "⏳ Cargando mantenimientos...";
+                lblResultadoInfo.ForeColor = ModernUI.Colors.Info;
+
+                todosLosMantenimientos = await _mantenimientoService.ObtenerTodosLosMantenimientosAsync();
+                mantenimientosFiltrados = new List<Mantenimiento>(todosLosMantenimientos);
+
+                ActualizarDataGrid();
+
+                this.Cursor = Cursors.Default;
+                lblResultadoInfo.Text = $"✅ {todosLosMantenimientos.Count} mantenimientos cargados correctamente";
+                lblResultadoInfo.ForeColor = ModernUI.Colors.Success;
+
+                ActualizarEstadisticas();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar mantenimientos: {ex.Message}",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Cursor = Cursors.Default;
+                lblResultadoInfo.Text = $"❌ Error al cargar: {ex.Message}";
+                lblResultadoInfo.ForeColor = ModernUI.Colors.Danger;
+
+                MessageBox.Show($"Error al cargar mantenimientos:\n\n{ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private async void BtnBuscar_Click(object? sender, EventArgs e)
+        private async void AplicarFiltro()
         {
             try
             {
-                List<Mantenimiento> mantenimientos;
-
-                if (!string.IsNullOrWhiteSpace(txtFiltroPlaca.Text))
+                if (string.IsNullOrWhiteSpace(txtFiltroPlaca.Text))
                 {
-                    mantenimientos = await _mantenimientoService.BuscarPorCarroAsync(txtFiltroPlaca.Text.Trim());
+                    mantenimientosFiltrados = new List<Mantenimiento>(todosLosMantenimientos);
+                    ActualizarDataGrid();
+                    ActualizarEstadisticas();
+
+                    lblResultadoInfo.Text = $"✅ {todosLosMantenimientos.Count} mantenimientos en total (sin filtro)";
+                    lblResultadoInfo.ForeColor = ModernUI.Colors.Success;
+                    return;
+                }
+
+                this.Cursor = Cursors.WaitCursor;
+                lblResultadoInfo.Text = "🔍 Filtrando...";
+                lblResultadoInfo.ForeColor = ModernUI.Colors.Info;
+
+                // Filtrar por placa
+                var placa = txtFiltroPlaca.Text.Trim().ToUpper();
+                mantenimientosFiltrados = await _mantenimientoService.BuscarPorCarroAsync(placa);
+
+                ActualizarDataGrid();
+
+                this.Cursor = Cursors.Default;
+
+                if (mantenimientosFiltrados.Count == 0)
+                {
+                    lblResultadoInfo.Text = $"❌ No se encontraron mantenimientos para la placa: {placa}";
+                    lblResultadoInfo.ForeColor = ModernUI.Colors.Danger;
                 }
                 else
                 {
-                    mantenimientos = await _mantenimientoService.ObtenerTodosLosMantenimientosAsync();
+                    lblResultadoInfo.Text = $"✅ {mantenimientosFiltrados.Count} mantenimiento(s) encontrado(s) - Placa: {placa}";
+                    lblResultadoInfo.ForeColor = ModernUI.Colors.Success;
                 }
 
-                // Aplicar filtros locales
-                string? tipo = cboFiltroTipo.SelectedIndex > 0 ? cboFiltroTipo.SelectedItem?.ToString() : null;
-                bool? completado = cboFiltroEstado.SelectedIndex == 1 ? true :
-                                  cboFiltroEstado.SelectedIndex == 2 ? false : null;
-
-                mantenimientos = _mantenimientoService.FiltrarMantenimientos(
-                    mantenimientos, tipo, completado);
-
-                dgvMantenimientos.DataSource = null;
-                dgvMantenimientos.DataSource = mantenimientos;
-                ActualizarEstadisticas(mantenimientos);
+                ActualizarEstadisticas();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al buscar: {ex.Message}",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Cursor = Cursors.Default;
+                lblResultadoInfo.Text = $"❌ Error al filtrar: {ex.Message}";
+                lblResultadoInfo.ForeColor = ModernUI.Colors.Danger;
+
+                MessageBox.Show($"Error al filtrar mantenimientos:\n\n{ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void BtnLimpiar_Click(object? sender, EventArgs e)
+        private void LimpiarFiltro()
         {
             txtFiltroPlaca.Clear();
-            cboFiltroTipo.SelectedIndex = 0;
-            cboFiltroEstado.SelectedIndex = 0;
-            CargarMantenimientos();
+            mantenimientosFiltrados = new List<Mantenimiento>(todosLosMantenimientos);
+            ActualizarDataGrid();
+
+            lblResultadoInfo.Text = $"✅ {todosLosMantenimientos.Count} mantenimientos en total (sin filtro)";
+            lblResultadoInfo.ForeColor = ModernUI.Colors.Success;
+
+            ActualizarEstadisticas();
+            txtFiltroPlaca.Focus();
         }
 
-        private void ActualizarEstadisticas(List<Mantenimiento> mantenimientos)
+        private void ActualizarDataGrid()
         {
-            lblTotal.Text = $"Total: {mantenimientos.Count}";
-            double costoTotal = mantenimientos.Sum(m => m.Costo);
-            lblCostoTotal.Text = $"Costo Total: {costoTotal:C0}";
+            dgvMantenimientos.DataSource = null;
+            dgvMantenimientos.DataSource = mantenimientosFiltrados;
+
+            // Personalizar columnas
+            if (dgvMantenimientos.Columns.Count > 0)
+            {
+                if (dgvMantenimientos.Columns.Contains("Id"))
+                    dgvMantenimientos.Columns["Id"].HeaderText = "ID";
+
+                if (dgvMantenimientos.Columns.Contains("PlacaCarro"))
+                    dgvMantenimientos.Columns["PlacaCarro"].HeaderText = "Placa del Carro";
+
+                if (dgvMantenimientos.Columns.Contains("TipoMantenimiento"))
+                    dgvMantenimientos.Columns["TipoMantenimiento"].HeaderText = "Tipo";
+
+                if (dgvMantenimientos.Columns.Contains("FechaMantenimiento"))
+                {
+                    dgvMantenimientos.Columns["FechaMantenimiento"].HeaderText = "Fecha";
+                    dgvMantenimientos.Columns["FechaMantenimiento"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                }
+
+                if (dgvMantenimientos.Columns.Contains("Kilometraje"))
+                {
+                    dgvMantenimientos.Columns["Kilometraje"].HeaderText = "Kilometraje (km)";
+                    dgvMantenimientos.Columns["Kilometraje"].DefaultCellStyle.Format = "N0";
+                }
+
+                if (dgvMantenimientos.Columns.Contains("Costo"))
+                {
+                    dgvMantenimientos.Columns["Costo"].HeaderText = "Costo";
+                    dgvMantenimientos.Columns["Costo"].DefaultCellStyle.Format = "C0";
+                }
+
+                if (dgvMantenimientos.Columns.Contains("Completado"))
+                    dgvMantenimientos.Columns["Completado"].HeaderText = "Completado";
+
+                if (dgvMantenimientos.Columns.Contains("Descripcion"))
+                    dgvMantenimientos.Columns["Descripcion"].HeaderText = "Descripción";
+
+                if (dgvMantenimientos.Columns.Contains("FechaRegistro"))
+                {
+                    dgvMantenimientos.Columns["FechaRegistro"].HeaderText = "Fecha Registro";
+                    dgvMantenimientos.Columns["FechaRegistro"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                }
+            }
+        }
+
+        private void ActualizarEstadisticas()
+        {
+            int total = mantenimientosFiltrados.Count;
+            int completados = mantenimientosFiltrados.Count(m => m.Completado);
+            int pendientes = total - completados;
+            double costoTotal = mantenimientosFiltrados.Sum(m => m.Costo);
+
+            lblEstadisticas.Text = $"📊 Total: {total} | ✅ Completados: {completados} | ⏳ Pendientes: {pendientes} | 💰 Costo Total: {costoTotal:C0}";
         }
 
         private void DgvMantenimientos_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvMantenimientos.Columns[e.ColumnIndex].HeaderText == "Estado" && e.RowIndex >= 0)
-            {
-                var mantenimiento = dgvMantenimientos.Rows[e.RowIndex].DataBoundItem as Mantenimiento;
-                if (mantenimiento != null)
-                {
-                    string estado = mantenimiento.ObtenerEstadoMantenimiento();
-                    e.Value = estado;
+            if (e.RowIndex < 0) return;
 
-                    // Colorear según el estado
-                    if (estado == "COMPLETADO")
-                    {
-                        dgvMantenimientos.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
-                    }
-                    else if (estado == "URGENTE")
-                    {
-                        dgvMantenimientos.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightCoral;
-                    }
-                    else
-                    {
-                        dgvMantenimientos.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightYellow;
-                    }
-                }
-            }
-            else if (dgvMantenimientos.Columns[e.ColumnIndex].HeaderText == "Costo" && e.Value != null)
+            var mantenimiento = dgvMantenimientos.Rows[e.RowIndex].DataBoundItem as Mantenimiento;
+            if (mantenimiento == null) return;
+
+            // Colorear filas según estado de completado
+            if (mantenimiento.Completado)
             {
-                e.Value = string.Format("{0:C0}", e.Value);
-                e.FormattingApplied = true;
+                dgvMantenimientos.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(220, 252, 231); // Verde claro
+                dgvMantenimientos.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = ModernUI.Colors.Success;
             }
-            else if (dgvMantenimientos.Columns[e.ColumnIndex].HeaderText == "Kilometraje" && e.Value != null)
+            else
             {
-                e.Value = string.Format("{0:N0} km", e.Value);
-                e.FormattingApplied = true;
+                dgvMantenimientos.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(254, 249, 195); // Amarillo claro
+                dgvMantenimientos.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = ModernUI.Colors.Warning;
             }
-            else if (dgvMantenimientos.Columns[e.ColumnIndex].HeaderText == "Fecha" && e.Value != null)
-            {
-                if (e.Value is DateTime fecha)
-                {
-                    e.Value = fecha.ToString("dd/MM/yyyy HH:mm");
-                    e.FormattingApplied = true;
-                }
-            }
+        }
+
+        private GraphicsPath GetRoundedRectangle(Rectangle rect, int radius)
+        {
+            var path = new GraphicsPath();
+            int diameter = radius * 2;
+
+            path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
+            path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
+            path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
+            path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
+            path.CloseFigure();
+
+            return path;
         }
     }
 }

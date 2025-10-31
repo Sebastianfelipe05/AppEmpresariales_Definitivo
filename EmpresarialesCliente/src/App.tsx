@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import CreateCarro from './pages/CreateCarro';
-import SearchListCarros from './pages/SearchListCarros';
+import ListarCarros from './pages/ListarCarros';
 import SearchCarro from './pages/SearchCarro';
 import UpdateCarro from './pages/UpdateCarro';
 import DeleteCarro from './pages/DeleteCarro';
@@ -9,6 +9,7 @@ import ActualizarCarroFormulario from './pages/ActualizarCarroFormulario';
 import EliminarCarroFormulario from './pages/EliminarCarroFormulario';
 import CrearMantenimiento from './pages/CrearMantenimiento';
 import ListarMantenimientos from './pages/ListarMantenimientos';
+import BuscarMantenimiento from './pages/BuscarMantenimiento';
 import ActualizarMantenimiento from './pages/ActualizarMantenimiento';
 import EliminarMantenimiento from './pages/EliminarMantenimiento';
 
@@ -505,7 +506,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/carros/create" element={<CreateCarro />} />
-            <Route path="/carros/list" element={<SearchListCarros />} />
+            <Route path="/carros/list" element={<ListarCarros />} />
             <Route path="/carros/search" element={<SearchCarro />} />
             <Route path="/carros/update" element={<UpdateCarro />} />
             <Route path="/carros/update/:placa" element={<UpdateCarro />} />
@@ -517,6 +518,7 @@ function App() {
             <Route path="/eliminar-formulario" element={<EliminarCarroFormulario />} />
             <Route path="/mantenimientos" element={<ListarMantenimientos />} />
             <Route path="/mantenimientos/crear" element={<CrearMantenimiento />} />
+            <Route path="/mantenimientos/buscar" element={<BuscarMantenimiento />} />
             <Route path="/mantenimientos/actualizar/:id" element={<ActualizarMantenimiento />} />
             <Route path="/mantenimientos/eliminar/:id" element={<EliminarMantenimiento />} />
             <Route path="*" element={<Navigate to="/" replace />} />

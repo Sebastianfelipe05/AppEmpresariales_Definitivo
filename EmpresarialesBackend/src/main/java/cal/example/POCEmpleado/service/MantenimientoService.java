@@ -1,167 +1,184 @@
 package cal.example.POCEmpleado.service;
 
+import cal.example.POCEmpleado.model.Carro;
 import cal.example.POCEmpleado.model.Mantenimiento;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import cal.example.POCEmpleado.repository.CarroRepository;
+import cal.example.POCEmpleado.repository.MantenimientoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Servicio de Mantenimiento - Implementa la lógica de negocio
- * Gestiona mantenimientos en memoria usando un ArrayList
+ * Servicio de Mantenimiento usando JPA
+ * Migrado desde almacenamiento en memoria/JSON a base de datos Oracle
+ *
+ * Implementa la relación @ManyToOne con Carro
  */
 @Service
+@Transactional
 public class MantenimientoService implements IMantenimientoService {
 
-    private final List<Mantenimiento> mantenimientos = new ArrayList<>();
-    private static final String JSON_FILE = "mantenimientos.json";
+    private final MantenimientoRepository mantenimientoRepository;
+    private final CarroRepository carroRepository;
 
-    public MantenimientoService() {
-        try {
-            loadFromJson();
-        } catch (Exception e) {
-            System.out.println("No se pudo cargar mantenimientos desde JSON, iniciando con lista vacía");
-            inicializarDatosDePrueba();
-        }
-    }
-
-    private void inicializarDatosDePrueba() {
-        // Mantenimientos para el carro ABC-123
-        mantenimientos.add(new Mantenimiento(
-            "ABC-123",
-            LocalDateTime.now().minusMonths(6),
-            50000,
-            "PREVENTIVO",
-            350000.0,
-            "Mantenimiento preventivo de 50,000 km: cambio de aceite, filtros y revisión general",
-            LocalDateTime.now().plusMonths(6)
-        ));
-
-        mantenimientos.add(new Mantenimiento(
-            "ABC-123",
-            LocalDateTime.now().minusMonths(3),
-            55000,
-            "CAMBIO_LLANTAS",
-            1200000.0,
-            "Cambio de las 4 llantas delanteras y traseras por desgaste",
-            null
-        ));
-
-        // Mantenimientos para el carro DEF-456
-        mantenimientos.add(new Mantenimiento(
-            "DEF-456",
-            LocalDateTime.now().minusMonths(2),
-            30000,
-            "CAMBIO_ACEITE",
-            180000.0,
-            "Cambio de aceite sintético y filtro de aceite",
-            LocalDateTime.now().plusMonths(4)
-        ));
-
-        mantenimientos.add(new Mantenimiento(
-            "DEF-456",
-            LocalDateTime.now().minusDays(15),
-            32000,
-            "CORRECTIVO",
-            450000.0,
-            "Reparación del sistema de frenos: cambio de pastillas y discos",
-            null
-        ));
-
-        // Marcar algunos como completados
-        mantenimientos.get(0).setCompletado(true);
-        mantenimientos.get(1).setCompletado(true);
+    @Autowired
+    public MantenimientoService(MantenimientoRepository mantenimientoRepository,
+                                CarroRepository carroRepository) {
+        this.mantenimientoRepository = mantenimientoRepository;
+        this.carroRepository = carroRepository;
     }
 
     @Override
     public Mantenimiento save(Mantenimiento mantenimiento) {
-        if (mantenimiento.getId() == null || mantenimiento.getId().isEmpty()) {
-            mantenimiento.setId(UUID.randomUUID().toString());
+        // Validar que el carro existe antes de guardar el mantenimiento
+        if (mantenimiento.getCarro() == null) {
+            throw new IllegalArgumentException("El mantenimiento debe estar asociado a un carro");
         }
 
-        // Buscar si ya existe
-        Optional<Mantenimiento> existente = mantenimientos.stream()
-                .filter(m -> m.getId().equals(mantenimiento.getId()))
-                .findFirst();
+        String placaCarro = mantenimiento.getCarro().getPlaca();
+        Carro carro = carroRepository.findById(placaCarro)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "No existe un carro con la placa: " + placaCarro));
 
-        if (existente.isPresent()) {
-            // Actualizar
-            mantenimientos.remove(existente.get());
-            mantenimientos.add(mantenimiento);
-        } else {
-            // Crear nuevo
-            if (mantenimiento.getFechaRegistro() == null) {
-                mantenimiento.setFechaRegistro(LocalDateTime.now());
-            }
-            mantenimientos.add(mantenimiento);
-        }
-
-        try {
-            saveToJson();
-        } catch (Exception e) {
-            System.err.println("Error al guardar en JSON: " + e.getMessage());
-        }
-
-        return mantenimiento;
+        mantenimiento.setCarro(carro);
+        return mantenimientoRepository.save(mantenimiento);
     }
 
     @Override
+    public boolean deleteById(Long id) {
+        if (mantenimientoRepository.existsById(id)) {
+            mantenimientoRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Mantenimiento> listar(Map<String, Object> filtros) {
+        // Sin filtros: retornar todos
         if (filtros == null || filtros.isEmpty()) {
-            return new ArrayList<>(mantenimientos);
+            return mantenimientoRepository.findAll();
         }
 
-        return mantenimientos.stream()
-                .filter(m -> cumpleFiltros(m, filtros))
+        // Filtro por ID
+        if (filtros.containsKey("id")) {
+            Long id = Long.parseLong(filtros.get("id").toString());
+            return mantenimientoRepository.findById(id)
+                    .map(Collections::singletonList)
+                    .orElse(Collections.emptyList());
+        }
+
+        // Filtro por placa del carro (usa query JPA personalizada)
+        if (filtros.containsKey("placaCarro") || filtros.containsKey("placa_carro")) {
+            String placa = filtros.getOrDefault("placaCarro",
+                    filtros.get("placa_carro")).toString();
+            return mantenimientoRepository.findByPlacaCarro(placa);
+        }
+
+        // Filtro por tipo de mantenimiento
+        if (filtros.containsKey("tipoMantenimiento") || filtros.containsKey("tipo_mantenimiento")) {
+            String tipo = filtros.getOrDefault("tipoMantenimiento",
+                    filtros.get("tipo_mantenimiento")).toString();
+            return mantenimientoRepository.findByTipoMantenimiento(tipo);
+        }
+
+        // Filtro por completado
+        if (filtros.containsKey("completado")) {
+            boolean completado = Boolean.parseBoolean(filtros.get("completado").toString());
+            return mantenimientoRepository.findByCompletado(completado);
+        }
+
+        // Filtro por rango de costos
+        if (filtros.containsKey("costo_min") && filtros.containsKey("costo_max")) {
+            double min = Double.parseDouble(filtros.get("costo_min").toString());
+            double max = Double.parseDouble(filtros.get("costo_max").toString());
+            return mantenimientoRepository.findByCostoRange(min, max);
+        }
+
+        // Filtro por rango de fechas
+        if (filtros.containsKey("fecha_inicio") && filtros.containsKey("fecha_fin")) {
+            LocalDateTime inicio = LocalDateTime.parse(filtros.get("fecha_inicio").toString());
+            LocalDateTime fin = LocalDateTime.parse(filtros.get("fecha_fin").toString());
+            return mantenimientoRepository.findByFechaRange(inicio, fin);
+        }
+
+        // Para filtros complejos no mapeados, filtrar en memoria
+        List<Mantenimiento> todos = mantenimientoRepository.findAll();
+        return todos.stream()
+                .filter(m -> aplicarFiltros(m, filtros))
                 .collect(Collectors.toList());
     }
 
-    private boolean cumpleFiltros(Mantenimiento m, Map<String, Object> filtros) {
-        for (Map.Entry<String, Object> entry : filtros.entrySet()) {
-            String key = entry.getKey().toLowerCase();
-            Object value = entry.getValue();
+    /**
+     * CONSULTA MAESTRO-DETALLE (Requerida por el PDF)
+     * Retorna mantenimientos con información del carro asociado
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Mantenimiento> listarConCarro() {
+        return mantenimientoRepository.findAllConCarro();
+    }
 
-            if (value == null) continue;
+    /**
+     * Obtener mantenimientos de un carro específico (maestro-detalle)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Mantenimiento> getMantenimientosPorCarro(String placa) {
+        return mantenimientoRepository.findMantenimientosConCarroByPlaca(placa);
+    }
 
-            switch (key) {
-                case "id":
-                    if (!m.getId().equalsIgnoreCase(value.toString())) return false;
-                    break;
-                case "placacarro":
-                case "placa_carro":
-                case "placa":
-                    if (!m.getPlacaCarro().equalsIgnoreCase(value.toString())) return false;
-                    break;
-                case "tipomantenimiento":
-                case "tipo_mantenimiento":
-                case "tipo":
-                    if (!m.getTipoMantenimiento().equalsIgnoreCase(value.toString())) return false;
+    /**
+     * Obtener mantenimientos urgentes (próximo mantenimiento en 7 días)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Mantenimiento> getMantenimientosUrgentes() {
+        LocalDateTime fechaLimite = LocalDateTime.now().plusDays(7);
+        return mantenimientoRepository.findMantenimientosUrgentes(fechaLimite);
+    }
+
+    /**
+     * Calcular costo total de mantenimientos de un carro
+     */
+    @Transactional(readOnly = true)
+    public double calcularCostoTotalPorCarro(String placa) {
+        Double total = mantenimientoRepository.calcularCostoTotalPorCarro(placa);
+        return total != null ? total : 0.0;
+    }
+
+    /**
+     * Filtrado en memoria para casos complejos
+     */
+    private boolean aplicarFiltros(Mantenimiento mantenimiento, Map<String, Object> filtros) {
+        for (Map.Entry<String, Object> filtro : filtros.entrySet()) {
+            String campo = filtro.getKey().toLowerCase();
+            Object valor = filtro.getValue();
+
+            if (valor == null) continue;
+
+            switch (campo) {
+                case "descripcion":
+                    if (!mantenimiento.getDescripcion().toLowerCase()
+                            .contains(valor.toString().toLowerCase())) {
+                        return false;
+                    }
                     break;
                 case "kilometraje":
-                    if (value instanceof Integer && m.getKilometraje() != (Integer) value) return false;
+                    if (mantenimiento.getKilometraje() != null &&
+                            !mantenimiento.getKilometraje().equals(Integer.parseInt(valor.toString()))) {
+                        return false;
+                    }
                     break;
-                case "kilometraje_min":
-                    if (value instanceof Integer && m.getKilometraje() < (Integer) value) return false;
-                    break;
-                case "kilometraje_max":
-                    if (value instanceof Integer && m.getKilometraje() > (Integer) value) return false;
-                    break;
-                case "costo_min":
-                    if (value instanceof Double && m.getCosto() < (Double) value) return false;
-                    break;
-                case "costo_max":
-                    if (value instanceof Double && m.getCosto() > (Double) value) return false;
-                    break;
-                case "completado":
-                    if (value instanceof Boolean && m.isCompletado() != (Boolean) value) return false;
-                    break;
-                case "urgente":
-                    if (value instanceof Boolean && (Boolean) value && !m.esUrgente()) return false;
+                case "costo":
+                    if (mantenimiento.getCosto() != Double.parseDouble(valor.toString())) {
+                        return false;
+                    }
                     break;
             }
         }
@@ -169,71 +186,44 @@ public class MantenimientoService implements IMantenimientoService {
     }
 
     @Override
-    public boolean deleteById(String id) {
-        boolean removed = mantenimientos.removeIf(m -> m.getId().equals(id));
-        if (removed) {
-            try {
-                saveToJson();
-            } catch (Exception e) {
-                System.err.println("Error al guardar en JSON: " + e.getMessage());
-            }
-        }
-        return removed;
-    }
-
-    @Override
-    public List<Mantenimiento> getMantenimientosPorCarro(String placaCarro) {
-        return mantenimientos.stream()
-                .filter(m -> m.getPlacaCarro().equalsIgnoreCase(placaCarro))
-                .sorted(Comparator.comparing(Mantenimiento::getFechaMantenimiento).reversed())
-                .collect(Collectors.toList());
-    }
-
-    @Override
+    @Transactional(readOnly = true)
     public long count() {
-        return mantenimientos.size();
+        return mantenimientoRepository.count();
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public double getCostoPromedio() {
+        List<Mantenimiento> mantenimientos = mantenimientoRepository.findAll();
+        return mantenimientos.stream()
+                .mapToDouble(Mantenimiento::getCosto)
+                .average()
+                .orElse(0.0);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countByPlacaCarro(String placa) {
+        return mantenimientoRepository.countByPlacaCarro(placa);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public double getCostoTotal() {
+        List<Mantenimiento> mantenimientos = mantenimientoRepository.findAll();
         return mantenimientos.stream()
                 .mapToDouble(Mantenimiento::getCosto)
                 .sum();
     }
 
+    // Métodos de persistencia JSON ya no son necesarios con JPA
     @Override
-    public double getCostoPromedio() {
-        if (mantenimientos.isEmpty()) return 0.0;
-        return getCostoTotal() / mantenimientos.size();
+    public void saveToJson() {
+        // No-op: JPA maneja la persistencia automáticamente
     }
 
     @Override
-    public List<Mantenimiento> getMantenimientosUrgentes() {
-        return mantenimientos.stream()
-                .filter(Mantenimiento::esUrgente)
-                .sorted(Comparator.comparing(Mantenimiento::getProximoMantenimiento))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void saveToJson() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File(JSON_FILE), mantenimientos);
-    }
-
-    @Override
-    public void loadFromJson() throws Exception {
-        File file = new File(JSON_FILE);
-        if (!file.exists()) {
-            throw new IOException("Archivo JSON no existe");
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        Mantenimiento[] array = mapper.readValue(file, Mantenimiento[].class);
-
-        mantenimientos.clear();
-        mantenimientos.addAll(Arrays.asList(array));
+    public void loadFromJson() {
+        // No-op: JPA carga los datos desde la base de datos
     }
 }

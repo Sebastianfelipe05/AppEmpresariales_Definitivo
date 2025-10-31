@@ -2,10 +2,16 @@ package cal.example.POCEmpleado.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "CARRO")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Carro extends Vehiculo {
 
@@ -18,6 +24,7 @@ public class Carro extends Vehiculo {
 
     @NotNull(message = "El precio es obligatorio")
     @DecimalMin(value = "0.0", inclusive = false, message = "El precio debe ser mayor que 0")
+    @Column(name = "precio", columnDefinition = "NUMBER(10,2)")
     private double precio;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -27,10 +34,17 @@ public class Carro extends Vehiculo {
     @Pattern(regexp = "MANUAL|AUTOMATICA", message = "El tipo de transmisión debe ser MANUAL o AUTOMATICA")
     private String tipoTransmision;
 
+    // ===== RELACIÓN @OneToMany CON MANTENIMIENTO =====
+    // Un CARRO puede tener MUCHOS Mantenimientos
+    @OneToMany(mappedBy = "carro", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference  // Evita recursión infinita en JSON
+    private List<Mantenimiento> mantenimientos = new ArrayList<>();
+
     // Constructor por defecto
     public Carro() {
         super();
         this.fechaRegistro = LocalDateTime.now();
+        this.mantenimientos = new ArrayList<>();
     }
 
     public Carro(String marca, String color, String placa, String combustible, String modelo, int anio,
@@ -122,6 +136,26 @@ public class Carro extends Vehiculo {
 
     public void setTipoTransmision(String tipoTransmision) {
         this.tipoTransmision = tipoTransmision;
+    }
+
+    // Getters y Setters para la relación
+    public List<Mantenimiento> getMantenimientos() {
+        return mantenimientos;
+    }
+
+    public void setMantenimientos(List<Mantenimiento> mantenimientos) {
+        this.mantenimientos = mantenimientos;
+    }
+
+    // Métodos helper para gestionar la relación bidireccional
+    public void addMantenimiento(Mantenimiento mantenimiento) {
+        mantenimientos.add(mantenimiento);
+        mantenimiento.setCarro(this);
+    }
+
+    public void removeMantenimiento(Mantenimiento mantenimiento) {
+        mantenimientos.remove(mantenimiento);
+        mantenimiento.setCarro(null);
     }
 
     @Override

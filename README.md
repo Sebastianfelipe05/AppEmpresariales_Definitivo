@@ -1,133 +1,513 @@
-# 🚗 Concesionario AAA - Sistema Distribuido
+# 📋 Proyecto Empresariales - Sistema de Gestión de Carros y Mantenimientos
 
-## Descripción General
-Sistema integral de gestión de automóviles implementado con arquitectura distribuida usando servicios REST. El proyecto incluye:
-- **Backend**: Spring Boot (Java) con arquitectura hexagonal
-- **Cliente 1**: React + TypeScript (SPA moderno)
-- **Cliente 2**: C# WinForms (Aplicación de escritorio)
+Sistema completo de gestión de vehículos y mantenimientos con arquitectura de microservicios, implementando relaciones maestro-detalle **@OneToMany/@ManyToOne** con Spring Boot, Oracle Database, y clientes en React y C#.
 
-## Estructura del Proyecto
+**Equipo de Desarrollo:**
+- Juan David Reyes
+- Julio David Suarez
+- Sebastian Felipe Solano
 
-```plaintext
-EmpresarialesProyecto/
-├── EmpresarialesBackend/          # Servidor Spring Boot
-├── EmpresarialesCliente/          # Cliente React/TypeScript
-├── EmpresarialesClienteCSharp/    # Cliente C# WinForms
-└── Segundo Proyecto Microservicios.pdf
+**Universidad de Ibagué** - Facultad de Ingeniería - Desarrollo de Aplicaciones Empresariales - 2025-A
+
+---
+
+## 📦 1. REQUISITOS E INSTALACIÓN
+
+### 1.1 Software Necesario
+
+#### **Java Development Kit (JDK) 17** ✅
+- **Descargar:** [Microsoft OpenJDK 17](https://learn.microsoft.com/en-us/java/openjdk/download#openjdk-17)
+- **Versión:** 17.0.16 o superior
+- **Verificar:**
+  ```bash
+  java -version
+  ```
+
+#### **Node.js y npm** ✅
+- **Descargar:** [Node.js LTS](https://nodejs.org/)
+- **Versión:** Node.js 18.x o superior
+- **Verificar:**
+  ```bash
+  node -v
+  npm -v
+  ```
+
+#### **.NET SDK 8.0** ✅
+- **Descargar:** [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- **Verificar:**
+  ```bash
+  dotnet --version
+  ```
+
+#### **Oracle Database 21c Express Edition (XE)** ✅
+- **Descargar:** [Oracle XE 21c](https://www.oracle.com/database/technologies/xe-downloads.html)
+- **Puerto:** 1521
+- **Bases de datos:** XE (Container) + XEPDB1 (Pluggable)
+
+---
+
+## 🗄️ 2. CONFIGURACIÓN DE BASE DE DATOS ORACLE
+
+### 2.1 Crear Usuario DAE2025
+
+Abrir **Command Prompt** y ejecutar:
+
+```bash
+sqlplus / as sysdba
 ```
 
-## Requisitos Implementados
+Luego ejecutar estos comandos SQL:
 
-✅ **Servicios Web REST**: Backend expone API REST completa
-✅ **Dos clientes en lenguajes diferentes**: React (TypeScript) y C# (WinForms)
-✅ **CRUD completo**: Create, Read, Update, Delete
-✅ **Búsqueda por criterios**: Múltiples filtros disponibles
-✅ **Búsqueda individual**: Por placa
-✅ **Listar con filtros**: Dos variantes implementadas
-✅ **Casos de uso separados**: Cada ventana = 1 funcionalidad
-✅ **Actualizar/Eliminar con búsqueda previa**: Implementado en ambos clientes
-✅ **Menú principal**: Con "Acerca de..."
-✅ **Arquitectura hexagonal**: Backend bien estructurado
+```sql
+-- Cambiar al Pluggable Database
+ALTER SESSION SET CONTAINER = XEPDB1;
 
-## Correcciones Realizadas
+-- Habilitar creación de usuarios
+ALTER SESSION SET "_ORACLE_SCRIPT"=true;
 
-### Frontend React
-1. ✅ **Eliminados archivos duplicados**: `App_fixed.tsx`, `SearchListCarros_new.tsx`
-2. ✅ **Navegación SPA corregida**: Reemplazado `window.location.href` por `useNavigate()`
-3. ✅ **Diseño profesional mejorado**: CSS rediseñado con paleta moderna
-4. ✅ **Dependencias instaladas**: `npm install` ejecutado exitosamente
-5. ✅ **UI más limpia**: Sistema de diseño consistente con variables CSS
+-- Crear usuario
+CREATE USER DAE2025 IDENTIFIED BY DAE2025
+DEFAULT TABLESPACE USERS
+TEMPORARY TABLESPACE TEMP
+QUOTA UNLIMITED ON USERS;
 
-### Cliente C# (NUEVO)
-1. ✅ **Proyecto WinForms completo**: Implementado desde cero
-2. ✅ **5 formularios separados**: Crear, Listar, Buscar, Actualizar, Eliminar
-3. ✅ **Consumo REST**: HttpClient con Newtonsoft.Json
-4. ✅ **Validaciones**: Formularios con validación robusta
-5. ✅ **Interfaz profesional**: Diseño moderno con colores y estilos
+-- Otorgar permisos
+GRANT CONNECT, RESOURCE, DBA TO DAE2025;
+GRANT CREATE SESSION TO DAE2025;
+GRANT CREATE TABLE TO DAE2025;
+GRANT CREATE VIEW TO DAE2025;
+GRANT CREATE SEQUENCE TO DAE2025;
 
-## Componentes del Sistema
+EXIT;
+```
 
-### 1. Backend (Spring Boot)
-- **Puerto**: 8080
-- **Endpoint base**: `/api/carro`
-- **Documentación**: Ver `EmpresarialesBackend/API_DOCUMENTATION.md`
+---
 
-### 2. Cliente React
-- **Puerto**: 5173 (desarrollo)
-- **Tecnologías**: React 19, TypeScript, Vite, React Router
-- **Ver**: `EmpresarialesCliente/README.md`
+### 2.2 Crear Tablas CARRO y MANTENIMIENTO
 
-### 3. Cliente C#
-- **Tecnología**: .NET 8.0 Windows Forms
-- **Ver**: `EmpresarialesClienteCSharp/README.md`
+#### **Script SQL completo:**
 
-## Cómo Ejecutar el Proyecto Completo
+**Ubicación:** `EmpresarialesBackend\CREAR_BD_ORACLE.sql`
 
-### 1. Iniciar el Backend
+Conectarse como DAE2025:
+```bash
+sqlplus DAE2025/DAE2025@localhost:1521/xepdb1
+```
+
+Ejecutar el script:
+```sql
+@C:\src\EmpresarialesProyecto\EmpresarialesBackend\CREAR_BD_ORACLE.sql
+```
+
+**O copiar y pegar este código:**
+
+```sql
+-- Borrar tablas si existen
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE MANTENIMIENTO CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN NULL;
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'DROP TABLE CARRO CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN NULL;
+END;
+/
+
+-- TABLA MAESTRA: CARRO
+CREATE TABLE CARRO (
+    placa VARCHAR2(10) PRIMARY KEY,
+    marca VARCHAR2(50) NOT NULL,
+    modelo VARCHAR2(50) NOT NULL,
+    anio NUMBER(4) NOT NULL CHECK (anio >= 1900 AND anio <= 2100),
+    color VARCHAR2(30) NOT NULL,
+    numero_puertas NUMBER(1) NOT NULL CHECK (numero_puertas BETWEEN 2 AND 5),
+    tiene_aire_acondicionado NUMBER(1) DEFAULT 0 CHECK (tiene_aire_acondicionado IN (0, 1)),
+    precio NUMBER(10,2) NOT NULL CHECK (precio > 0),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo_transmision VARCHAR2(20) NOT NULL CHECK (tipo_transmision IN ('MANUAL', 'AUTOMATICA')),
+    estado VARCHAR2(20) DEFAULT 'DISPONIBLE'
+);
+
+-- TABLA DETALLE: MANTENIMIENTO (Relación 1:N con CARRO)
+CREATE TABLE MANTENIMIENTO (
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    placa_carro VARCHAR2(10) NOT NULL,
+    fecha_mantenimiento TIMESTAMP NOT NULL,
+    kilometraje NUMBER(10),
+    tipo_mantenimiento VARCHAR2(50) NOT NULL,
+    costo NUMBER(10,2) NOT NULL,
+    descripcion VARCHAR2(500) NOT NULL,
+    proximo_mantenimiento TIMESTAMP,
+    completado NUMBER(1) DEFAULT 0,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- FOREIGN KEY: Relación Maestro-Detalle
+    CONSTRAINT fk_mantenimiento_carro FOREIGN KEY (placa_carro)
+        REFERENCES CARRO(placa) ON DELETE CASCADE
+);
+
+-- Índices
+CREATE INDEX idx_mantenimiento_placa ON MANTENIMIENTO(placa_carro);
+
+-- Datos de prueba
+INSERT INTO CARRO VALUES ('ABC-123', 'Toyota', 'Corolla', 2022, 'Blanco', 4, 1, 25000.00, CURRENT_TIMESTAMP, 'AUTOMATICA', 'DISPONIBLE');
+INSERT INTO CARRO VALUES ('DEF-456', 'Honda', 'Civic', 2021, 'Negro', 4, 1, 23000.00, CURRENT_TIMESTAMP, 'MANUAL', 'DISPONIBLE');
+INSERT INTO CARRO VALUES ('GHI-789', 'Mazda', 'CX-5', 2023, 'Rojo', 5, 1, 35000.00, CURRENT_TIMESTAMP, 'AUTOMATICA', 'DISPONIBLE');
+
+INSERT INTO MANTENIMIENTO (placa_carro, fecha_mantenimiento, kilometraje, tipo_mantenimiento, costo, descripcion, proximo_mantenimiento, completado)
+VALUES ('ABC-123', TIMESTAMP '2024-01-15 09:30:00', 15000, 'PREVENTIVO', 350.00, 'Cambio de aceite y filtros', TIMESTAMP '2024-07-15 09:30:00', 1);
+
+INSERT INTO MANTENIMIENTO (placa_carro, fecha_mantenimiento, kilometraje, tipo_mantenimiento, costo, descripcion, proximo_mantenimiento, completado)
+VALUES ('ABC-123', TIMESTAMP '2024-06-20 14:00:00', 22000, 'CAMBIO_ACEITE', 180.00, 'Cambio de aceite sintético', TIMESTAMP '2024-12-20 14:00:00', 1);
+
+COMMIT;
+```
+
+---
+
+### 2.3 Verificar Datos
+
+```sql
+-- Ver carros
+SELECT * FROM CARRO;
+
+-- Ver mantenimientos
+SELECT * FROM MANTENIMIENTO;
+
+-- Consulta maestro-detalle
+SELECT c.placa, c.marca, c.modelo, m.tipo_mantenimiento, m.costo
+FROM CARRO c
+LEFT JOIN MANTENIMIENTO m ON c.placa = m.placa_carro
+ORDER BY c.placa;
+```
+
+---
+
+## 🏗️ 3. ARQUITECTURA DEL PROYECTO
+
+### 3.1 Relación Maestro-Detalle (@OneToMany/@ManyToOne)
+
+```
+┌─────────────────────┐
+│      CARRO          │  (Maestro)
+│  @OneToMany         │
+├─────────────────────┤
+│ placa (PK)          │───┐
+│ marca               │   │
+│ modelo              │   │ 1:N
+│ precio              │   │
+└─────────────────────┘   │
+                          │
+                          ▼
+┌─────────────────────┐
+│   MANTENIMIENTO     │  (Detalle)
+│   @ManyToOne        │
+├─────────────────────┤
+│ id (PK)             │
+│ placa_carro (FK)    │◄──┘
+│ tipo_mantenimiento  │
+│ costo               │
+└─────────────────────┘
+```
+
+**Anotaciones JPA implementadas:**
+
+```java
+// Carro.java
+@OneToMany(mappedBy = "carro", cascade = CascadeType.ALL,
+           orphanRemoval = true, fetch = FetchType.LAZY)
+@JsonManagedReference
+private List<Mantenimiento> mantenimientos;
+
+// Mantenimiento.java
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "placa_carro", nullable = false)
+@JsonBackReference
+private Carro carro;
+```
+
+---
+
+## 🚀 4. EJECUCIÓN DE APLICACIONES
+
+### 4.1 Backend - Spring Boot (Puerto 8080)
+
+```bash
+# Navegar al directorio
+cd C:\src\EmpresarialesProyecto\EmpresarialesBackend
+
+# Configurar JAVA_HOME (si es necesario)
+set JAVA_HOME=C:\Users\TU_USUARIO\.jdks\ms-17.0.16
+
+# Compilar y ejecutar
+mvnw.cmd spring-boot:run
+```
+
+**Verificar que esté funcionando:**
+```bash
+curl -u admin:admin http://localhost:8080/api/carro/healthCheck
+```
+
+**Credenciales:** `admin / admin`
+
+---
+
+### 4.2 Frontend - React (Puerto 5173)
+
+```bash
+# Navegar al directorio
+cd C:\src\EmpresarialesProyecto\EmpresarialesCliente
+
+# Instalar dependencias (solo primera vez)
+npm install
+
+# Ejecutar en desarrollo
+npm run dev
+```
+
+**Acceder:** `http://localhost:5173`
+
+---
+
+### 4.3 Cliente - C# WinForms
+
+```bash
+# Navegar al directorio
+cd C:\src\EmpresarialesProyecto\EmpresarialesClienteCSharp
+
+# Restaurar paquetes
+dotnet restore
+
+# Compilar y ejecutar
+dotnet run
+```
+
+**O abrir en Visual Studio 2022 y presionar F5**
+
+---
+
+## 📡 5. API REST - ENDPOINTS PRINCIPALES
+
+### 5.1 Carros
+
+```bash
+# Listar todos
+GET http://localhost:8080/api/carro
+
+# Buscar por placa
+GET http://localhost:8080/api/carro?placa=ABC-123
+
+# Crear carro
+POST http://localhost:8080/api/carro
+Content-Type: application/json
+{
+  "placa": "XYZ-999",
+  "marca": "Nissan",
+  "modelo": "Sentra",
+  "anio": 2023,
+  "color": "Gris",
+  "numeroPuertas": 4,
+  "tieneAireAcondicionado": true,
+  "precio": 28000.00,
+  "tipoTransmision": "AUTOMATICA",
+  "estado": "DISPONIBLE"
+}
+
+# Actualizar
+PUT http://localhost:8080/api/carro/ABC-123
+
+# Eliminar
+DELETE http://localhost:8080/api/carro/ABC-123
+```
+
+---
+
+### 5.2 Mantenimientos
+
+```bash
+# Listar todos
+GET http://localhost:8080/api/mantenimiento
+
+# Mantenimientos de un carro (maestro-detalle)
+GET http://localhost:8080/api/mantenimiento/carro/ABC-123
+
+# Mantenimientos urgentes
+GET http://localhost:8080/api/mantenimiento?action=urgentes
+
+# Estadísticas
+GET http://localhost:8080/api/mantenimiento?action=estadisticas
+
+# Crear mantenimiento
+POST http://localhost:8080/api/mantenimiento
+{
+  "carro": {"placa": "ABC-123"},
+  "fechaMantenimiento": "2024-11-01T10:00:00",
+  "kilometraje": 30000,
+  "tipoMantenimiento": "CAMBIO_ACEITE",
+  "costo": 200.00,
+  "descripcion": "Cambio de aceite sintético",
+  "proximoMantenimiento": "2025-05-01T10:00:00",
+  "completado": false
+}
+
+# Actualizar
+PUT http://localhost:8080/api/mantenimiento/1
+
+# Eliminar
+DELETE http://localhost:8080/api/mantenimiento/1
+```
+
+---
+
+## 🛠️ 6. SOLUCIÓN DE PROBLEMAS
+
+### Puerto 8080 ocupado
+```bash
+# Ver proceso en puerto 8080
+netstat -ano | findstr :8080
+
+# Matar proceso (reemplazar PID)
+taskkill /F /PID <PID>
+```
+
+### Error de conexión a Oracle
+```bash
+# Verificar servicio
+lsnrctl status
+
+# Asegurarse de usar /xepdb1 no /xe
+jdbc:oracle:thin:@localhost:1521/xepdb1
+```
+
+### Error de memoria JVM
+Ya corregido en `.mvn\jvm.config`:
+```
+-Xmx512m
+-Xms256m
+```
+
+---
+
+## 📊 7. CARACTERÍSTICAS IMPLEMENTADAS
+
+✅ **Arquitectura de microservicios** (Spring Boot REST API)
+✅ **Base de datos relacional Oracle** (21c XE)
+✅ **Operaciones CRUD completas**
+✅ **Relación Maestro-Detalle @OneToMany/@ManyToOne**
+✅ **12+ queries JPA personalizadas en MantenimientoRepository**
+✅ **10+ queries JPA personalizadas en CarroRepository**
+✅ **Consultas maestro-detalle con JOIN FETCH**
+✅ **Validaciones con Bean Validation**
+✅ **Transacciones con @Transactional**
+✅ **Connection pooling con HikariCP**
+✅ **Autenticación HTTP Basic Auth**
+✅ **CORS habilitado**
+✅ **Clientes en React y C# WinForms**
+
+---
+
+## 📝 8. COMANDOS RÁPIDOS
+
+### Oracle
+```bash
+# Conectar como SYSDBA
+sqlplus / as sysdba
+
+# Conectar como DAE2025
+sqlplus DAE2025/DAE2025@localhost:1521/xepdb1
+
+# Ver tablas
+SELECT table_name FROM user_tables;
+```
+
+### Spring Boot
 ```bash
 cd EmpresarialesBackend
-./mvnw spring-boot:run
+mvnw.cmd spring-boot:run
+mvnw.cmd clean package    # Compilar JAR
 ```
-El backend estará disponible en `http://localhost:8080`
 
-### 2. Iniciar Cliente React
+### React
 ```bash
 cd EmpresarialesCliente
 npm install
 npm run dev
+npm run build     # Producción
 ```
-Acceder a `http://localhost:5173`
 
-### 3. Iniciar Cliente C#
+### C#
 ```bash
 cd EmpresarialesClienteCSharp
 dotnet restore
 dotnet run
+dotnet build --configuration Release
 ```
-O abrir en Visual Studio 2022 y presionar F5
 
-## Casos de Uso
+---
 
-| Caso de Uso | Descripción | React | C# |
-|-------------|-------------|-------|-----|
-| Adicionar Objeto | Crear nuevo carro | ✅ | ✅ |
-| Listar Objetos | Mostrar todos los carros | ✅ | ✅ |
-| Buscar por Criterios | Filtros múltiples | ✅ | ✅ |
-| Actualizar Objeto | Con búsqueda previa | ✅ | ✅ |
-| Eliminar Objeto | Con búsqueda previa | ✅ | ✅ |
+## 📚 9. TECNOLOGÍAS
 
-## Tecnologías Utilizadas
+| Componente | Tecnología | Versión |
+|------------|------------|---------|
+| Backend | Spring Boot | 3.5.5 |
+| Java | OpenJDK | 17.0.16 |
+| ORM | Hibernate/JPA | 6.6.26 |
+| Base de Datos | Oracle XE | 21.3 |
+| Frontend | React + Vite | 18.x |
+| Cliente Desktop | .NET WinForms | 8.0 |
+| Build Tool | Maven | 3.9.x |
 
-### Backend
-- Java 17
-- Spring Boot 3.5.5
-- Spring Security
-- Jackson (JSON)
-- Bean Validation
+---
 
-### Cliente React
-- React 19
-- TypeScript
-- Vite
-- React Router v7
-- CSS Modules
+## 🎯 10. ESTRUCTURA DE DIRECTORIOS
 
-### Cliente C#
-- .NET 8.0
-- Windows Forms
-- HttpClient
-- Newtonsoft.Json
+```
+EmpresarialesProyecto/
+│
+├── EmpresarialesBackend/              # Spring Boot API
+│   ├── src/main/java/.../
+│   │   ├── controller/                # REST Controllers
+│   │   ├── service/                   # Business Logic
+│   │   ├── repository/                # JPA Repositories
+│   │   ├── model/                     # Entities (Carro, Mantenimiento)
+│   │   └── config/                    # Security Config
+│   ├── src/main/resources/
+│   │   └── application.properties     # Oracle connection
+│   ├── .mvn/jvm.config               # JVM memory config
+│   ├── pom.xml
+│   └── CREAR_BD_ORACLE.sql           # Database script
+│
+├── EmpresarialesCliente/             # React Frontend
+│   ├── src/pages/                    # React pages
+│   ├── package.json
+│   └── vite.config.ts
+│
+└── EmpresarialesClienteCSharp/       # C# WinForms
+    ├── Forms/                        # Windows Forms
+    ├── Utils/ApiClient.cs            # HTTP Client
+    └── Program.cs
+```
 
-## Equipo de Desarrollo
+---
 
-- **Juan David Reyes**
-- **Julio David Suarez**
-- **Sebastian Felipe Solano**
+## ✅ CHECKLIST DE INICIO
 
-**Universidad de Ibagué**
-Facultad de Ingeniería
-Desarrollo de Aplicaciones Empresariales
-2025-A
+- [ ] Instalar Java 17
+- [ ] Instalar Node.js 18+
+- [ ] Instalar .NET 8.0
+- [ ] Instalar Oracle XE 21c
+- [ ] Crear usuario DAE2025
+- [ ] Ejecutar script de tablas
+- [ ] Verificar conexión a BD
+- [ ] Iniciar backend (puerto 8080)
+- [ ] Iniciar frontend React (puerto 5173)
+- [ ] Compilar cliente C#
+- [ ] Probar endpoints con curl
 
-## Licencia
-Proyecto académico - Universidad de Ibagué
+---
+
+**¡Proyecto listo para ejecutar! 🚀**
+
+**Universidad de Ibagué** - 2025-A

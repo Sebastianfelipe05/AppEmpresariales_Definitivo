@@ -1,135 +1,189 @@
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using EmpresarialesClienteCSharp.Models;
 using EmpresarialesClienteCSharp.Services;
+using EmpresarialesClienteCSharp.Utils;
 
 namespace EmpresarialesClienteCSharp.Forms
 {
     public partial class CrearMantenimientoForm : Form
     {
         private readonly MantenimientoService _mantenimientoService;
-        private TextBox txtPlacaCarro;
-        private DateTimePicker dtpFechaMantenimiento;
-        private NumericUpDown nudKilometraje;
-        private ComboBox cboTipoMantenimiento;
-        private NumericUpDown nudCosto;
-        private TextBox txtDescripcion;
-        private DateTimePicker dtpProximoMantenimiento;
-        private CheckBox chkProximoMantenimiento;
-        private CheckBox chkCompletado;
-        private Button btnGuardar;
-        private Button btnCancelar;
+        private TextBox txtPlacaCarro = null!;
+        private DateTimePicker dtpFechaMantenimiento = null!;
+        private NumericUpDown nudKilometraje = null!;
+        private ComboBox cboTipoMantenimiento = null!;
+        private NumericUpDown nudCosto = null!;
+        private TextBox txtDescripcion = null!;
+        private DateTimePicker dtpProximoMantenimiento = null!;
+        private CheckBox chkProximoMantenimiento = null!;
+        private CheckBox chkCompletado = null!;
 
         public CrearMantenimientoForm()
         {
             _mantenimientoService = new MantenimientoService();
             InitializeComponent();
-            ConfigurarFormulario();
+            ModernUI.MakeResponsive(this);
         }
 
         private void InitializeComponent()
         {
-            this.Text = "Crear Nuevo Mantenimiento";
-            this.Size = new Size(600, 650);
+            this.Text = "Registrar Nuevo Mantenimiento";
+            this.Size = new Size(900, 950);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
+            this.BackColor = ModernUI.Colors.Background;
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            this.MinimumSize = new Size(800, 850);
+
+            // Panel principal con scroll
+            var mainPanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                AutoScroll = true,
+                BackColor = ModernUI.Colors.Background,
+                Padding = new Padding(30)
+            };
+
+            // Header
+            var headerPanel = CreateHeader();
+            mainPanel.Controls.Add(headerPanel);
+
+            // Form Card
+            var formCard = CreateFormCard();
+            formCard.Location = new Point(30, 120);
+            mainPanel.Controls.Add(formCard);
+
+            this.Controls.Add(mainPanel);
         }
 
-        private void ConfigurarFormulario()
+        private Panel CreateHeader()
         {
-            int yPos = 20;
-            int labelX = 20;
-            int controlX = 180;
-            int controlWidth = 360;
+            var header = new Panel
+            {
+                Location = new Point(0, 0),
+                Size = new Size(840, 100),
+                BackColor = Color.Transparent
+            };
+
+            // Botón volver
+            var btnVolver = CreateBackButton();
+            btnVolver.Location = new Point(0, 10);
+            header.Controls.Add(btnVolver);
 
             // Título
             var lblTitulo = new Label
             {
-                Text = "CREAR NUEVO MANTENIMIENTO",
-                Font = new Font("Arial", 14, FontStyle.Bold),
-                Location = new Point(20, yPos),
-                AutoSize = true
+                Text = "🔧 Registrar Mantenimiento",
+                Font = ModernUI.Fonts.Heading1,
+                ForeColor = ModernUI.Colors.Gray900,
+                AutoSize = true,
+                Location = new Point(0, 50),
+                BackColor = Color.Transparent
             };
-            this.Controls.Add(lblTitulo);
-            yPos += 40;
+            header.Controls.Add(lblTitulo);
 
+            // Subtítulo
+            var lblSubtitulo = new Label
+            {
+                Text = "Complete el formulario para registrar un nuevo mantenimiento vehicular",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray600,
+                AutoSize = true,
+                Location = new Point(0, 80),
+                BackColor = Color.Transparent
+            };
+            header.Controls.Add(lblSubtitulo);
+
+            return header;
+        }
+
+        private Button CreateBackButton()
+        {
+            var btn = new Button
+            {
+                Text = "← Volver",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Info,
+                BackColor = Color.Transparent,
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(100, 35),
+                Cursor = Cursors.Hand
+            };
+
+            btn.FlatAppearance.BorderSize = 0;
+            btn.FlatAppearance.MouseOverBackColor = ModernUI.Colors.Gray100;
+
+            btn.Click += (s, e) => this.Close();
+
+            return btn;
+        }
+
+        private Panel CreateFormCard()
+        {
+            var card = new Panel
+            {
+                Size = new Size(840, 730),
+                BackColor = Color.White
+            };
+
+            card.Paint += (s, e) => {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                // Sombra
+                using (var shadowPath = GetRoundedRectangle(new Rectangle(2, 2, 836, 726), 12))
+                using (var shadowBrush = new SolidBrush(Color.FromArgb(10, 0, 0, 0)))
+                {
+                    e.Graphics.FillPath(shadowBrush, shadowPath);
+                }
+
+                // Fondo
+                using (var path = GetRoundedRectangle(new Rectangle(0, 0, 839, 729), 12))
+                using (var brush = new SolidBrush(Color.White))
+                using (var pen = new Pen(ModernUI.Colors.Border, 1))
+                {
+                    e.Graphics.FillPath(brush, path);
+                    e.Graphics.DrawPath(pen, path);
+                }
+            };
+
+            int y = 30;
+            int leftCol = 30;
+            int rightCol = 440;
+            int fieldWidth = 360;
+
+            // COLUMNA IZQUIERDA
             // Placa del Carro
-            var lblPlaca = new Label
-            {
-                Text = "Placa del Carro: *",
-                Location = new Point(labelX, yPos),
-                Width = 150
-            };
-            this.Controls.Add(lblPlaca);
-
-            txtPlacaCarro = new TextBox
-            {
-                Location = new Point(controlX, yPos),
-                Width = controlWidth,
-                MaxLength = 7,
-                CharacterCasing = CharacterCasing.Upper
-            };
-            txtPlacaCarro.Leave += ValidarPlaca;
-            this.Controls.Add(txtPlacaCarro);
-            yPos += 35;
+            var lblPlaca = CreateLabel("Placa del Carro *", leftCol, y);
+            card.Controls.Add(lblPlaca);
+            txtPlacaCarro = CreateModernTextBox(card, leftCol, y + 25, fieldWidth);
+            txtPlacaCarro.CharacterCasing = CharacterCasing.Upper;
+            txtPlacaCarro.MaxLength = 10;
+            y += 75;
 
             // Fecha de Mantenimiento
-            var lblFecha = new Label
-            {
-                Text = "Fecha Mantenimiento: *",
-                Location = new Point(labelX, yPos),
-                Width = 150
-            };
-            this.Controls.Add(lblFecha);
-
-            dtpFechaMantenimiento = new DateTimePicker
-            {
-                Location = new Point(controlX, yPos),
-                Width = controlWidth,
-                Format = DateTimePickerFormat.Custom,
-                CustomFormat = "dd/MM/yyyy HH:mm",
-                ShowUpDown = false
-            };
-            this.Controls.Add(dtpFechaMantenimiento);
-            yPos += 35;
+            var lblFecha = CreateLabel("Fecha de Mantenimiento *", leftCol, y);
+            card.Controls.Add(lblFecha);
+            dtpFechaMantenimiento = CreateModernDateTimePicker(leftCol, y + 25, fieldWidth);
+            dtpFechaMantenimiento.Format = DateTimePickerFormat.Custom;
+            dtpFechaMantenimiento.CustomFormat = "dd/MM/yyyy HH:mm";
+            card.Controls.Add(dtpFechaMantenimiento);
+            y += 75;
 
             // Kilometraje
-            var lblKilometraje = new Label
-            {
-                Text = "Kilometraje (km): *",
-                Location = new Point(labelX, yPos),
-                Width = 150
-            };
-            this.Controls.Add(lblKilometraje);
-
-            nudKilometraje = new NumericUpDown
-            {
-                Location = new Point(controlX, yPos),
-                Width = controlWidth,
-                Minimum = 0,
-                Maximum = 1000000,
-                ThousandsSeparator = true
-            };
-            this.Controls.Add(nudKilometraje);
-            yPos += 35;
+            var lblKilometraje = CreateLabel("Kilometraje (km) *", leftCol, y);
+            card.Controls.Add(lblKilometraje);
+            nudKilometraje = CreateModernNumericUpDown(leftCol, y + 25, fieldWidth);
+            nudKilometraje.Maximum = 1000000;
+            nudKilometraje.ThousandsSeparator = true;
+            card.Controls.Add(nudKilometraje);
+            y += 75;
 
             // Tipo de Mantenimiento
-            var lblTipo = new Label
-            {
-                Text = "Tipo Mantenimiento: *",
-                Location = new Point(labelX, yPos),
-                Width = 150
-            };
-            this.Controls.Add(lblTipo);
-
-            cboTipoMantenimiento = new ComboBox
-            {
-                Location = new Point(controlX, yPos),
-                Width = controlWidth,
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
+            var lblTipo = CreateLabel("Tipo de Mantenimiento *", leftCol, y);
+            card.Controls.Add(lblTipo);
+            cboTipoMantenimiento = CreateModernComboBox(leftCol, y + 25, fieldWidth);
             cboTipoMantenimiento.Items.AddRange(new object[]
             {
                 "PREVENTIVO",
@@ -140,170 +194,248 @@ namespace EmpresarialesClienteCSharp.Forms
                 "OTROS"
             });
             cboTipoMantenimiento.SelectedIndex = 0;
-            this.Controls.Add(cboTipoMantenimiento);
-            yPos += 35;
+            card.Controls.Add(cboTipoMantenimiento);
+
+            // COLUMNA DERECHA
+            y = 30;
 
             // Costo
-            var lblCosto = new Label
-            {
-                Text = "Costo: *",
-                Location = new Point(labelX, yPos),
-                Width = 150
-            };
-            this.Controls.Add(lblCosto);
+            var lblCosto = CreateLabel("Costo ($) *", rightCol, y);
+            card.Controls.Add(lblCosto);
+            nudCosto = CreateModernNumericUpDown(rightCol, y + 25, fieldWidth);
+            nudCosto.Maximum = 100000000;
+            nudCosto.ThousandsSeparator = true;
+            card.Controls.Add(nudCosto);
+            y += 75;
 
-            nudCosto = new NumericUpDown
-            {
-                Location = new Point(controlX, yPos),
-                Width = controlWidth,
-                Minimum = 0,
-                Maximum = 100000000,
-                DecimalPlaces = 0,
-                ThousandsSeparator = true
-            };
-            this.Controls.Add(nudCosto);
-            yPos += 35;
+            // Descripción (spanning both columns)
+            y = 330;
+            var lblDescripcion = CreateLabel("Descripción del Mantenimiento *", leftCol, y);
+            card.Controls.Add(lblDescripcion);
 
-            // Descripción
-            var lblDescripcion = new Label
+            var txtDescContainer = new Panel
             {
-                Text = "Descripción: *",
-                Location = new Point(labelX, yPos),
-                Width = 150
+                Location = new Point(leftCol, y + 25),
+                Size = new Size(770, 120),
+                BackColor = Color.White
             };
-            this.Controls.Add(lblDescripcion);
+
+            txtDescContainer.Paint += (s, e) => {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (var path = GetRoundedRectangle(txtDescContainer.ClientRectangle, 8))
+                using (var pen = new Pen(ModernUI.Colors.Border, 2))
+                {
+                    e.Graphics.DrawPath(pen, path);
+                }
+            };
 
             txtDescripcion = new TextBox
             {
-                Location = new Point(controlX, yPos),
-                Width = controlWidth,
-                Height = 80,
+                Location = new Point(10, 10),
+                Width = 750,
+                Height = 100,
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                BorderStyle = BorderStyle.None,
+                BackColor = Color.White,
+                ForeColor = ModernUI.Colors.Gray900,
                 Multiline = true,
                 MaxLength = 500,
                 ScrollBars = ScrollBars.Vertical
             };
-            this.Controls.Add(txtDescripcion);
-            yPos += 90;
 
-            // Próximo Mantenimiento (Checkbox)
-            chkProximoMantenimiento = new CheckBox
-            {
-                Text = "Programar próximo mantenimiento",
-                Location = new Point(labelX, yPos),
-                Width = 250
-            };
-            chkProximoMantenimiento.CheckedChanged += ChkProximoMantenimiento_CheckedChanged;
-            this.Controls.Add(chkProximoMantenimiento);
-            yPos += 30;
+            txtDescContainer.Controls.Add(txtDescripcion);
+            card.Controls.Add(txtDescContainer);
 
-            // Fecha Próximo Mantenimiento
-            dtpProximoMantenimiento = new DateTimePicker
-            {
-                Location = new Point(controlX, yPos),
-                Width = controlWidth,
-                Format = DateTimePickerFormat.Custom,
-                CustomFormat = "dd/MM/yyyy",
-                Enabled = false
-            };
-            this.Controls.Add(dtpProximoMantenimiento);
-            yPos += 35;
-
-            // Completado
+            // Checkboxes
+            y = 475;
             chkCompletado = new CheckBox
             {
-                Text = "Mantenimiento completado",
-                Location = new Point(labelX, yPos),
-                Width = 250
+                Text = "  ✅ Mantenimiento Completado",
+                Location = new Point(leftCol, y),
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray700,
+                AutoSize = true,
+                Checked = false,
+                BackColor = Color.Transparent
             };
-            this.Controls.Add(chkCompletado);
-            yPos += 40;
+            card.Controls.Add(chkCompletado);
 
-            // Nota
+            y += 30;
+            chkProximoMantenimiento = new CheckBox
+            {
+                Text = "  📅 Programar Próximo Mantenimiento",
+                Location = new Point(leftCol, y),
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray700,
+                AutoSize = true,
+                Checked = false,
+                BackColor = Color.Transparent
+            };
+            chkProximoMantenimiento.CheckedChanged += (s, e) => {
+                dtpProximoMantenimiento.Enabled = chkProximoMantenimiento.Checked;
+            };
+            card.Controls.Add(chkProximoMantenimiento);
+
+            // Fecha Próximo Mantenimiento
+            y += 30;
+            var lblProximoMant = CreateLabel("Fecha del Próximo Mantenimiento", leftCol, y);
+            card.Controls.Add(lblProximoMant);
+            dtpProximoMantenimiento = CreateModernDateTimePicker(leftCol, y + 25, 360);
+            dtpProximoMantenimiento.Format = DateTimePickerFormat.Custom;
+            dtpProximoMantenimiento.CustomFormat = "dd/MM/yyyy";
+            dtpProximoMantenimiento.Enabled = false;
+            card.Controls.Add(dtpProximoMantenimiento);
+
+            // Nota de campos obligatorios
+            y = 615;
             var lblNota = new Label
             {
                 Text = "* Campos obligatorios",
-                Location = new Point(labelX, yPos),
-                Width = 200,
-                ForeColor = Color.Red,
-                Font = new Font("Arial", 8, FontStyle.Italic)
+                Location = new Point(leftCol, y),
+                Font = new Font("Segoe UI", 9, FontStyle.Italic),
+                ForeColor = ModernUI.Colors.Danger,
+                AutoSize = true,
+                BackColor = Color.Transparent
             };
-            this.Controls.Add(lblNota);
-            yPos += 30;
+            card.Controls.Add(lblNota);
 
             // Botones
-            btnGuardar = new Button
-            {
-                Text = "Guardar",
-                Location = new Point(controlX, yPos),
-                Width = 120,
-                Height = 35
-            };
-            btnGuardar.Click += BtnGuardar_Click;
-            this.Controls.Add(btnGuardar);
+            y = 655;
+            var btnGuardar = ModernUI.CreateSuccessButton("💾 Guardar Mantenimiento", BtnGuardar_Click);
+            btnGuardar.Location = new Point(leftCol, y);
+            btnGuardar.Size = new Size(360, 50);
+            btnGuardar.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            card.Controls.Add(btnGuardar);
 
-            btnCancelar = new Button
-            {
-                Text = "Cancelar",
-                Location = new Point(controlX + 140, yPos),
-                Width = 120,
-                Height = 35
-            };
-            btnCancelar.Click += (s, e) => this.Close();
-            this.Controls.Add(btnCancelar);
+            var btnCancelar = ModernUI.CreateDangerButton("✖️ Cancelar", (s, e) => this.Close());
+            btnCancelar.Location = new Point(rightCol, y);
+            btnCancelar.Size = new Size(360, 50);
+            btnCancelar.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            card.Controls.Add(btnCancelar);
+
+            return card;
         }
 
-        private void ChkProximoMantenimiento_CheckedChanged(object? sender, EventArgs e)
+        private Label CreateLabel(string text, int x, int y)
         {
-            dtpProximoMantenimiento.Enabled = chkProximoMantenimiento.Checked;
+            return new Label
+            {
+                Text = text,
+                Location = new Point(x, y),
+                Font = ModernUI.Fonts.BodyBold,
+                ForeColor = ModernUI.Colors.Gray700,
+                AutoSize = true,
+                BackColor = Color.Transparent
+            };
         }
 
-        private void ValidarPlaca(object? sender, EventArgs e)
+        private TextBox CreateModernTextBox(Panel parent, int x, int y, int width)
         {
-            string placa = txtPlacaCarro.Text.Trim();
-            if (!string.IsNullOrEmpty(placa) && !System.Text.RegularExpressions.Regex.IsMatch(placa, @"^[A-Z]{3}-[0-9]{3}$"))
+            var container = new Panel
             {
-                MessageBox.Show("La placa debe tener el formato ABC-123",
-                    "Formato Incorrecto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtPlacaCarro.Focus();
-            }
+                Location = new Point(x, y),
+                Size = new Size(width, 40),
+                BackColor = Color.White
+            };
+
+            container.Paint += (s, e) => {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (var path = GetRoundedRectangle(container.ClientRectangle, 8))
+                using (var pen = new Pen(ModernUI.Colors.Border, 2))
+                {
+                    e.Graphics.DrawPath(pen, path);
+                }
+            };
+
+            var txt = new TextBox
+            {
+                Location = new Point(10, 8),
+                Width = width - 20,
+                Height = 24,
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                BorderStyle = BorderStyle.None,
+                BackColor = Color.White,
+                ForeColor = ModernUI.Colors.Gray900
+            };
+
+            container.Controls.Add(txt);
+            parent.Controls.Add(container);
+
+            return txt;
+        }
+
+        private NumericUpDown CreateModernNumericUpDown(int x, int y, int width)
+        {
+            var nud = new NumericUpDown
+            {
+                Location = new Point(x, y),
+                Size = new Size(width, 40),
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                Minimum = 0,
+                Maximum = 999999,
+                BackColor = Color.White,
+                ForeColor = ModernUI.Colors.Gray900
+            };
+
+            return nud;
+        }
+
+        private ComboBox CreateModernComboBox(int x, int y, int width)
+        {
+            var cmb = new ComboBox
+            {
+                Location = new Point(x, y),
+                Size = new Size(width, 40),
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                ForeColor = ModernUI.Colors.Gray900,
+                BackColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            return cmb;
+        }
+
+        private DateTimePicker CreateModernDateTimePicker(int x, int y, int width)
+        {
+            var dtp = new DateTimePicker
+            {
+                Location = new Point(x, y),
+                Size = new Size(width, 40),
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                Format = DateTimePickerFormat.Long,
+                CalendarForeColor = ModernUI.Colors.Gray900,
+                CalendarMonthBackground = Color.White
+            };
+
+            return dtp;
         }
 
         private async void BtnGuardar_Click(object? sender, EventArgs e)
         {
-            // Validaciones
-            if (string.IsNullOrWhiteSpace(txtPlacaCarro.Text))
-            {
-                MessageBox.Show("La placa del carro es obligatoria", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtPlacaCarro.Focus();
-                return;
-            }
-
-            if (!System.Text.RegularExpressions.Regex.IsMatch(txtPlacaCarro.Text.Trim(), @"^[A-Z]{3}-[0-9]{3}$"))
-            {
-                MessageBox.Show("La placa debe tener el formato ABC-123", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtPlacaCarro.Focus();
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtDescripcion.Text) || txtDescripcion.Text.Length < 10)
-            {
-                MessageBox.Show("La descripción debe tener al menos 10 caracteres", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtDescripcion.Focus();
-                return;
-            }
-
-            if (txtDescripcion.Text.Length > 500)
-            {
-                MessageBox.Show("La descripción no puede exceder 500 caracteres", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtDescripcion.Focus();
-                return;
-            }
-
             try
             {
+                // Validaciones
+                if (string.IsNullOrWhiteSpace(txtPlacaCarro.Text))
+                {
+                    MessageBox.Show("La placa del carro es obligatoria.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtPlacaCarro.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(txtDescripcion.Text) || txtDescripcion.Text.Length < 10)
+                {
+                    MessageBox.Show("La descripción debe tener al menos 10 caracteres.", "Validación",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtDescripcion.Focus();
+                    return;
+                }
+
+                // Crear objeto Mantenimiento
                 var mantenimiento = new Mantenimiento
                 {
-                    PlacaCarro = txtPlacaCarro.Text.Trim(),
+                    PlacaCarro = txtPlacaCarro.Text.Trim().ToUpper(),
                     FechaMantenimiento = dtpFechaMantenimiento.Value,
                     Kilometraje = (int)nudKilometraje.Value,
                     TipoMantenimiento = cboTipoMantenimiento.SelectedItem?.ToString() ?? "PREVENTIVO",
@@ -313,24 +445,39 @@ namespace EmpresarialesClienteCSharp.Forms
                     Completado = chkCompletado.Checked
                 };
 
-                btnGuardar.Enabled = false;
-                btnGuardar.Text = "Guardando...";
+                this.Cursor = Cursors.WaitCursor;
 
+                // Guardar en el servicio
                 await _mantenimientoService.CrearMantenimientoAsync(mantenimiento);
 
-                MessageBox.Show("Mantenimiento creado exitosamente",
-                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Cursor = Cursors.Default;
+
+                MessageBox.Show("✅ Mantenimiento registrado exitosamente!", "Éxito",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al crear el mantenimiento: {ex.Message}",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnGuardar.Enabled = true;
-                btnGuardar.Text = "Guardar";
+                this.Cursor = Cursors.Default;
+                MessageBox.Show($"Error al registrar el mantenimiento:\n\n{ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private GraphicsPath GetRoundedRectangle(Rectangle rect, int radius)
+        {
+            var path = new GraphicsPath();
+            int diameter = radius * 2;
+
+            path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
+            path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
+            path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
+            path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
+            path.CloseFigure();
+
+            return path;
         }
     }
 }

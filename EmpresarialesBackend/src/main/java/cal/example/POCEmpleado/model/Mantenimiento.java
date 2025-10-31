@@ -1,75 +1,89 @@
 package cal.example.POCEmpleado.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Clase Mantenimiento - Representa el detalle de los mantenimientos de un Carro
- * Relación: Carro (1) <---> (0..*) Mantenimiento
+ * Relación: Carro (1) <---> (N) Mantenimiento
  * Cumple con los requisitos:
  * - int: kilometraje
  * - double: costo
- * - String: id, placaCarro, tipoMantenimiento, descripcion
+ * - String: tipoMantenimiento, descripcion
  * - LocalDateTime: fechaMantenimiento, proximoMantenimiento
  * - boolean: completado
  */
+@Entity
+@Table(name = "MANTENIMIENTO")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Mantenimiento {
 
-    @NotBlank(message = "El ID es obligatorio")
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    @NotBlank(message = "La placa del carro es obligatoria")
-    @Pattern(regexp = "^[A-Z]{3}-[0-9]{3}$", message = "La placa debe tener el formato ABC-123")
-    private String placaCarro; // FK → Carro.placa
+    // ===== RELACIÓN @ManyToOne CON CARRO =====
+    // MUCHOS Mantenimientos pertenecen a UN Carro
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "placa_carro", nullable = false)
+    @JsonBackReference  // Evita recursión infinita en JSON
+    private Carro carro;
 
     @NotNull(message = "La fecha de mantenimiento es obligatoria")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "fecha_mantenimiento", nullable = false)
     private LocalDateTime fechaMantenimiento;
 
     @NotNull(message = "El kilometraje es obligatorio")
     @Min(value = 0, message = "El kilometraje debe ser mayor o igual a 0")
     @Max(value = 1000000, message = "El kilometraje debe ser menor a 1,000,000 km")
-    private int kilometraje;
+    @Column(nullable = true)
+    private Integer kilometraje;
 
     @NotBlank(message = "El tipo de mantenimiento es obligatorio")
     @Pattern(regexp = "PREVENTIVO|CORRECTIVO|REVISION|CAMBIO_ACEITE|CAMBIO_LLANTAS|OTROS",
              message = "El tipo debe ser: PREVENTIVO, CORRECTIVO, REVISION, CAMBIO_ACEITE, CAMBIO_LLANTAS u OTROS")
+    @Column(name = "tipo_mantenimiento", nullable = false, length = 50)
     private String tipoMantenimiento;
 
     @NotNull(message = "El costo es obligatorio")
     @DecimalMin(value = "0.0", inclusive = true, message = "El costo debe ser mayor o igual a 0")
+    @Column(name = "costo", nullable = false, columnDefinition = "NUMBER(10,2)")
     private double costo;
 
     @NotBlank(message = "La descripción es obligatoria")
     @Size(min = 10, max = 500, message = "La descripción debe tener entre 10 y 500 caracteres")
+    @Column(length = 500)
     private String descripcion;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "proximo_mantenimiento")
     private LocalDateTime proximoMantenimiento;
 
+    @Column(nullable = false)
     private boolean completado;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
 
     // Constructor por defecto
     public Mantenimiento() {
-        this.id = UUID.randomUUID().toString();
         this.fechaRegistro = LocalDateTime.now();
         this.completado = false;
     }
 
     // Constructor completo
-    public Mantenimiento(String placaCarro, LocalDateTime fechaMantenimiento, int kilometraje,
+    public Mantenimiento(Carro carro, LocalDateTime fechaMantenimiento, Integer kilometraje,
                         String tipoMantenimiento, double costo, String descripcion,
                         LocalDateTime proximoMantenimiento) {
-        this.id = UUID.randomUUID().toString();
-        this.placaCarro = placaCarro;
+        this.carro = carro;
         this.fechaMantenimiento = fechaMantenimiento;
         this.kilometraje = kilometraje;
         this.tipoMantenimiento = tipoMantenimiento;
@@ -104,20 +118,25 @@ public class Mantenimiento {
     }
 
     // Getters y Setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getPlacaCarro() {
-        return placaCarro;
+    public Carro getCarro() {
+        return carro;
     }
 
-    public void setPlacaCarro(String placaCarro) {
-        this.placaCarro = placaCarro;
+    public void setCarro(Carro carro) {
+        this.carro = carro;
+    }
+
+    // Helper para obtener la placa del carro (compatibilidad con código existente)
+    public String getPlacaCarro() {
+        return carro != null ? carro.getPlaca() : null;
     }
 
     public LocalDateTime getFechaMantenimiento() {
@@ -128,11 +147,11 @@ public class Mantenimiento {
         this.fechaMantenimiento = fechaMantenimiento;
     }
 
-    public int getKilometraje() {
+    public Integer getKilometraje() {
         return kilometraje;
     }
 
-    public void setKilometraje(int kilometraje) {
+    public void setKilometraje(Integer kilometraje) {
         this.kilometraje = kilometraje;
     }
 
@@ -200,8 +219,8 @@ public class Mantenimiento {
     @Override
     public String toString() {
         return "Mantenimiento{" +
-                "id='" + id + '\'' +
-                ", placaCarro='" + placaCarro + '\'' +
+                "id=" + id +
+                ", placaCarro='" + getPlacaCarro() + '\'' +
                 ", fechaMantenimiento=" + fechaMantenimiento +
                 ", kilometraje=" + kilometraje +
                 ", tipoMantenimiento='" + tipoMantenimiento + '\'' +

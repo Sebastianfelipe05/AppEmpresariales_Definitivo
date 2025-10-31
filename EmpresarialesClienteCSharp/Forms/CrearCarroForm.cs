@@ -1,8 +1,10 @@
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using EmpresarialesClienteCSharp.Models;
 using EmpresarialesClienteCSharp.Services;
+using EmpresarialesClienteCSharp.Utils;
 
 namespace EmpresarialesClienteCSharp.Forms
 {
@@ -17,178 +19,316 @@ namespace EmpresarialesClienteCSharp.Forms
         {
             _carroService = new CarroService();
             InitializeComponent();
+            ModernUI.MakeResponsive(this);
         }
 
         private void InitializeComponent()
         {
-            this.Text = "Registrar Vehículo - Concesionario App";
-            this.Size = new Size(650, 750);
+            this.Text = "Registrar Nuevo Vehículo";
+            this.Size = new Size(900, 900);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.BackColor = Color.White;
+            this.BackColor = ModernUI.Colors.Background;
             this.AutoScaleMode = AutoScaleMode.Dpi;
+            this.MinimumSize = new Size(800, 800);
 
-            // Panel principal
-            var panel = new Panel
+            // Panel principal con scroll
+            var mainPanel = new Panel
             {
                 Dock = DockStyle.Fill,
-                Padding = new Padding(20),
-                AutoScroll = true
+                AutoScroll = true,
+                BackColor = ModernUI.Colors.Background,
+                Padding = new Padding(30)
             };
+
+            // Header
+            var headerPanel = CreateHeader();
+            mainPanel.Controls.Add(headerPanel);
+
+            // Form Card
+            var formCard = CreateFormCard();
+            formCard.Location = new Point(30, 120);
+            mainPanel.Controls.Add(formCard);
+
+            this.Controls.Add(mainPanel);
+        }
+
+        private Panel CreateHeader()
+        {
+            var header = new Panel
+            {
+                Location = new Point(0, 0),
+                Size = new Size(840, 100),
+                BackColor = Color.Transparent
+            };
+
+            // Botón volver
+            var btnVolver = CreateBackButton();
+            btnVolver.Location = new Point(0, 10);
+            header.Controls.Add(btnVolver);
 
             // Título
             var lblTitulo = new Label
             {
-                Text = "Registrar Nuevo Vehículo",
-                Font = new Font("Segoe UI", 18, FontStyle.Bold),
-                ForeColor = Color.FromArgb(30, 58, 138),
+                Text = "➕ Registrar Vehículo",
+                Font = ModernUI.Fonts.Heading1,
+                ForeColor = ModernUI.Colors.Gray900,
                 AutoSize = true,
-                Location = new Point(20, 20)
+                Location = new Point(0, 50),
+                BackColor = Color.Transparent
             };
+            header.Controls.Add(lblTitulo);
 
-            int y = 70;
-
-            // Crear campos del formulario
-            txtPlaca = CrearCampoTexto(panel, "Placa (ABC-123):", y); y += 60;
-            txtMarca = CrearCampoTexto(panel, "Marca:", y); y += 60;
-            txtModelo = CrearCampoTexto(panel, "Modelo:", y); y += 60;
-            txtColor = CrearCampoTexto(panel, "Color:", y); y += 60;
-            txtAnio = CrearCampoTexto(panel, "Año:", y); y += 60;
-            txtPuertas = CrearCampoTexto(panel, "Número de Puertas (2-5):", y); y += 60;
-            txtPrecio = CrearCampoTexto(panel, "Precio:", y); y += 60;
-
-            // Combustible
-            var lblCombustible = new Label
+            // Subtítulo
+            var lblSubtitulo = new Label
             {
-                Text = "Combustible:",
-                Location = new Point(20, y),
+                Text = "Complete el formulario para agregar un nuevo vehículo al inventario",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray600,
                 AutoSize = true,
-                Font = new Font("Segoe UI", 10),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left
+                Location = new Point(0, 80),
+                BackColor = Color.Transparent
             };
-            cmbCombustible = new ComboBox
-            {
-                Location = new Point(20, y + 25),
-                Size = new Size(panel.Width - 60, 30),
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                Font = new Font("Segoe UI", 10),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
-            };
-            cmbCombustible.Items.AddRange(new[] { "GASOLINA", "DIESEL", "HIBRIDO", "ELECTRICO" });
-            cmbCombustible.SelectedIndex = 0;
-            panel.Controls.AddRange(new Control[] { lblCombustible, cmbCombustible });
-            y += 60;
+            header.Controls.Add(lblSubtitulo);
 
-            // Estado
-            var lblEstado = new Label
-            {
-                Text = "Estado:",
-                Location = new Point(20, y),
-                AutoSize = true,
-                Font = new Font("Segoe UI", 10),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left
-            };
-            cmbEstado = new ComboBox
-            {
-                Location = new Point(20, y + 25),
-                Size = new Size(panel.Width - 60, 30),
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                Font = new Font("Segoe UI", 10),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
-            };
-            cmbEstado.Items.AddRange(new[] { "NUEVO", "USADO", "EXCELENTE", "BUENO", "REGULAR" });
-            cmbEstado.SelectedIndex = 0;
-            panel.Controls.AddRange(new Control[] { lblEstado, cmbEstado });
-            y += 60;
-
-            // Transmisión
-            var lblTransmision = new Label
-            {
-                Text = "Transmisión:",
-                Location = new Point(20, y),
-                AutoSize = true,
-                Font = new Font("Segoe UI", 10),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left
-            };
-            cmbTransmision = new ComboBox
-            {
-                Location = new Point(20, y + 25),
-                Size = new Size(panel.Width - 60, 30),
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                Font = new Font("Segoe UI", 10),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
-            };
-            cmbTransmision.Items.AddRange(new[] { "MANUAL", "AUTOMATICA" });
-            cmbTransmision.SelectedIndex = 0;
-            panel.Controls.AddRange(new Control[] { lblTransmision, cmbTransmision });
-            y += 60;
-
-            // Aire Acondicionado
-            chkAireAcondicionado = new CheckBox
-            {
-                Text = "Tiene Aire Acondicionado",
-                Location = new Point(20, y),
-                AutoSize = true,
-                Font = new Font("Segoe UI", 10),
-                Checked = false
-            };
-            panel.Controls.Add(chkAireAcondicionado);
-            y += 50;
-
-            // Botones
-            var btnGuardar = new Button
-            {
-                Text = "Guardar Vehículo",
-                Size = new Size(260, 50),
-                Location = new Point(20, y),
-                BackColor = Color.FromArgb(5, 150, 105),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                Cursor = Cursors.Hand
-            };
-            btnGuardar.FlatAppearance.BorderSize = 0;
-            btnGuardar.Click += BtnGuardar_Click;
-
-            var btnCancelar = new Button
-            {
-                Text = "Cancelar",
-                Size = new Size(260, 50),
-                Location = new Point(300, y),
-                BackColor = Color.FromArgb(220, 38, 38),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                Cursor = Cursors.Hand
-            };
-            btnCancelar.FlatAppearance.BorderSize = 0;
-            btnCancelar.Click += (s, e) => this.Close();
-
-            panel.Controls.AddRange(new Control[] { lblTitulo, btnGuardar, btnCancelar });
-            this.Controls.Add(panel);
+            return header;
         }
 
-        private TextBox CrearCampoTexto(Panel panel, string etiqueta, int y)
+        private Button CreateBackButton()
         {
-            var lbl = new Label
+            var btn = new Button
             {
-                Text = etiqueta,
-                Location = new Point(20, y),
-                AutoSize = true,
-                Font = new Font("Segoe UI", 10, FontStyle.Regular, GraphicsUnit.Point),
-                UseCompatibleTextRendering = false,
-                Anchor = AnchorStyles.Top | AnchorStyles.Left
+                Text = "← Volver",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Success,
+                BackColor = Color.Transparent,
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(100, 35),
+                Cursor = Cursors.Hand
             };
+
+            btn.FlatAppearance.BorderSize = 0;
+            btn.FlatAppearance.MouseOverBackColor = ModernUI.Colors.Gray100;
+
+            btn.Click += (s, e) => this.Close();
+
+            return btn;
+        }
+
+        private Panel CreateFormCard()
+        {
+            var card = new Panel
+            {
+                Size = new Size(840, 680),
+                BackColor = Color.White
+            };
+
+            card.Paint += (s, e) => {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+                // Sombra
+                using (var shadowPath = GetRoundedRectangle(new Rectangle(2, 2, 836, 676), 12))
+                using (var shadowBrush = new SolidBrush(Color.FromArgb(10, 0, 0, 0)))
+                {
+                    e.Graphics.FillPath(shadowBrush, shadowPath);
+                }
+
+                // Fondo
+                using (var path = GetRoundedRectangle(new Rectangle(0, 0, 839, 679), 12))
+                using (var brush = new SolidBrush(Color.White))
+                using (var pen = new Pen(ModernUI.Colors.Border, 1))
+                {
+                    e.Graphics.FillPath(brush, path);
+                    e.Graphics.DrawPath(pen, path);
+                }
+            };
+
+            int y = 30;
+            int leftCol = 30;
+            int rightCol = 440;
+            int fieldWidth = 360;
+
+            // COLUMNA IZQUIERDA
+            // Placa
+            var lblPlaca = CreateLabel("Placa (ABC-123)", leftCol, y);
+            card.Controls.Add(lblPlaca);
+            txtPlaca = CreateModernTextBox(card, leftCol, y + 25, fieldWidth);
+            txtPlaca.CharacterCasing = CharacterCasing.Upper;
+            txtPlaca.MaxLength = 10;
+            y += 75;
+
+            // Marca
+            var lblMarca = CreateLabel("Marca", leftCol, y);
+            card.Controls.Add(lblMarca);
+            txtMarca = CreateModernTextBox(card, leftCol, y + 25, fieldWidth);
+            y += 75;
+
+            // Modelo
+            var lblModelo = CreateLabel("Modelo", leftCol, y);
+            card.Controls.Add(lblModelo);
+            txtModelo = CreateModernTextBox(card, leftCol, y + 25, fieldWidth);
+            y += 75;
+
+            // Color
+            var lblColor = CreateLabel("Color", leftCol, y);
+            card.Controls.Add(lblColor);
+            txtColor = CreateModernTextBox(card, leftCol, y + 25, fieldWidth);
+            y += 75;
+
+            // Año
+            var lblAnio = CreateLabel("Año (1950-2030)", leftCol, y);
+            card.Controls.Add(lblAnio);
+            txtAnio = CreateModernTextBox(card, leftCol, y + 25, fieldWidth);
+            txtAnio.MaxLength = 4;
+
+            // COLUMNA DERECHA
+            y = 30;
+
+            // Precio
+            var lblPrecio = CreateLabel("Precio", rightCol, y);
+            card.Controls.Add(lblPrecio);
+            txtPrecio = CreateModernTextBox(card, rightCol, y + 25, fieldWidth);
+            y += 75;
+
+            // Número de Puertas
+            var lblPuertas = CreateLabel("Número de Puertas (2-5)", rightCol, y);
+            card.Controls.Add(lblPuertas);
+            txtPuertas = CreateModernTextBox(card, rightCol, y + 25, fieldWidth);
+            txtPuertas.MaxLength = 1;
+            y += 75;
+
+            // Combustible
+            var lblCombustible = CreateLabel("Combustible", rightCol, y);
+            card.Controls.Add(lblCombustible);
+            cmbCombustible = CreateModernComboBox(rightCol, y + 25, fieldWidth);
+            cmbCombustible.Items.AddRange(new[] { "GASOLINA", "DIESEL", "HIBRIDO", "ELECTRICO" });
+            cmbCombustible.SelectedIndex = 0;
+            card.Controls.Add(cmbCombustible);
+            y += 75;
+
+            // Estado
+            var lblEstado = CreateLabel("Estado", rightCol, y);
+            card.Controls.Add(lblEstado);
+            cmbEstado = CreateModernComboBox(rightCol, y + 25, fieldWidth);
+            cmbEstado.Items.AddRange(new[] { "NUEVO", "USADO", "EXCELENTE", "BUENO", "REGULAR" });
+            cmbEstado.SelectedIndex = 0;
+            card.Controls.Add(cmbEstado);
+            y += 75;
+
+            // Transmisión
+            var lblTransmision = CreateLabel("Transmisión", rightCol, y);
+            card.Controls.Add(lblTransmision);
+            cmbTransmision = CreateModernComboBox(rightCol, y + 25, fieldWidth);
+            cmbTransmision.Items.AddRange(new[] { "MANUAL", "AUTOMATICA" });
+            cmbTransmision.SelectedIndex = 0;
+            card.Controls.Add(cmbTransmision);
+
+            // Checkbox Aire Acondicionado (spanning both columns)
+            y = 405;
+            chkAireAcondicionado = new CheckBox
+            {
+                Text = "  ❄️ Tiene Aire Acondicionado",
+                Location = new Point(leftCol, y),
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray700,
+                AutoSize = true,
+                Checked = false,
+                BackColor = Color.Transparent
+            };
+            card.Controls.Add(chkAireAcondicionado);
+
+            // Botones
+            y = 580;
+            var btnGuardar = ModernUI.CreateSuccessButton("💾 Guardar Vehículo", BtnGuardar_Click);
+            btnGuardar.Location = new Point(leftCol, y);
+            btnGuardar.Size = new Size(360, 50);
+            btnGuardar.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            card.Controls.Add(btnGuardar);
+
+            var btnCancelar = ModernUI.CreateDangerButton("✖️ Cancelar", (s, e) => this.Close());
+            btnCancelar.Location = new Point(rightCol, y);
+            btnCancelar.Size = new Size(360, 50);
+            btnCancelar.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            card.Controls.Add(btnCancelar);
+
+            return card;
+        }
+
+        private Label CreateLabel(string text, int x, int y)
+        {
+            return new Label
+            {
+                Text = text,
+                Location = new Point(x, y),
+                Font = ModernUI.Fonts.BodyBold,
+                ForeColor = ModernUI.Colors.Gray700,
+                AutoSize = true,
+                BackColor = Color.Transparent
+            };
+        }
+
+        private TextBox CreateModernTextBox(Panel parent, int x, int y, int width)
+        {
+            var container = new Panel
+            {
+                Location = new Point(x, y),
+                Size = new Size(width, 40),
+                BackColor = Color.White
+            };
+
+            container.Paint += (s, e) => {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (var path = GetRoundedRectangle(container.ClientRectangle, 8))
+                using (var pen = new Pen(ModernUI.Colors.Border, 2))
+                {
+                    e.Graphics.DrawPath(pen, path);
+                }
+            };
+
             var txt = new TextBox
             {
-                Location = new Point(20, y + 25),
-                Size = new Size(panel.Width - 60, 30),
-                Font = new Font("Segoe UI", 11, FontStyle.Regular, GraphicsUnit.Point),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                Location = new Point(10, 8),
+                Width = width - 20,
+                Height = 24,
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                BorderStyle = BorderStyle.None,
+                BackColor = Color.White,
+                ForeColor = ModernUI.Colors.Gray900
             };
-            panel.Controls.AddRange(new Control[] { lbl, txt });
+
+            container.Controls.Add(txt);
+            parent.Controls.Add(container);
+
             return txt;
+        }
+
+        private ComboBox CreateModernComboBox(int x, int y, int width)
+        {
+            var cmb = new ComboBox
+            {
+                Location = new Point(x, y),
+                Size = new Size(width, 40),
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                ForeColor = ModernUI.Colors.Gray900,
+                BackColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+
+            return cmb;
+        }
+
+        private GraphicsPath GetRoundedRectangle(Rectangle rect, int radius)
+        {
+            var path = new GraphicsPath();
+            int diameter = radius * 2;
+
+            path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
+            path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
+            path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
+            path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
+            path.CloseFigure();
+
+            return path;
         }
 
         private async void BtnGuardar_Click(object? sender, EventArgs e)
@@ -205,9 +345,9 @@ namespace EmpresarialesClienteCSharp.Forms
                     return;
                 }
 
-                if (!int.TryParse(txtAnio.Text, out int anio) || anio < 1950 || anio > 2025)
+                if (!int.TryParse(txtAnio.Text, out int anio) || anio < 1950 || anio > 2030)
                 {
-                    MessageBox.Show("El año debe ser un número entre 1950 y 2025.", "Error de Validación",
+                    MessageBox.Show("El año debe ser un número entre 1950 y 2030.", "Error de Validación",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }

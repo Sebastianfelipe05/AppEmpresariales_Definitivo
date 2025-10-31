@@ -7,24 +7,24 @@ using EmpresarialesClienteCSharp.Utils;
 
 namespace EmpresarialesClienteCSharp.Forms
 {
-    public partial class BuscarCarroForm : Form
+    public partial class BuscarMantenimientoForm : Form
     {
-        private readonly CarroService _carroService;
-        private TextBox txtPlaca = null!;
+        private readonly MantenimientoService _mantenimientoService;
+        private TextBox txtId = null!;
         private DataGridView dgvResultados = null!;
         private Panel searchPanel;
         private Label lblResultadoInfo;
 
-        public BuscarCarroForm()
+        public BuscarMantenimientoForm()
         {
-            _carroService = new CarroService();
+            _mantenimientoService = new MantenimientoService();
             InitializeComponent();
             ModernUI.MakeResponsive(this);
         }
 
         private void InitializeComponent()
         {
-            this.Text = "Buscar Vehículo por Placa";
+            this.Text = "Buscar Mantenimiento por ID";
             this.Size = new Size(1100, 750);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = ModernUI.Colors.Background;
@@ -52,7 +52,7 @@ namespace EmpresarialesClienteCSharp.Forms
             // Info Label
             lblResultadoInfo = new Label
             {
-                Text = "Ingrese una placa para buscar",
+                Text = "Ingrese un ID (UUID) para buscar",
                 Font = ModernUI.Fonts.Body,
                 ForeColor = ModernUI.Colors.Gray600,
                 AutoSize = true,
@@ -88,7 +88,7 @@ namespace EmpresarialesClienteCSharp.Forms
             // Título
             var lblTitulo = new Label
             {
-                Text = "🔍 Buscar Vehículo",
+                Text = "🔍 Buscar Mantenimiento",
                 Font = ModernUI.Fonts.Heading1,
                 ForeColor = ModernUI.Colors.Gray900,
                 AutoSize = true,
@@ -100,7 +100,7 @@ namespace EmpresarialesClienteCSharp.Forms
             // Subtítulo
             var lblSubtitulo = new Label
             {
-                Text = "Busque un vehículo específico por su placa única",
+                Text = "Busque un mantenimiento específico por su ID único (UUID)",
                 Font = ModernUI.Fonts.Body,
                 ForeColor = ModernUI.Colors.Gray600,
                 AutoSize = true,
@@ -118,7 +118,7 @@ namespace EmpresarialesClienteCSharp.Forms
             {
                 Text = "← Volver",
                 Font = ModernUI.Fonts.Body,
-                ForeColor = ModernUI.Colors.Primary,
+                ForeColor = ModernUI.Colors.Info,
                 BackColor = Color.Transparent,
                 FlatStyle = FlatStyle.Flat,
                 Size = new Size(100, 35),
@@ -162,16 +162,16 @@ namespace EmpresarialesClienteCSharp.Forms
             };
 
             // Label
-            var lblPlaca = new Label
+            var lblId = new Label
             {
-                Text = "Placa del Vehículo",
+                Text = "ID del Mantenimiento (UUID)",
                 Font = ModernUI.Fonts.BodyBold,
                 ForeColor = ModernUI.Colors.Gray700,
                 AutoSize = true,
                 Location = new Point(25, 25),
                 BackColor = Color.Transparent
             };
-            panel.Controls.Add(lblPlaca);
+            panel.Controls.Add(lblId);
 
             // TextBox Container
             var txtContainer = new Panel
@@ -190,7 +190,7 @@ namespace EmpresarialesClienteCSharp.Forms
                 }
             };
 
-            txtPlaca = new TextBox
+            txtId = new TextBox
             {
                 Location = new Point(15, 10),
                 Width = 420,
@@ -201,12 +201,7 @@ namespace EmpresarialesClienteCSharp.Forms
                 ForeColor = ModernUI.Colors.Gray900
             };
 
-            txtPlaca.TextChanged += (s, e) => {
-                txtPlaca.Text = txtPlaca.Text.ToUpper();
-                txtPlaca.SelectionStart = txtPlaca.Text.Length;
-            };
-
-            txtPlaca.KeyPress += (s, e) => {
+            txtId.KeyPress += (s, e) => {
                 if (e.KeyChar == (char)Keys.Enter)
                 {
                     e.Handled = true;
@@ -214,11 +209,11 @@ namespace EmpresarialesClienteCSharp.Forms
                 }
             };
 
-            txtContainer.Controls.Add(txtPlaca);
+            txtContainer.Controls.Add(txtId);
             panel.Controls.Add(txtContainer);
 
             // Botón Buscar
-            var btnBuscar = ModernUI.CreatePrimaryButton("🔍 Buscar Vehículo", BtnBuscar_Click);
+            var btnBuscar = ModernUI.CreateButton("🔍 Buscar Mantenimiento", ModernUI.Colors.Info, Color.White, BtnBuscar_Click);
             btnBuscar.Location = new Point(500, 50);
             btnBuscar.Size = new Size(200, 45);
             btnBuscar.Font = ModernUI.Fonts.Button;
@@ -226,11 +221,11 @@ namespace EmpresarialesClienteCSharp.Forms
 
             // Botón Limpiar
             var btnLimpiar = ModernUI.CreateSecondaryButton("🔄 Limpiar", (s, e) => {
-                txtPlaca.Clear();
+                txtId.Clear();
                 dgvResultados.DataSource = null;
-                lblResultadoInfo.Text = "Ingrese una placa para buscar";
+                lblResultadoInfo.Text = "Ingrese un ID (UUID) para buscar";
                 lblResultadoInfo.ForeColor = ModernUI.Colors.Gray600;
-                txtPlaca.Focus();
+                txtId.Focus();
             });
             btnLimpiar.Location = new Point(720, 50);
             btnLimpiar.Size = new Size(150, 45);
@@ -244,43 +239,42 @@ namespace EmpresarialesClienteCSharp.Forms
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(txtPlaca.Text))
+                if (string.IsNullOrWhiteSpace(txtId.Text))
                 {
-                    MessageBox.Show("Por favor, ingrese una placa para buscar.", "Validación",
+                    MessageBox.Show("Por favor, ingrese un ID de mantenimiento.", "Validación",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtPlaca.Focus();
+                    txtId.Focus();
                     return;
                 }
 
                 // Mostrar indicador de carga
                 this.Cursor = Cursors.WaitCursor;
                 lblResultadoInfo.Text = "🔍 Buscando...";
-                lblResultadoInfo.ForeColor = ModernUI.Colors.Primary;
+                lblResultadoInfo.ForeColor = ModernUI.Colors.Info;
                 dgvResultados.DataSource = null;
 
-                var carro = await _carroService.BuscarPorPlacaAsync(txtPlaca.Text.Trim().ToUpper());
+                var mantenimiento = await _mantenimientoService.BuscarPorIdAsync(txtId.Text.Trim());
 
                 this.Cursor = Cursors.Default;
 
-                if (carro != null)
+                if (mantenimiento != null)
                 {
-                    dgvResultados.DataSource = new[] { carro };
+                    dgvResultados.DataSource = new[] { mantenimiento };
 
                     // Personalizar columnas
                     if (dgvResultados.Columns.Count > 0)
                     {
-                        dgvResultados.Columns["Placa"].HeaderText = "Placa";
-                        dgvResultados.Columns["Marca"].HeaderText = "Marca";
-                        dgvResultados.Columns["Modelo"].HeaderText = "Modelo";
-                        dgvResultados.Columns["Anio"].HeaderText = "Año";
-                        dgvResultados.Columns["Color"].HeaderText = "Color";
-                        dgvResultados.Columns["Precio"].HeaderText = "Precio";
-                        dgvResultados.Columns["Precio"].DefaultCellStyle.Format = "C0";
-                        dgvResultados.Columns["TipoTransmision"].HeaderText = "Transmisión";
-                        dgvResultados.Columns["NumeroPuertas"].HeaderText = "Puertas";
-                        dgvResultados.Columns["TieneAireAcondicionado"].HeaderText = "A/C";
-                        dgvResultados.Columns["Estado"].HeaderText = "Estado";
-                        dgvResultados.Columns["Combustible"].HeaderText = "Combustible";
+                        dgvResultados.Columns["Id"].HeaderText = "ID";
+                        dgvResultados.Columns["PlacaCarro"].HeaderText = "Placa del Carro";
+                        dgvResultados.Columns["TipoMantenimiento"].HeaderText = "Tipo";
+                        dgvResultados.Columns["FechaMantenimiento"].HeaderText = "Fecha";
+                        dgvResultados.Columns["FechaMantenimiento"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                        dgvResultados.Columns["Kilometraje"].HeaderText = "Kilometraje (km)";
+                        dgvResultados.Columns["Kilometraje"].DefaultCellStyle.Format = "N0";
+                        dgvResultados.Columns["Costo"].HeaderText = "Costo";
+                        dgvResultados.Columns["Costo"].DefaultCellStyle.Format = "C0";
+                        dgvResultados.Columns["Completado"].HeaderText = "Estado";
+                        dgvResultados.Columns["Descripcion"].HeaderText = "Descripción";
 
                         if (dgvResultados.Columns.Contains("FechaRegistro"))
                         {
@@ -289,37 +283,35 @@ namespace EmpresarialesClienteCSharp.Forms
                         }
                     }
 
-                    lblResultadoInfo.Text = $"✅ Vehículo encontrado - {carro.Marca} {carro.Modelo} ({carro.Anio})";
+                    var estadoTexto = mantenimiento.Completado ? "COMPLETADO" : "PENDIENTE";
+                    lblResultadoInfo.Text = $"✅ Mantenimiento encontrado - {mantenimiento.TipoMantenimiento} ({estadoTexto})";
                     lblResultadoInfo.ForeColor = ModernUI.Colors.Success;
 
                     // Mostrar detalles en MessageBox
-                    var detalles = $"✅ Vehículo Encontrado\n\n" +
-                                 $"📋 INFORMACIÓN BÁSICA\n" +
-                                 $"├─ Placa: {carro.Placa}\n" +
-                                 $"├─ Marca: {carro.Marca}\n" +
-                                 $"├─ Modelo: {carro.Modelo}\n" +
-                                 $"└─ Año: {carro.Anio}\n\n" +
-                                 $"🎨 CARACTERÍSTICAS\n" +
-                                 $"├─ Color: {carro.Color}\n" +
-                                 $"├─ Estado: {carro.Estado}\n" +
-                                 $"├─ Puertas: {carro.NumeroPuertas}\n" +
-                                 $"└─ Aire Acondicionado: {(carro.TieneAireAcondicionado ? "Sí" : "No")}\n\n" +
-                                 $"⚙️ ESPECIFICACIONES\n" +
-                                 $"├─ Transmisión: {carro.TipoTransmision}\n" +
-                                 $"└─ Combustible: {carro.Combustible}\n\n" +
-                                 $"💰 PRECIO\n" +
-                                 $"└─ {carro.Precio:C0}";
+                    var detalles = $"✅ Mantenimiento Encontrado\n\n" +
+                                 $"🔖 IDENTIFICACIÓN\n" +
+                                 $"├─ ID: {mantenimiento.Id}\n" +
+                                 $"└─ Placa del Carro: {mantenimiento.PlacaCarro}\n\n" +
+                                 $"🔧 SERVICIO\n" +
+                                 $"├─ Tipo: {mantenimiento.TipoMantenimiento}\n" +
+                                 $"├─ Fecha: {mantenimiento.FechaMantenimiento:dd/MM/yyyy}\n" +
+                                 $"├─ Kilometraje: {mantenimiento.Kilometraje:N0} km\n" +
+                                 $"└─ Estado: {estadoTexto}\n\n" +
+                                 $"💰 COSTO\n" +
+                                 $"└─ {mantenimiento.Costo:C0}\n\n" +
+                                 $"📝 DESCRIPCIÓN\n" +
+                                 $"└─ {mantenimiento.Descripcion}";
 
-                    MessageBox.Show(detalles, "Vehículo Encontrado",
+                    MessageBox.Show(detalles, "Mantenimiento Encontrado",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    lblResultadoInfo.Text = $"❌ No se encontró ningún vehículo con la placa: {txtPlaca.Text}";
+                    lblResultadoInfo.Text = $"❌ No se encontró ningún mantenimiento con el ID: {txtId.Text}";
                     lblResultadoInfo.ForeColor = ModernUI.Colors.Danger;
                     dgvResultados.DataSource = null;
 
-                    MessageBox.Show($"No se encontró ningún vehículo con la placa: {txtPlaca.Text}",
+                    MessageBox.Show($"No se encontró ningún mantenimiento con el ID:\n\n{txtId.Text}",
                         "No Encontrado",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -330,7 +322,7 @@ namespace EmpresarialesClienteCSharp.Forms
                 lblResultadoInfo.Text = $"❌ Error al buscar: {ex.Message}";
                 lblResultadoInfo.ForeColor = ModernUI.Colors.Danger;
 
-                MessageBox.Show($"Error al buscar vehículo:\n\n{ex.Message}",
+                MessageBox.Show($"Error al buscar mantenimiento:\n\n{ex.Message}",
                     "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

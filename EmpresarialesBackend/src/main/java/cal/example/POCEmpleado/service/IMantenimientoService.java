@@ -29,14 +29,7 @@ public interface IMantenimientoService {
      * @param id El ID del mantenimiento a eliminar
      * @return true si se eliminó, false si no existe
      */
-    boolean deleteById(String id);
-
-    /**
-     * Obtiene todos los mantenimientos de un carro específico
-     * @param placaCarro La placa del carro
-     * @return Lista de mantenimientos del carro
-     */
-    List<Mantenimiento> getMantenimientosPorCarro(String placaCarro);
+    boolean deleteById(Long id);
 
     /**
      * Cuenta el total de mantenimientos
@@ -45,32 +38,50 @@ public interface IMantenimientoService {
     long count();
 
     /**
-     * Calcula el costo total de mantenimientos
-     * @return Suma total de todos los costos
-     */
-    double getCostoTotal();
-
-    /**
      * Calcula el costo promedio de mantenimientos
      * @return Promedio de los costos
      */
     double getCostoPromedio();
 
     /**
-     * Obtiene mantenimientos urgentes (próximos en menos de 7 días)
+     * Cuenta mantenimientos por placa de carro
+     * @param placa La placa del carro
+     * @return Número de mantenimientos del carro
+     */
+    long countByPlacaCarro(String placa);
+
+    /**
+     * Lista mantenimientos con información del carro (maestro-detalle)
+     * @return Lista de mantenimientos con carro asociado
+     */
+    List<Mantenimiento> listarConCarro();
+
+    /**
+     * Guarda los datos en archivo JSON (persistencia manual)
+     */
+    void saveToJson();
+
+    /**
+     * Carga los datos desde archivo JSON
+     */
+    void loadFromJson();
+
+    /**
+     * Obtiene mantenimientos de un carro específico
+     * @param placa La placa del carro
+     * @return Lista de mantenimientos del carro
+     */
+    List<Mantenimiento> getMantenimientosPorCarro(String placa);
+
+    /**
+     * Obtiene mantenimientos urgentes (próximos en 7 días)
      * @return Lista de mantenimientos urgentes
      */
     List<Mantenimiento> getMantenimientosUrgentes();
 
     /**
-     * Guarda los datos en archivo JSON (persistencia manual)
-     * @throws Exception Si hay error al guardar
+     * Calcula el costo total de todos los mantenimientos
+     * @return Costo total
      */
-    void saveToJson() throws Exception;
-
-    /**
-     * Carga los datos desde archivo JSON
-     * @throws Exception Si hay error al cargar
-     */
-    void loadFromJson() throws Exception;
+    double getCostoTotal();
 }

@@ -138,7 +138,7 @@ public class MantenimientoController {
      * PUT /api/mantenimiento/{id}
      */
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> actualizarMantenimiento(@PathVariable("id") String id,
+    public ResponseEntity<?> actualizarMantenimiento(@PathVariable("id") Long id,
                                                      @Valid @RequestBody Mantenimiento mantenimiento,
                                                      BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -165,13 +165,13 @@ public class MantenimientoController {
      * DELETE /api/mantenimiento/{id}
      */
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Map<String, String>> eliminarMantenimiento(@PathVariable("id") String id) {
+    public ResponseEntity<Map<String, String>> eliminarMantenimiento(@PathVariable("id") Long id) {
         boolean eliminado = mantenimientoService.deleteById(id);
 
         Map<String, String> response = new HashMap<>();
         if (eliminado) {
             response.put("message", "Mantenimiento eliminado exitosamente");
-            response.put("id", id);
+            response.put("id", String.valueOf(id));
             return ResponseEntity.ok(response);
         } else {
             response.put("error", "No se encontró un mantenimiento con el ID: " + id);

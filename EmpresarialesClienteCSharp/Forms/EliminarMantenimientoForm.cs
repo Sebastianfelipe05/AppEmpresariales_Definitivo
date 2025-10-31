@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using EmpresarialesClienteCSharp.Models;
 using EmpresarialesClienteCSharp.Services;
@@ -11,230 +12,327 @@ namespace EmpresarialesClienteCSharp.Forms
         private readonly MantenimientoService _mantenimientoService;
         private Mantenimiento? _mantenimientoActual;
 
-        private TextBox txtId;
-        private Button btnBuscar;
-        private Panel panelBusqueda;
-        private Panel panelInformacion;
-        private Label lblInfo;
-        private Button btnEliminar;
-        private Button btnCancelar;
+        private TextBox txtId = null!;
+        private Button btnBuscar = null!;
+        private Panel panelInfo = null!;
+        private Button btnEliminar = null!;
+        private Label lblId = null!, lblPlaca = null!, lblFecha = null!, lblTipo = null!;
+        private Label lblKilometraje = null!, lblCosto = null!, lblEstado = null!, lblCompletado = null!;
+        private Label lblDescripcion = null!, lblProximo = null!;
 
         public EliminarMantenimientoForm()
         {
             _mantenimientoService = new MantenimientoService();
             InitializeComponent();
-            ConfigurarFormulario();
         }
 
         private void InitializeComponent()
         {
             this.Text = "Eliminar Mantenimiento";
-            this.Size = new Size(600, 500);
+            this.Size = new Size(750, 700);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-        }
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.BackColor = Color.FromArgb(249, 250, 251);
+            this.MinimumSize = new Size(750, 700);
+            this.MaximumSize = new Size(750, 700);
 
-        private void ConfigurarFormulario()
-        {
-            // Panel de búsqueda
-            panelBusqueda = new Panel
+            // Modern title bar with close button
+            var titleBar = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 120,
-                Padding = new Padding(10)
+                Height = 70,
+                BackColor = Color.FromArgb(220, 38, 38) // Red theme for delete
+            };
+            titleBar.Paint += (s, e) =>
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             };
 
             var lblTitulo = new Label
             {
-                Text = "ELIMINAR MANTENIMIENTO",
-                Font = new Font("Arial", 14, FontStyle.Bold),
-                Location = new Point(20, 10),
+                Text = "🗑️ Eliminar Mantenimiento",
+                Font = new Font("Segoe UI", 20, FontStyle.Bold),
+                ForeColor = Color.White,
+                Location = new Point(25, 18),
                 AutoSize = true
             };
-            panelBusqueda.Controls.Add(lblTitulo);
 
-            var lblId = new Label
+            var btnCerrar = new Button
+            {
+                Text = "✕",
+                Size = new Size(35, 35),
+                Location = new Point(690, 17),
+                BackColor = Color.Transparent,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 14, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            btnCerrar.FlatAppearance.BorderSize = 0;
+            btnCerrar.FlatAppearance.MouseOverBackColor = Color.FromArgb(185, 28, 28);
+            btnCerrar.Click += (s, e) => this.Close();
+
+            titleBar.Controls.AddRange(new Control[] { lblTitulo, btnCerrar });
+
+            // Main content panel
+            var mainPanel = new Panel
+            {
+                Location = new Point(30, 100),
+                Size = new Size(690, 570),
+                BackColor = Color.White
+            };
+            mainPanel.Paint += (s, e) =>
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (var path = GetRoundedRectangle(mainPanel.ClientRectangle, 15))
+                {
+                    e.Graphics.FillPath(new SolidBrush(Color.White), path);
+                    e.Graphics.DrawPath(new Pen(Color.FromArgb(229, 231, 235), 1), path);
+                }
+            };
+
+            // Search section
+            var lblInstruccion = new Label
+            {
+                Text = "🔍 Paso 1: Buscar Mantenimiento por ID",
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                ForeColor = Color.FromArgb(31, 41, 55),
+                Location = new Point(30, 30),
+                AutoSize = true
+            };
+
+            var lblIdLabel = new Label
             {
                 Text = "ID del Mantenimiento:",
-                Location = new Point(20, 50),
-                Width = 150
+                Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                ForeColor = Color.FromArgb(107, 114, 128),
+                Location = new Point(30, 70),
+                AutoSize = true
             };
-            panelBusqueda.Controls.Add(lblId);
 
             txtId = new TextBox
             {
-                Location = new Point(180, 47),
-                Width = 300
+                Location = new Point(30, 95),
+                Size = new Size(410, 35),
+                Font = new Font("Segoe UI", 11),
+                BorderStyle = BorderStyle.FixedSingle
             };
-            panelBusqueda.Controls.Add(txtId);
-
-            btnBuscar = new Button
+            txtId.KeyPress += (s, e) =>
             {
-                Text = "Buscar",
-                Location = new Point(490, 45),
-                Width = 80,
-                Height = 25
+                if (e.KeyChar == (char)Keys.Enter)
+                {
+                    e.Handled = true;
+                    BtnBuscar_Click(s, e);
+                }
             };
+
+            btnBuscar = CreateModernButton("🔎 Buscar", Color.FromArgb(147, 51, 234), 460, 92, 200, 42);
             btnBuscar.Click += BtnBuscar_Click;
-            panelBusqueda.Controls.Add(btnBuscar);
 
-            var lblInstruccion = new Label
+            // Info panel (hidden by default)
+            panelInfo = new Panel
             {
-                Text = "Ingrese el ID del mantenimiento que desea eliminar",
-                Location = new Point(20, 85),
-                AutoSize = true,
-                ForeColor = Color.Gray,
-                Font = new Font("Arial", 8, FontStyle.Italic)
+                Location = new Point(30, 160),
+                Size = new Size(630, 320),
+                BackColor = Color.FromArgb(254, 242, 242),
+                Visible = false
             };
-            panelBusqueda.Controls.Add(lblInstruccion);
-
-            this.Controls.Add(panelBusqueda);
-
-            // Panel de información (inicialmente oculto)
-            panelInformacion = new Panel
+            panelInfo.Paint += (s, e) =>
             {
-                Dock = DockStyle.Fill,
-                Padding = new Padding(20),
-                Visible = false,
-                AutoScroll = true
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                using (var path = GetRoundedRectangle(panelInfo.ClientRectangle, 10))
+                {
+                    e.Graphics.FillPath(new SolidBrush(Color.FromArgb(254, 242, 242)), path);
+                    e.Graphics.DrawPath(new Pen(Color.FromArgb(252, 165, 165), 2), path);
+                }
             };
 
-            // Advertencia
-            var lblAdvertencia = new Label
+            var lblInfoTitulo = new Label
             {
-                Text = "⚠️ ADVERTENCIA: Esta acción eliminará permanentemente este mantenimiento",
-                Location = new Point(0, 10),
-                Width = 540,
-                Height = 40,
-                BackColor = Color.FromArgb(255, 200, 200),
-                BorderStyle = BorderStyle.FixedSingle,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Arial", 10, FontStyle.Bold),
-                ForeColor = Color.DarkRed
+                Text = "⚠️ Información del Mantenimiento a Eliminar",
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                ForeColor = Color.FromArgb(153, 27, 27),
+                Location = new Point(20, 15),
+                AutoSize = true
             };
-            panelInformacion.Controls.Add(lblAdvertencia);
 
-            // Información del mantenimiento
-            lblInfo = new Label
+            // Create info labels in two columns
+            int col1X = 20;
+            int col2X = 330;
+            int yStart = 50;
+            int ySpacing = 30;
+
+            lblId = CreateInfoLabel("🔖 ID:", "", col1X, yStart);
+            lblPlaca = CreateInfoLabel("🚗 Placa:", "", col1X, yStart + ySpacing);
+            lblFecha = CreateInfoLabel("📅 Fecha:", "", col1X, yStart + ySpacing * 2);
+            lblTipo = CreateInfoLabel("🔧 Tipo:", "", col1X, yStart + ySpacing * 3);
+            lblKilometraje = CreateInfoLabel("📏 Kilometraje:", "", col1X, yStart + ySpacing * 4);
+
+            lblCosto = CreateInfoLabel("💰 Costo:", "", col2X, yStart);
+            lblEstado = CreateInfoLabel("📊 Estado:", "", col2X, yStart + ySpacing);
+            lblCompletado = CreateInfoLabel("✅ Completado:", "", col2X, yStart + ySpacing * 2);
+            lblProximo = CreateInfoLabel("📆 Próximo:", "", col2X, yStart + ySpacing * 3);
+
+            lblDescripcion = new Label
             {
-                Location = new Point(0, 60),
-                Width = 540,
-                Height = 250,
-                Font = new Font("Courier New", 9),
-                BorderStyle = BorderStyle.FixedSingle,
-                Padding = new Padding(10),
+                Text = "📝 Descripción: ",
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                ForeColor = Color.FromArgb(31, 41, 55),
+                Location = new Point(col1X, yStart + ySpacing * 5 + 10),
+                Size = new Size(590, 60),
                 BackColor = Color.White
             };
-            panelInformacion.Controls.Add(lblInfo);
 
-            // Botones
-            btnEliminar = new Button
+            var lblAdvertencia = new Label
             {
-                Text = "Confirmar Eliminación",
-                Location = new Point(0, 330),
-                Width = 260,
-                Height = 40,
-                BackColor = Color.FromArgb(220, 53, 69),
-                ForeColor = Color.White,
-                Font = new Font("Arial", 10, FontStyle.Bold)
+                Text = "⚠️ ADVERTENCIA: Esta acción es permanente y no se puede deshacer",
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                ForeColor = Color.FromArgb(220, 38, 38),
+                Location = new Point(20, 280),
+                Size = new Size(590, 25),
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.FromArgb(254, 226, 226)
             };
+
+            panelInfo.Controls.AddRange(new Control[] {
+                lblInfoTitulo, lblId, lblPlaca, lblFecha, lblTipo, lblKilometraje,
+                lblCosto, lblEstado, lblCompletado, lblProximo, lblDescripcion, lblAdvertencia
+            });
+
+            // Action buttons
+            btnEliminar = CreateModernButton("🗑️ Eliminar Mantenimiento", Color.FromArgb(220, 38, 38), 30, 500, 300, 50);
+            btnEliminar.Enabled = false;
             btnEliminar.Click += BtnEliminar_Click;
-            panelInformacion.Controls.Add(btnEliminar);
 
-            btnCancelar = new Button
+            var btnCancelar = CreateModernButton("❌ Cancelar", Color.FromArgb(107, 114, 128), 360, 500, 300, 50);
+            btnCancelar.Click += (s, e) => this.Close();
+
+            mainPanel.Controls.AddRange(new Control[] { lblInstruccion, lblIdLabel, txtId, btnBuscar, panelInfo, btnEliminar, btnCancelar });
+            this.Controls.AddRange(new Control[] { titleBar, mainPanel });
+        }
+
+        private Button CreateModernButton(string text, Color bgColor, int x, int y, int width, int height)
+        {
+            var btn = new Button
             {
-                Text = "Cancelar",
-                Location = new Point(280, 330),
-                Width = 260,
-                Height = 40,
-                BackColor = Color.Gray,
+                Text = text,
+                Location = new Point(x, y),
+                Size = new Size(width, height),
+                BackColor = bgColor,
                 ForeColor = Color.White,
-                Font = new Font("Arial", 10, FontStyle.Bold)
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                Cursor = Cursors.Hand
             };
-            btnCancelar.Click += BtnCancelar_Click;
-            panelInformacion.Controls.Add(btnCancelar);
+            btn.FlatAppearance.BorderSize = 0;
 
-            this.Controls.Add(panelInformacion);
+            Color hoverColor = ControlPaint.Dark(bgColor, 0.1f);
+            btn.MouseEnter += (s, e) => btn.BackColor = hoverColor;
+            btn.MouseLeave += (s, e) => btn.BackColor = bgColor;
+
+            return btn;
+        }
+
+        private Label CreateInfoLabel(string caption, string value, int x, int y)
+        {
+            return new Label
+            {
+                Text = $"{caption} {value}",
+                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                ForeColor = Color.FromArgb(31, 41, 55),
+                Location = new Point(x, y),
+                AutoSize = true
+            };
+        }
+
+        private GraphicsPath GetRoundedRectangle(Rectangle rect, int radius)
+        {
+            GraphicsPath path = new GraphicsPath();
+            int diameter = radius * 2;
+            path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
+            path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
+            path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
+            path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
+            path.CloseFigure();
+            return path;
         }
 
         private async void BtnBuscar_Click(object? sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtId.Text))
             {
-                MessageBox.Show("Por favor ingrese un ID", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("⚠️ Por favor ingrese un ID", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             try
             {
                 btnBuscar.Enabled = false;
-                btnBuscar.Text = "Buscando...";
+                btnBuscar.Text = "🔍 Buscando...";
 
                 var mantenimiento = await _mantenimientoService.BuscarPorIdAsync(txtId.Text.Trim());
 
                 if (mantenimiento == null)
                 {
-                    MessageBox.Show("No se encontró un mantenimiento con ese ID",
-                        "No Encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("❌ No se encontró un mantenimiento con ese ID",
+                        "No Encontrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    panelInfo.Visible = false;
+                    btnEliminar.Enabled = false;
                     return;
                 }
 
                 _mantenimientoActual = mantenimiento;
                 MostrarInformacion(mantenimiento);
-                panelInformacion.Visible = true;
+                panelInfo.Visible = true;
+                btnEliminar.Enabled = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al buscar el mantenimiento: {ex.Message}",
+                MessageBox.Show($"❌ Error al buscar el mantenimiento:\n{ex.Message}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 btnBuscar.Enabled = true;
-                btnBuscar.Text = "Buscar";
+                btnBuscar.Text = "🔎 Buscar";
             }
         }
 
         private void MostrarInformacion(Mantenimiento mantenimiento)
         {
-            var info = $@"
-=== INFORMACIÓN DEL MANTENIMIENTO ===
+            lblId.Text = $"🔖 ID: {mantenimiento.Id}";
+            lblPlaca.Text = $"🚗 Placa: {mantenimiento.PlacaCarro}";
+            lblFecha.Text = $"📅 Fecha: {mantenimiento.GetFechaMantenimientoFormateada()}";
+            lblTipo.Text = $"🔧 Tipo: {mantenimiento.TipoMantenimiento.Replace("_", " ")}";
+            lblKilometraje.Text = $"📏 Kilometraje: {mantenimiento.Kilometraje:N0} km";
+            lblCosto.Text = $"💰 Costo: ${mantenimiento.Costo:N0}";
+            lblEstado.Text = $"📊 Estado: {mantenimiento.ObtenerEstadoMantenimiento()}";
+            lblCompletado.Text = $"✅ Completado: {(mantenimiento.Completado ? "Sí" : "No")}";
+            lblProximo.Text = $"📆 Próximo: {mantenimiento.GetProximoMantenimientoFormateado()}";
 
-ID:                 {mantenimiento.Id}
-Placa Carro:        {mantenimiento.PlacaCarro}
-Fecha:              {mantenimiento.GetFechaMantenimientoFormateada()}
-Tipo:               {mantenimiento.TipoMantenimiento.Replace("_", " ")}
-Kilometraje:        {mantenimiento.Kilometraje:N0} km
-Costo:              {mantenimiento.Costo:C0}
-Estado:             {mantenimiento.ObtenerEstadoMantenimiento()}
-Completado:         {(mantenimiento.Completado ? "Sí" : "No")}
-
-Descripción:
-{mantenimiento.Descripcion}
-
-Próximo Mant.:      {mantenimiento.GetProximoMantenimientoFormateado()}
-Fecha Registro:     {mantenimiento.FechaRegistro?.ToString("dd/MM/yyyy HH:mm") ?? "N/A"}
-";
-
-            lblInfo.Text = info;
+            string descripcionCorta = mantenimiento.Descripcion.Length > 100
+                ? mantenimiento.Descripcion.Substring(0, 100) + "..."
+                : mantenimiento.Descripcion;
+            lblDescripcion.Text = $"📝 Descripción: {descripcionCorta}";
         }
 
         private async void BtnEliminar_Click(object? sender, EventArgs e)
         {
             if (_mantenimientoActual == null)
             {
-                MessageBox.Show("No hay mantenimiento cargado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("❌ No hay mantenimiento cargado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             var result = MessageBox.Show(
-                $"¿Está COMPLETAMENTE SEGURO que desea eliminar este mantenimiento?\n\n" +
-                $"Placa: {_mantenimientoActual.PlacaCarro}\n" +
-                $"Tipo: {_mantenimientoActual.TipoMantenimiento}\n" +
-                $"Costo: {_mantenimientoActual.Costo:C0}\n\n" +
-                $"Esta acción NO SE PUEDE DESHACER.",
-                "Confirmar Eliminación",
+                $"⚠️ ¿Está COMPLETAMENTE SEGURO que desea eliminar este mantenimiento?\n\n" +
+                $"📋 ID: {_mantenimientoActual.Id}\n" +
+                $"🚗 Placa: {_mantenimientoActual.PlacaCarro}\n" +
+                $"🔧 Tipo: {_mantenimientoActual.TipoMantenimiento}\n" +
+                $"💰 Costo: ${_mantenimientoActual.Costo:N0}\n\n" +
+                $"⛔ Esta acción es PERMANENTE y NO se puede deshacer.\n" +
+                $"Se perderán todos los registros de este mantenimiento.",
+                "⚠️ Confirmar Eliminación Permanente",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning,
                 MessageBoxDefaultButton.Button2
@@ -248,13 +346,13 @@ Fecha Registro:     {mantenimiento.FechaRegistro?.ToString("dd/MM/yyyy HH:mm") ?
             try
             {
                 btnEliminar.Enabled = false;
-                btnEliminar.Text = "Eliminando...";
+                btnEliminar.Text = "⏳ Eliminando...";
 
                 bool eliminado = await _mantenimientoService.EliminarMantenimientoAsync(_mantenimientoActual.Id);
 
                 if (eliminado)
                 {
-                    MessageBox.Show("Mantenimiento eliminado exitosamente",
+                    MessageBox.Show("✅ Mantenimiento eliminado exitosamente del sistema.",
                         "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.DialogResult = DialogResult.OK;
@@ -262,24 +360,19 @@ Fecha Registro:     {mantenimiento.FechaRegistro?.ToString("dd/MM/yyyy HH:mm") ?
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo eliminar el mantenimiento",
+                    MessageBox.Show("❌ No se pudo eliminar el mantenimiento. Intente nuevamente.",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    btnEliminar.Enabled = true;
+                    btnEliminar.Text = "🗑️ Eliminar Mantenimiento";
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al eliminar el mantenimiento: {ex.Message}",
+                MessageBox.Show($"❌ Error al eliminar el mantenimiento:\n{ex.Message}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnEliminar.Enabled = true;
-                btnEliminar.Text = "Confirmar Eliminación";
+                btnEliminar.Text = "🗑️ Eliminar Mantenimiento";
             }
-        }
-
-        private void BtnCancelar_Click(object? sender, EventArgs e)
-        {
-            _mantenimientoActual = null;
-            txtId.Clear();
-            panelInformacion.Visible = false;
         }
     }
 }
