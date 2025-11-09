@@ -1,0 +1,32 @@
+# C# / .NET
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+
+# Node / React
+**/node_modules/
+**/dist/
+**/.vite/
+**/build/
+
+# IDEs
+**/.vs/
+**/.vscode/
+**/.idea/
+**/*.swp
+**/*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build results
+**/.nuget/
+**/packages/
+
+# Special Windows device names
+nul

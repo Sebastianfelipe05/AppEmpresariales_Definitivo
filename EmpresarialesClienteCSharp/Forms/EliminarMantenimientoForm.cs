@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 using EmpresarialesClienteCSharp.Models;
 using EmpresarialesClienteCSharp.Services;
@@ -12,8 +13,9 @@ namespace EmpresarialesClienteCSharp.Forms
         private readonly MantenimientoService _mantenimientoService;
         private Mantenimiento? _mantenimientoActual;
 
-        private TextBox txtId = null!;
+        private TextBox txtPlaca = null!;
         private Button btnBuscar = null!;
+        private DataGridView dgvMantenimientos = null!;
         private Panel panelInfo = null!;
         private Button btnEliminar = null!;
         private Label lblId = null!, lblPlaca = null!, lblFecha = null!, lblTipo = null!;
@@ -94,30 +96,32 @@ namespace EmpresarialesClienteCSharp.Forms
             // Search section
             var lblInstruccion = new Label
             {
-                Text = "🔍 Paso 1: Buscar Mantenimiento por ID",
+                Text = "🔍 Paso 1: Buscar Mantenimientos por Placa del Carro",
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 ForeColor = Color.FromArgb(31, 41, 55),
                 Location = new Point(30, 30),
                 AutoSize = true
             };
 
-            var lblIdLabel = new Label
+            var lblPlacaLabel = new Label
             {
-                Text = "ID del Mantenimiento:",
+                Text = "Placa del Carro:",
                 Font = new Font("Segoe UI", 10, FontStyle.Regular),
                 ForeColor = Color.FromArgb(107, 114, 128),
                 Location = new Point(30, 70),
                 AutoSize = true
             };
 
-            txtId = new TextBox
+            txtPlaca = new TextBox
             {
                 Location = new Point(30, 95),
-                Size = new Size(410, 35),
+                Size = new Size(200, 35),
                 Font = new Font("Segoe UI", 11),
-                BorderStyle = BorderStyle.FixedSingle
+                BorderStyle = BorderStyle.FixedSingle,
+                CharacterCasing = CharacterCasing.Upper,
+                MaxLength = 10
             };
-            txtId.KeyPress += (s, e) =>
+            txtPlaca.KeyPress += (s, e) =>
             {
                 if (e.KeyChar == (char)Keys.Enter)
                 {
@@ -126,13 +130,36 @@ namespace EmpresarialesClienteCSharp.Forms
                 }
             };
 
-            btnBuscar = CreateModernButton("🔎 Buscar", Color.FromArgb(147, 51, 234), 460, 92, 200, 42);
+            btnBuscar = CreateModernButton("🔎 Buscar", Color.FromArgb(147, 51, 234), 250, 92, 150, 42);
             btnBuscar.Click += BtnBuscar_Click;
+
+            // DataGridView para mostrar mantenimientos encontrados
+            dgvMantenimientos = new DataGridView
+            {
+                Location = new Point(30, 150),
+                Size = new Size(630, 180),
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.None,
+                AllowUserToAddRows = false,
+                AllowUserToDeleteRows = false,
+                ReadOnly = true,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                MultiSelect = false,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+                {
+                    BackColor = Color.FromArgb(220, 38, 38),
+                    ForeColor = Color.White,
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold)
+                },
+                Visible = false
+            };
+            dgvMantenimientos.CellDoubleClick += DgvMantenimientos_CellDoubleClick;
 
             // Info panel (hidden by default)
             panelInfo = new Panel
             {
-                Location = new Point(30, 160),
+                Location = new Point(30, 350),
                 Size = new Size(630, 320),
                 BackColor = Color.FromArgb(254, 242, 242),
                 Visible = false
@@ -207,7 +234,7 @@ namespace EmpresarialesClienteCSharp.Forms
             var btnCancelar = CreateModernButton("❌ Cancelar", Color.FromArgb(107, 114, 128), 360, 500, 300, 50);
             btnCancelar.Click += (s, e) => this.Close();
 
-            mainPanel.Controls.AddRange(new Control[] { lblInstruccion, lblIdLabel, txtId, btnBuscar, panelInfo, btnEliminar, btnCancelar });
+            mainPanel.Controls.AddRange(new Control[] { lblInstruccion, lblPlacaLabel, txtPlaca, btnBuscar, dgvMantenimientos, panelInfo, btnEliminar, btnCancelar });
             this.Controls.AddRange(new Control[] { titleBar, mainPanel });
         }
 
@@ -259,9 +286,9 @@ namespace EmpresarialesClienteCSharp.Forms
 
         private async void BtnBuscar_Click(object? sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtId.Text))
+            if (string.IsNullOrWhiteSpace(txtPlaca.Text))
             {
-                MessageBox.Show("⚠️ Por favor ingrese un ID", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("⚠️ Por favor ingrese una placa", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -269,32 +296,71 @@ namespace EmpresarialesClienteCSharp.Forms
             {
                 btnBuscar.Enabled = false;
                 btnBuscar.Text = "🔍 Buscando...";
+                dgvMantenimientos.Visible = false;
+                panelInfo.Visible = false;
+                btnEliminar.Enabled = false;
 
-                var mantenimiento = await _mantenimientoService.BuscarPorIdAsync(txtId.Text.Trim());
+                var mantenimientos = await _mantenimientoService.BuscarPorCarroAsync(txtPlaca.Text.Trim());
 
-                if (mantenimiento == null)
+                if (mantenimientos == null || !mantenimientos.Any())
                 {
-                    MessageBox.Show("❌ No se encontró un mantenimiento con ese ID",
+                    MessageBox.Show($"❌ No se encontraron mantenimientos para la placa {txtPlaca.Text.Trim()}",
                         "No Encontrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    panelInfo.Visible = false;
-                    btnEliminar.Enabled = false;
                     return;
                 }
 
-                _mantenimientoActual = mantenimiento;
-                MostrarInformacion(mantenimiento);
-                panelInfo.Visible = true;
-                btnEliminar.Enabled = true;
+                // Mostrar mantenimientos en el grid
+                dgvMantenimientos.DataSource = mantenimientos;
+                ConfigurarColumnasGrid();
+                dgvMantenimientos.Visible = true;
+
+                MessageBox.Show($"✅ Se encontraron {mantenimientos.Count} mantenimiento(s).\n\nHaga doble clic en uno para eliminarlo.",
+                    "Mantenimientos Encontrados", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"❌ Error al buscar el mantenimiento:\n{ex.Message}",
+                MessageBox.Show($"❌ Error al buscar mantenimientos:\n{ex.Message}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 btnBuscar.Enabled = true;
                 btnBuscar.Text = "🔎 Buscar";
+            }
+        }
+
+        private void ConfigurarColumnasGrid()
+        {
+            if (dgvMantenimientos.Columns.Count > 0)
+            {
+                dgvMantenimientos.Columns["Id"].HeaderText = "ID";
+                dgvMantenimientos.Columns["Id"].Width = 60;
+                dgvMantenimientos.Columns["PlacaCarro"].Visible = false;
+                dgvMantenimientos.Columns["FechaMantenimiento"].HeaderText = "Fecha";
+                dgvMantenimientos.Columns["FechaMantenimiento"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                dgvMantenimientos.Columns["TipoMantenimiento"].HeaderText = "Tipo";
+                dgvMantenimientos.Columns["Kilometraje"].HeaderText = "KM";
+                dgvMantenimientos.Columns["Costo"].HeaderText = "Costo";
+                dgvMantenimientos.Columns["Costo"].DefaultCellStyle.Format = "C2";
+                dgvMantenimientos.Columns["Descripcion"].HeaderText = "Descripción";
+                dgvMantenimientos.Columns["Completado"].HeaderText = "Completado";
+                dgvMantenimientos.Columns["ProximoMantenimiento"].Visible = false;
+                dgvMantenimientos.Columns["FechaRegistro"].Visible = false;
+            }
+        }
+
+        private void DgvMantenimientos_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var mantenimiento = dgvMantenimientos.Rows[e.RowIndex].DataBoundItem as Mantenimiento;
+                if (mantenimiento != null)
+                {
+                    _mantenimientoActual = mantenimiento;
+                    MostrarInformacion(mantenimiento);
+                    panelInfo.Visible = true;
+                    btnEliminar.Enabled = true;
+                }
             }
         }
 

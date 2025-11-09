@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using EmpresarialesClienteCSharp.Models;
 using EmpresarialesClienteCSharp.Services;
 using EmpresarialesClienteCSharp.Utils;
 
@@ -16,7 +17,7 @@ namespace EmpresarialesClienteCSharp.Forms
         private DataGridView dgvResultados = null!;
         private Panel searchPanel;
         private Label lblResultadoInfo;
-        private List<dynamic> mantenimientosEncontrados = new List<dynamic>();
+        private List<Mantenimiento> mantenimientosEncontrados = new List<Mantenimiento>();
 
         public BuscarMantenimientoForm()
         {

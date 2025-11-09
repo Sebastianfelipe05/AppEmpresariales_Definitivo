@@ -25,7 +25,7 @@ public interface MantenimientoRepository extends JpaRepository<Mantenimiento, Lo
     // ===== CONSULTAS PERSONALIZADAS (requeridas por el PDF) =====
 
     /**
-     * CONSULTA PERSONALIZADA 1 (REQUERIDA EN PDF):
+     * CONSULTA PERSONALIZADA 1:
      * Mostrar datos de la tabla maestro (Carro) y detalle (Mantenimiento)
      * "Debe permitir mostrar los datos de la tabla maestro y dos de detalle"
      */
@@ -36,7 +36,7 @@ public interface MantenimientoRepository extends JpaRepository<Mantenimiento, Lo
     List<Mantenimiento> findMantenimientosConCarroByPlaca(@Param("placa") String placa);
 
     /**
-     * CONSULTA PERSONALIZADA 2 (REQUERIDA EN PDF):
+     * CONSULTA PERSONALIZADA 2:
      * Listar todos los mantenimientos con información del carro (maestro-detalle)
      */
     @Query("SELECT m FROM Mantenimiento m " +

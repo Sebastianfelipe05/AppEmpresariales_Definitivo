@@ -23,7 +23,7 @@ public interface CarroRepository extends JpaRepository<Carro, String> {
     // - deleteById(String placa): void
     // - existsById(String placa): boolean
 
-    // ===== CONSULTAS PERSONALIZADAS (requeridas por el PDF) =====
+    // ===== CONSULTAS PERSONALIZADAS  =====
 
     /**
      * CONSULTA PERSONALIZADA 1: Buscar carros por estado

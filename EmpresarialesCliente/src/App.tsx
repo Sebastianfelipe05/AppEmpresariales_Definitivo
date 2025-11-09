@@ -519,8 +519,8 @@ function App() {
             <Route path="/mantenimientos" element={<ListarMantenimientos />} />
             <Route path="/mantenimientos/crear" element={<CrearMantenimiento />} />
             <Route path="/mantenimientos/buscar" element={<BuscarMantenimiento />} />
-            <Route path="/mantenimientos/actualizar/:id" element={<ActualizarMantenimiento />} />
-            <Route path="/mantenimientos/eliminar/:id" element={<EliminarMantenimiento />} />
+            <Route path="/mantenimientos/actualizar" element={<ActualizarMantenimiento />} />
+            <Route path="/mantenimientos/eliminar" element={<EliminarMantenimiento />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
