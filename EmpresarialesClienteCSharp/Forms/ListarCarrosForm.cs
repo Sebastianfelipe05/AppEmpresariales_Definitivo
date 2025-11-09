@@ -15,6 +15,8 @@ namespace EmpresarialesClienteCSharp.Forms
         private readonly CarroService _carroService;
         private DataGridView dgvCarros = null!;
         private TextBox txtFiltroMarca = null!;
+        private TextBox txtFiltroColor = null!;
+        private TextBox txtFiltroModelo = null!;
         private Label lblResultadoInfo;
         private List<Carro> todosLosCarros = new List<Carro>();
         private List<Carro> carrosFiltrados = new List<Carro>();
@@ -29,12 +31,12 @@ namespace EmpresarialesClienteCSharp.Forms
 
         private void InitializeComponent()
         {
-            this.Text = "Inventario de Vehículos - Listar por Marca";
-            this.Size = new Size(1200, 800);
+            this.Text = "Inventario de Vehículos - Filtros Avanzados";
+            this.Size = new Size(1300, 850);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = ModernUI.Colors.Background;
             this.AutoScaleMode = AutoScaleMode.Dpi;
-            this.MinimumSize = new Size(1000, 700);
+            this.MinimumSize = new Size(1100, 750);
 
             // Panel principal con scroll
             var mainPanel = new Panel
@@ -61,15 +63,15 @@ namespace EmpresarialesClienteCSharp.Forms
                 Font = ModernUI.Fonts.Body,
                 ForeColor = ModernUI.Colors.Gray600,
                 AutoSize = true,
-                Location = new Point(30, 260),
+                Location = new Point(30, 310),
                 BackColor = Color.Transparent
             };
             mainPanel.Controls.Add(lblResultadoInfo);
 
             // DataGridView
             dgvCarros = ModernUI.CreateModernDataGrid();
-            dgvCarros.Location = new Point(30, 290);
-            dgvCarros.Size = new Size(1110, 420);
+            dgvCarros.Location = new Point(30, 340);
+            dgvCarros.Size = new Size(1210, 420);
             dgvCarros.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             mainPanel.Controls.Add(dgvCarros);
 
@@ -105,7 +107,7 @@ namespace EmpresarialesClienteCSharp.Forms
             // Subtítulo
             var lblSubtitulo = new Label
             {
-                Text = "Explore y filtre el inventario completo de vehículos por marca",
+                Text = "Explore y filtre el inventario completo de vehículos por marca, color o modelo",
                 Font = ModernUI.Fonts.Body,
                 ForeColor = ModernUI.Colors.Gray600,
                 AutoSize = true,
@@ -142,7 +144,7 @@ namespace EmpresarialesClienteCSharp.Forms
         {
             var panel = new Panel
             {
-                Size = new Size(1110, 120),
+                Size = new Size(1210, 170),
                 BackColor = Color.White
             };
 
@@ -150,14 +152,14 @@ namespace EmpresarialesClienteCSharp.Forms
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
                 // Sombra
-                using (var shadowPath = GetRoundedRectangle(new Rectangle(2, 2, 1106, 116), 12))
+                using (var shadowPath = GetRoundedRectangle(new Rectangle(2, 2, 1206, 166), 12))
                 using (var shadowBrush = new SolidBrush(Color.FromArgb(10, 0, 0, 0)))
                 {
                     e.Graphics.FillPath(shadowBrush, shadowPath);
                 }
 
                 // Fondo
-                using (var path = GetRoundedRectangle(new Rectangle(0, 0, 1109, 119), 12))
+                using (var path = GetRoundedRectangle(new Rectangle(0, 0, 1209, 169), 12))
                 using (var brush = new SolidBrush(Color.White))
                 using (var pen = new Pen(ModernUI.Colors.Border, 1))
                 {
@@ -166,47 +168,137 @@ namespace EmpresarialesClienteCSharp.Forms
                 }
             };
 
-            // Label
-            var lblFiltro = new Label
+            // Header del Panel
+            var lblHeader = new Label
             {
-                Text = "Filtrar por Marca",
+                Text = "🔍 Filtros de Búsqueda",
                 Font = ModernUI.Fonts.BodyBold,
-                ForeColor = ModernUI.Colors.Gray700,
+                ForeColor = ModernUI.Colors.Gray900,
                 AutoSize = true,
-                Location = new Point(25, 25),
+                Location = new Point(25, 15),
                 BackColor = Color.Transparent
             };
-            panel.Controls.Add(lblFiltro);
+            panel.Controls.Add(lblHeader);
 
-            // TextBox Container
-            var txtContainer = new Panel
+            // Primera fila de filtros
+            int yPos = 45;
+            int xMargin = 25;
+
+            // Filtro por Marca
+            var lblMarca = new Label
             {
-                Location = new Point(25, 50),
-                Size = new Size(450, 45),
+                Text = "Marca",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray700,
+                AutoSize = true,
+                Location = new Point(xMargin, yPos),
+                BackColor = Color.Transparent
+            };
+            panel.Controls.Add(lblMarca);
+
+            var txtContainerMarca = CreateTextBoxContainer(350, 40);
+            txtContainerMarca.Location = new Point(xMargin, yPos + 20);
+            txtFiltroMarca = CreateFilterTextBox(330);
+            txtContainerMarca.Controls.Add(txtFiltroMarca);
+            panel.Controls.Add(txtContainerMarca);
+
+            // Filtro por Color
+            var lblColor = new Label
+            {
+                Text = "Color",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray700,
+                AutoSize = true,
+                Location = new Point(xMargin + 380, yPos),
+                BackColor = Color.Transparent
+            };
+            panel.Controls.Add(lblColor);
+
+            var txtContainerColor = CreateTextBoxContainer(280, 40);
+            txtContainerColor.Location = new Point(xMargin + 380, yPos + 20);
+            txtFiltroColor = CreateFilterTextBox(260);
+            txtContainerColor.Controls.Add(txtFiltroColor);
+            panel.Controls.Add(txtContainerColor);
+
+            // Filtro por Modelo
+            var lblModelo = new Label
+            {
+                Text = "Modelo",
+                Font = ModernUI.Fonts.Body,
+                ForeColor = ModernUI.Colors.Gray700,
+                AutoSize = true,
+                Location = new Point(xMargin + 690, yPos),
+                BackColor = Color.Transparent
+            };
+            panel.Controls.Add(lblModelo);
+
+            var txtContainerModelo = CreateTextBoxContainer(280, 40);
+            txtContainerModelo.Location = new Point(xMargin + 690, yPos + 20);
+            txtFiltroModelo = CreateFilterTextBox(260);
+            txtContainerModelo.Controls.Add(txtFiltroModelo);
+            panel.Controls.Add(txtContainerModelo);
+
+            // Segunda fila - Botones de acción
+            int yPosButtons = yPos + 70;
+
+            // Botón Filtrar
+            var btnFiltrar = ModernUI.CreatePrimaryButton("🔍 Aplicar Filtros", (s, e) => AplicarFiltro());
+            btnFiltrar.Location = new Point(xMargin, yPosButtons);
+            btnFiltrar.Size = new Size(200, 45);
+            btnFiltrar.Font = ModernUI.Fonts.Button;
+            panel.Controls.Add(btnFiltrar);
+
+            // Botón Limpiar
+            var btnLimpiar = ModernUI.CreateSecondaryButton("🔄 Limpiar Filtros", (s, e) => LimpiarFiltro());
+            btnLimpiar.Location = new Point(xMargin + 220, yPosButtons);
+            btnLimpiar.Size = new Size(200, 45);
+            btnLimpiar.Font = ModernUI.Fonts.Button;
+            panel.Controls.Add(btnLimpiar);
+
+            // Botón Refrescar
+            var btnRefrescar = ModernUI.CreateButton("♻️ Recargar Datos", ModernUI.Colors.Success, Color.White, (s, e) => CargarCarros());
+            btnRefrescar.Location = new Point(xMargin + 440, yPosButtons);
+            btnRefrescar.Size = new Size(220, 45);
+            btnRefrescar.Font = ModernUI.Fonts.Button;
+            panel.Controls.Add(btnRefrescar);
+
+            return panel;
+        }
+
+        private Panel CreateTextBoxContainer(int width, int height)
+        {
+            var container = new Panel
+            {
+                Size = new Size(width, height),
                 BackColor = Color.White
             };
 
-            txtContainer.Paint += (s, e) => {
+            container.Paint += (s, e) => {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                using (var path = GetRoundedRectangle(txtContainer.ClientRectangle, 8))
+                using (var path = GetRoundedRectangle(container.ClientRectangle, 8))
                 using (var pen = new Pen(ModernUI.Colors.Border, 2))
                 {
                     e.Graphics.DrawPath(pen, path);
                 }
             };
 
-            txtFiltroMarca = new TextBox
+            return container;
+        }
+
+        private TextBox CreateFilterTextBox(int width)
+        {
+            var textBox = new TextBox
             {
-                Location = new Point(15, 10),
-                Width = 420,
+                Location = new Point(10, 8),
+                Width = width,
                 Height = 25,
-                Font = new Font("Segoe UI", 12, FontStyle.Regular),
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
                 BorderStyle = BorderStyle.None,
                 BackColor = Color.White,
                 ForeColor = ModernUI.Colors.Gray900
             };
 
-            txtFiltroMarca.KeyPress += (s, e) => {
+            textBox.KeyPress += (s, e) => {
                 if (e.KeyChar == (char)Keys.Enter)
                 {
                     e.Handled = true;
@@ -214,31 +306,7 @@ namespace EmpresarialesClienteCSharp.Forms
                 }
             };
 
-            txtContainer.Controls.Add(txtFiltroMarca);
-            panel.Controls.Add(txtContainer);
-
-            // Botón Filtrar
-            var btnFiltrar = ModernUI.CreatePrimaryButton("🔍 Filtrar", (s, e) => AplicarFiltro());
-            btnFiltrar.Location = new Point(500, 50);
-            btnFiltrar.Size = new Size(150, 45);
-            btnFiltrar.Font = ModernUI.Fonts.Button;
-            panel.Controls.Add(btnFiltrar);
-
-            // Botón Limpiar
-            var btnLimpiar = ModernUI.CreateSecondaryButton("🔄 Limpiar Filtro", (s, e) => LimpiarFiltro());
-            btnLimpiar.Location = new Point(670, 50);
-            btnLimpiar.Size = new Size(170, 45);
-            btnLimpiar.Font = ModernUI.Fonts.Button;
-            panel.Controls.Add(btnLimpiar);
-
-            // Botón Refrescar
-            var btnRefrescar = ModernUI.CreateButton("♻️ Recargar Datos", ModernUI.Colors.Success, Color.White, (s, e) => CargarCarros());
-            btnRefrescar.Location = new Point(860, 50);
-            btnRefrescar.Size = new Size(200, 45);
-            btnRefrescar.Font = ModernUI.Fonts.Button;
-            panel.Controls.Add(btnRefrescar);
-
-            return panel;
+            return textBox;
         }
 
         private async void CargarCarros()
@@ -271,28 +339,53 @@ namespace EmpresarialesClienteCSharp.Forms
 
         private void AplicarFiltro()
         {
-            if (string.IsNullOrWhiteSpace(txtFiltroMarca.Text))
+            var marcaBuscada = txtFiltroMarca.Text.Trim().ToLower();
+            var colorBuscado = txtFiltroColor.Text.Trim().ToLower();
+            var modeloBuscado = txtFiltroModelo.Text.Trim().ToLower();
+
+            // Si no hay filtros aplicados, mostrar todos
+            if (string.IsNullOrWhiteSpace(marcaBuscada) &&
+                string.IsNullOrWhiteSpace(colorBuscado) &&
+                string.IsNullOrWhiteSpace(modeloBuscado))
             {
                 carrosFiltrados = new List<Carro>(todosLosCarros);
+                lblResultadoInfo.Text = $"ℹ️ {todosLosCarros.Count} vehículos en total (sin filtros)";
+                lblResultadoInfo.ForeColor = ModernUI.Colors.Primary;
+                ActualizarDataGrid();
+                return;
             }
-            else
+
+            // Aplicar filtros combinados (AND)
+            carrosFiltrados = todosLosCarros.Where(c =>
             {
-                var marcaBuscada = txtFiltroMarca.Text.Trim().ToLower();
-                carrosFiltrados = todosLosCarros
-                    .Where(c => c.Marca?.ToLower().Contains(marcaBuscada) == true)
-                    .ToList();
-            }
+                bool cumpleMarca = string.IsNullOrWhiteSpace(marcaBuscada) ||
+                                   (c.Marca?.ToLower().Contains(marcaBuscada) == true);
+
+                bool cumpleColor = string.IsNullOrWhiteSpace(colorBuscado) ||
+                                   (c.Color?.ToLower().Contains(colorBuscado) == true);
+
+                bool cumpleModelo = string.IsNullOrWhiteSpace(modeloBuscado) ||
+                                    (c.Modelo?.ToLower().Contains(modeloBuscado) == true);
+
+                return cumpleMarca && cumpleColor && cumpleModelo;
+            }).ToList();
 
             ActualizarDataGrid();
 
+            // Construir mensaje de resultado
+            var filtrosAplicados = new List<string>();
+            if (!string.IsNullOrWhiteSpace(marcaBuscada)) filtrosAplicados.Add($"Marca: {txtFiltroMarca.Text}");
+            if (!string.IsNullOrWhiteSpace(colorBuscado)) filtrosAplicados.Add($"Color: {txtFiltroColor.Text}");
+            if (!string.IsNullOrWhiteSpace(modeloBuscado)) filtrosAplicados.Add($"Modelo: {txtFiltroModelo.Text}");
+
             if (carrosFiltrados.Count == 0)
             {
-                lblResultadoInfo.Text = $"❌ No se encontraron vehículos de la marca: {txtFiltroMarca.Text}";
+                lblResultadoInfo.Text = $"❌ No se encontraron vehículos con los filtros: {string.Join(", ", filtrosAplicados)}";
                 lblResultadoInfo.ForeColor = ModernUI.Colors.Danger;
             }
             else
             {
-                lblResultadoInfo.Text = $"✅ {carrosFiltrados.Count} vehículo(s) encontrado(s) - Marca: {txtFiltroMarca.Text}";
+                lblResultadoInfo.Text = $"✅ {carrosFiltrados.Count} vehículo(s) encontrado(s) | Filtros: {string.Join(", ", filtrosAplicados)}";
                 lblResultadoInfo.ForeColor = ModernUI.Colors.Success;
             }
         }
@@ -300,10 +393,12 @@ namespace EmpresarialesClienteCSharp.Forms
         private void LimpiarFiltro()
         {
             txtFiltroMarca.Clear();
+            txtFiltroColor.Clear();
+            txtFiltroModelo.Clear();
             carrosFiltrados = new List<Carro>(todosLosCarros);
             ActualizarDataGrid();
 
-            lblResultadoInfo.Text = $"✅ {todosLosCarros.Count} vehículos en total (sin filtro)";
+            lblResultadoInfo.Text = $"✅ {todosLosCarros.Count} vehículos en total (filtros limpiados)";
             lblResultadoInfo.ForeColor = ModernUI.Colors.Success;
             txtFiltroMarca.Focus();
         }

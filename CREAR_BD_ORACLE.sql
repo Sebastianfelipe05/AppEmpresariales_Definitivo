@@ -104,58 +104,10 @@ CREATE INDEX idx_carro_marca ON CARRO(marca);
 CREATE INDEX idx_carro_anio ON CARRO(anio);
 
 -- =====================================
--- PASO 5: INSERTAR DATOS DE PRUEBA
+-- PASO 5: DATOS INICIALES
 -- =====================================
-
--- Insertar carros de prueba
-INSERT INTO CARRO (placa, marca, color, modelo, combustible, anio, estado,
-                   numero_puertas, tiene_aire_acondicionado, precio, tipo_transmision)
-VALUES ('ABC-123', 'TOYOTA', 'ROJO', 'COROLLA', 'GASOLINA', 2020, 'USADO',
-        4, 1, 45000000, 'AUTOMATICA');
-
-INSERT INTO CARRO (placa, marca, color, modelo, combustible, anio, estado,
-                   numero_puertas, tiene_aire_acondicionado, precio, tipo_transmision)
-VALUES ('DEF-456', 'HONDA', 'AZUL', 'CIVIC', 'GASOLINA', 2022, 'NUEVO',
-        4, 1, 55000000, 'MANUAL');
-
-INSERT INTO CARRO (placa, marca, color, modelo, combustible, anio, estado,
-                   numero_puertas, tiene_aire_acondicionado, precio, tipo_transmision)
-VALUES ('GHI-789', 'CHEVROLET', 'BLANCO', 'CRUZE', 'HIBRIDO', 2021, 'EXCELENTE',
-        4, 1, 50000000, 'AUTOMATICA');
-
-INSERT INTO CARRO (placa, marca, color, modelo, combustible, anio, estado,
-                   numero_puertas, tiene_aire_acondicionado, precio, tipo_transmision)
-VALUES ('JKL-012', 'NISSAN', 'NEGRO', 'LEAF', 'ELECTRICO', 2023, 'NUEVO',
-        5, 1, 65000000, 'AUTOMATICA');
-
--- Insertar mantenimientos de prueba
-INSERT INTO MANTENIMIENTO (placa_carro, fecha_mantenimiento, kilometraje, tipo_mantenimiento,
-                          costo, descripcion, proximo_mantenimiento, completado)
-VALUES ('ABC-123', CURRENT_TIMESTAMP - 180, 50000, 'PREVENTIVO',
-        350000, 'Mantenimiento preventivo de 50,000 km: cambio de aceite, filtros y revisión general',
-        CURRENT_TIMESTAMP + 180, 1);
-
-INSERT INTO MANTENIMIENTO (placa_carro, fecha_mantenimiento, kilometraje, tipo_mantenimiento,
-                          costo, descripcion, completado)
-VALUES ('ABC-123', CURRENT_TIMESTAMP - 90, 55000, 'CAMBIO_LLANTAS',
-        1200000, 'Cambio de las 4 llantas delanteras y traseras por desgaste', 1);
-
-INSERT INTO MANTENIMIENTO (placa_carro, fecha_mantenimiento, kilometraje, tipo_mantenimiento,
-                          costo, descripcion, proximo_mantenimiento)
-VALUES ('DEF-456', CURRENT_TIMESTAMP - 60, 30000, 'CAMBIO_ACEITE',
-        180000, 'Cambio de aceite sintético y filtro de aceite',
-        CURRENT_TIMESTAMP + 120);
-
-INSERT INTO MANTENIMIENTO (placa_carro, fecha_mantenimiento, kilometraje, tipo_mantenimiento,
-                          costo, descripcion)
-VALUES ('DEF-456', CURRENT_TIMESTAMP - 15, 32000, 'CORRECTIVO',
-        450000, 'Reparación del sistema de frenos: cambio de pastillas y discos');
-
-INSERT INTO MANTENIMIENTO (placa_carro, fecha_mantenimiento, kilometraje, tipo_mantenimiento,
-                          costo, descripcion, proximo_mantenimiento)
-VALUES ('GHI-789', CURRENT_TIMESTAMP - 30, 25000, 'REVISION',
-        250000, 'Revisión técnico-mecánica completa del vehículo',
-        CURRENT_TIMESTAMP + 365);
+-- Base de datos vacía - Sin datos de prueba
+-- Los datos se agregarán desde la aplicación
 
 COMMIT;
 
@@ -208,9 +160,8 @@ ORDER BY table_name, constraint_type;
 -- - Usuario DAE2025 creado
 -- - 2 tablas creadas (CARRO, MANTENIMIENTO)
 -- - 6 índices creados
--- - 4 carros insertados
--- - 5 mantenimientos insertados
+-- - Base de datos vacía (sin datos de prueba)
 -- - Relación FK funcionando
 
 -- Ahora puedes ejecutar tu aplicación Spring Boot
--- y se conectará automáticamente a esta base de datos.
+-- y agregar datos desde el frontend React o C#.

@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 
 /**
  * Inicializador de datos simple para carros
+ * DESACTIVADO: La base de datos inicia vacía
  */
-@Component
+//@Component  // Comentado para desactivar la inicialización automática
 public class DataInitializer implements CommandLineRunner {
 
     @Autowired
@@ -19,10 +20,13 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        // ⚠️ DESACTIVADO: La base de datos debe iniciar vacía
+        // Si necesitas datos de prueba, descomenta la línea @Component arriba
+
         // Verificar si ya existen datos
-        if (carroService.count() == 0) {
-            initializeCarros();
-        }
+        // if (carroService.count() == 0) {
+        //     initializeCarros();
+        // }
     }
 
     private void initializeCarros() {
@@ -95,10 +99,20 @@ public class DataInitializer implements CommandLineRunner {
 
             System.out.println("✅ Datos de prueba inicializados correctamente:");
             System.out.println("   - 4 carros creados");
-            System.out.println("   - API REST disponible en: /carros");
+            System.out.println("   - API REST disponible en: /api/carro");
 
         } catch (Exception e) {
             System.err.println("❌ Error al inicializar datos de prueba: " + e.getMessage());
         }
     }
 }
+
+/*
+ * NOTA: Para reactivar los datos de prueba automáticos:
+ * 1. Descomenta la anotación @Component en la línea 15
+ * 2. Descomenta las líneas 26-29 del método run()
+ * 3. Reinicia el backend
+ *
+ * Para mantener la base de datos vacía:
+ * - Deja todo comentado como está actualmente
+ */
