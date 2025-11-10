@@ -135,18 +135,34 @@ namespace EmpresarialesClienteCSharp.Services
             {
                 // Convertir a DTO con el formato correcto para el backend
                 var dto = MantenimientoRequestDto.FromMantenimiento(mantenimiento);
+                // NO enviar ID al crear (se genera automáticamente en el backend)
+                dto.Id = null;
 
                 var json = JsonConvert.SerializeObject(dto, new JsonSerializerSettings
                 {
                     DateFormatString = "yyyy-MM-dd HH:mm:ss",
-                    NullValueHandling = NullValueHandling.Ignore
+                    NullValueHandling = NullValueHandling.Ignore,
+                    DateTimeZoneHandling = DateTimeZoneHandling.Local
                 });
+
+                System.Diagnostics.Debug.WriteLine($"JSON enviado: {json}");
+
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(BASE_URL, content);
-                response.EnsureSuccessStatusCode();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Status: {response.StatusCode}. Detalle: {errorContent}");
+                }
+
                 var responseContent = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Mantenimiento>(responseContent)
                     ?? throw new Exception("No se pudo crear el mantenimiento");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"Error de conexión: {ex.Message}. Verifique que el backend esté ejecutándose.", ex);
             }
             catch (Exception ex)
             {
@@ -186,8 +202,25 @@ namespace EmpresarialesClienteCSharp.Services
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine($"Intentando eliminar mantenimiento con ID: {id}");
+                System.Diagnostics.Debug.WriteLine($"URL: {BASE_URL}/{id}");
+
                 var response = await _httpClient.DeleteAsync($"{BASE_URL}/{id}");
+
+                System.Diagnostics.Debug.WriteLine($"Response Status Code: {response.StatusCode}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine($"Error Content: {errorContent}");
+                    throw new Exception($"Error HTTP {response.StatusCode}: {errorContent}");
+                }
+
                 return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"Error de conexión al eliminar: {ex.Message}. Verifique que el backend esté ejecutándose.", ex);
             }
             catch (Exception ex)
             {

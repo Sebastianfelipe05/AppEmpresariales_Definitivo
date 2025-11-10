@@ -31,12 +31,12 @@ namespace EmpresarialesClienteCSharp.Forms
         private void InitializeComponent()
         {
             this.Text = "Eliminar Mantenimiento";
-            this.Size = new Size(750, 700);
+            this.Size = new Size(900, 800);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.FormBorderStyle = FormBorderStyle.None;
+            this.FormBorderStyle = FormBorderStyle.Sizable;
             this.BackColor = Color.FromArgb(249, 250, 251);
             this.MinimumSize = new Size(750, 700);
-            this.MaximumSize = new Size(750, 700);
+            this.AutoScaleMode = AutoScaleMode.Dpi;
 
             // Modern title bar with close button
             var titleBar = new Panel
@@ -80,13 +80,15 @@ namespace EmpresarialesClienteCSharp.Forms
             var mainPanel = new Panel
             {
                 Location = new Point(30, 100),
-                Size = new Size(690, 570),
-                BackColor = Color.White
+                Size = new Size(840, 670),
+                BackColor = Color.White,
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                AutoScroll = true
             };
             mainPanel.Paint += (s, e) =>
             {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                using (var path = GetRoundedRectangle(mainPanel.ClientRectangle, 15))
+                using (var path = GetRoundedRectangle(new Rectangle(0, 0, mainPanel.Width - 1, mainPanel.Height - 1), 15))
                 {
                     e.Graphics.FillPath(new SolidBrush(Color.White), path);
                     e.Graphics.DrawPath(new Pen(Color.FromArgb(229, 231, 235), 1), path);
@@ -137,7 +139,7 @@ namespace EmpresarialesClienteCSharp.Forms
             dgvMantenimientos = new DataGridView
             {
                 Location = new Point(30, 150),
-                Size = new Size(630, 180),
+                Size = new Size(780, 200),
                 BackgroundColor = Color.White,
                 BorderStyle = BorderStyle.None,
                 AllowUserToAddRows = false,
@@ -152,17 +154,19 @@ namespace EmpresarialesClienteCSharp.Forms
                     ForeColor = Color.White,
                     Font = new Font("Segoe UI", 10, FontStyle.Bold)
                 },
-                Visible = false
+                Visible = false,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
             dgvMantenimientos.CellDoubleClick += DgvMantenimientos_CellDoubleClick;
 
             // Info panel (hidden by default)
             panelInfo = new Panel
             {
-                Location = new Point(30, 350),
-                Size = new Size(630, 320),
+                Location = new Point(30, 370),
+                Size = new Size(780, 220),
                 BackColor = Color.FromArgb(254, 242, 242),
-                Visible = false
+                Visible = false,
+                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
             panelInfo.Paint += (s, e) =>
             {
@@ -177,17 +181,17 @@ namespace EmpresarialesClienteCSharp.Forms
             var lblInfoTitulo = new Label
             {
                 Text = "⚠️ Información del Mantenimiento a Eliminar",
-                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
                 ForeColor = Color.FromArgb(153, 27, 27),
-                Location = new Point(20, 15),
+                Location = new Point(20, 12),
                 AutoSize = true
             };
 
             // Create info labels in two columns
             int col1X = 20;
-            int col2X = 330;
-            int yStart = 50;
-            int ySpacing = 30;
+            int col2X = 400;
+            int yStart = 40;
+            int ySpacing = 25;
 
             lblId = CreateInfoLabel("🔖 ID:", "", col1X, yStart);
             lblPlaca = CreateInfoLabel("🚗 Placa:", "", col1X, yStart + ySpacing);
@@ -203,10 +207,10 @@ namespace EmpresarialesClienteCSharp.Forms
             lblDescripcion = new Label
             {
                 Text = "📝 Descripción: ",
-                Font = new Font("Segoe UI", 9, FontStyle.Regular),
+                Font = new Font("Segoe UI", 8, FontStyle.Regular),
                 ForeColor = Color.FromArgb(31, 41, 55),
-                Location = new Point(col1X, yStart + ySpacing * 5 + 10),
-                Size = new Size(590, 60),
+                Location = new Point(col1X, yStart + ySpacing * 5),
+                Size = new Size(740, 40),
                 BackColor = Color.White
             };
 
@@ -215,8 +219,8 @@ namespace EmpresarialesClienteCSharp.Forms
                 Text = "⚠️ ADVERTENCIA: Esta acción es permanente y no se puede deshacer",
                 Font = new Font("Segoe UI", 9, FontStyle.Bold),
                 ForeColor = Color.FromArgb(220, 38, 38),
-                Location = new Point(20, 280),
-                Size = new Size(590, 25),
+                Location = new Point(20, 185),
+                Size = new Size(740, 25),
                 TextAlign = ContentAlignment.MiddleCenter,
                 BackColor = Color.FromArgb(254, 226, 226)
             };
@@ -227,12 +231,14 @@ namespace EmpresarialesClienteCSharp.Forms
             });
 
             // Action buttons
-            btnEliminar = CreateModernButton("🗑️ Eliminar Mantenimiento", Color.FromArgb(220, 38, 38), 30, 500, 300, 50);
+            btnEliminar = CreateModernButton("🗑️ Eliminar Mantenimiento", Color.FromArgb(220, 38, 38), 30, 610, 380, 50);
             btnEliminar.Enabled = false;
             btnEliminar.Click += BtnEliminar_Click;
+            btnEliminar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 
-            var btnCancelar = CreateModernButton("❌ Cancelar", Color.FromArgb(107, 114, 128), 360, 500, 300, 50);
+            var btnCancelar = CreateModernButton("❌ Cancelar", Color.FromArgb(107, 114, 128), 430, 610, 380, 50);
             btnCancelar.Click += (s, e) => this.Close();
+            btnCancelar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 
             mainPanel.Controls.AddRange(new Control[] { lblInstruccion, lblPlacaLabel, txtPlaca, btnBuscar, dgvMantenimientos, panelInfo, btnEliminar, btnCancelar });
             this.Controls.AddRange(new Control[] { titleBar, mainPanel });
@@ -390,6 +396,10 @@ namespace EmpresarialesClienteCSharp.Forms
                 return;
             }
 
+            System.Diagnostics.Debug.WriteLine($"=== INICIANDO ELIMINACIÓN ===");
+            System.Diagnostics.Debug.WriteLine($"Mantenimiento ID: {_mantenimientoActual.Id}");
+            System.Diagnostics.Debug.WriteLine($"Placa: {_mantenimientoActual.PlacaCarro}");
+
             var result = MessageBox.Show(
                 $"⚠️ ¿Está COMPLETAMENTE SEGURO que desea eliminar este mantenimiento?\n\n" +
                 $"📋 ID: {_mantenimientoActual.Id}\n" +
@@ -406,15 +416,21 @@ namespace EmpresarialesClienteCSharp.Forms
 
             if (result != DialogResult.Yes)
             {
+                System.Diagnostics.Debug.WriteLine("Usuario canceló la eliminación");
                 return;
             }
 
             try
             {
+                System.Diagnostics.Debug.WriteLine("Usuario confirmó eliminación");
                 btnEliminar.Enabled = false;
                 btnEliminar.Text = "⏳ Eliminando...";
+                this.Cursor = Cursors.WaitCursor;
 
                 bool eliminado = await _mantenimientoService.EliminarMantenimientoAsync(_mantenimientoActual.Id);
+
+                this.Cursor = Cursors.Default;
+                System.Diagnostics.Debug.WriteLine($"Resultado eliminación: {eliminado}");
 
                 if (eliminado)
                 {
@@ -434,7 +450,11 @@ namespace EmpresarialesClienteCSharp.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"❌ Error al eliminar el mantenimiento:\n{ex.Message}",
+                this.Cursor = Cursors.Default;
+                System.Diagnostics.Debug.WriteLine($"ERROR EN ELIMINACIÓN: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+
+                MessageBox.Show($"❌ Error al eliminar el mantenimiento:\n\n{ex.Message}\n\nVerifique que el backend esté ejecutándose.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnEliminar.Enabled = true;
                 btnEliminar.Text = "🗑️ Eliminar Mantenimiento";
