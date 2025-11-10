@@ -133,7 +133,10 @@ namespace EmpresarialesClienteCSharp.Services
         {
             try
             {
-                var json = JsonConvert.SerializeObject(mantenimiento, new JsonSerializerSettings
+                // Convertir a DTO con el formato correcto para el backend
+                var dto = MantenimientoRequestDto.FromMantenimiento(mantenimiento);
+
+                var json = JsonConvert.SerializeObject(dto, new JsonSerializerSettings
                 {
                     DateFormatString = "yyyy-MM-dd HH:mm:ss",
                     NullValueHandling = NullValueHandling.Ignore
@@ -156,7 +159,11 @@ namespace EmpresarialesClienteCSharp.Services
         {
             try
             {
-                var json = JsonConvert.SerializeObject(mantenimiento, new JsonSerializerSettings
+                // Convertir a DTO con el formato correcto para el backend
+                var dto = MantenimientoRequestDto.FromMantenimiento(mantenimiento);
+                dto.Id = id;
+
+                var json = JsonConvert.SerializeObject(dto, new JsonSerializerSettings
                 {
                     DateFormatString = "yyyy-MM-dd HH:mm:ss",
                     NullValueHandling = NullValueHandling.Ignore

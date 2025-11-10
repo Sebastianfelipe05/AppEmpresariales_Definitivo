@@ -1,0 +1,5322 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2025-11-09T18:56:40.852-05:00  INFO 5416 --- [POCEmpleado] [           main] c.e.POCEmpleado.EmpresarialesProyecto    : Starting EmpresarialesProyecto v0.0.1-SNAPSHOT using Java 17.0.16 with PID 5416 (C:\src\EmpresarialesProyecto\EmpresarialesBackend\target\POCEmpleado-0.0.1-SNAPSHOT.jar started by Sebastian in C:\src\EmpresarialesProyecto\EmpresarialesBackend)
+2025-11-09T18:56:40.857-05:00  INFO 5416 --- [POCEmpleado] [           main] c.e.POCEmpleado.EmpresarialesProyecto    : No active profile set, falling back to 1 default profile: "default"
+2025-11-09T18:56:42.189-05:00  INFO 5416 --- [POCEmpleado] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-09T18:56:42.320-05:00  INFO 5416 --- [POCEmpleado] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 96 ms. Found 2 JPA repository interfaces.
+2025-11-09T18:56:43.554-05:00  INFO 5416 --- [POCEmpleado] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-11-09T18:56:43.586-05:00  INFO 5416 --- [POCEmpleado] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-09T18:56:43.587-05:00  INFO 5416 --- [POCEmpleado] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.44]
+2025-11-09T18:56:43.654-05:00  INFO 5416 --- [POCEmpleado] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-09T18:56:43.656-05:00  INFO 5416 --- [POCEmpleado] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2747 ms
+2025-11-09T18:56:44.492-05:00  INFO 5416 --- [POCEmpleado] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-09T18:56:44.646-05:00  INFO 5416 --- [POCEmpleado] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-11-09T18:56:44.760-05:00  INFO 5416 --- [POCEmpleado] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-09T18:56:45.504-05:00  INFO 5416 --- [POCEmpleado] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-09T18:56:45.561-05:00  INFO 5416 --- [POCEmpleado] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-09T18:56:46.275-05:00  INFO 5416 --- [POCEmpleado] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@53f495f0
+2025-11-09T18:56:46.282-05:00  INFO 5416 --- [POCEmpleado] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-09T18:56:46.715-05:00  WARN 5416 --- [POCEmpleado] [           main] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-09T18:56:46.844-05:00  INFO 5416 --- [POCEmpleado] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 21.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-09T18:56:48.094-05:00  INFO 5416 --- [POCEmpleado] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-09T18:56:48.247-05:00  INFO 5416 --- [POCEmpleado] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-09T18:56:48.635-05:00  INFO 5416 --- [POCEmpleado] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-09T18:56:50.491-05:00  WARN 5416 --- [POCEmpleado] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-09T18:56:51.148-05:00  INFO 5416 --- [POCEmpleado] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2025-11-09T18:56:52.405-05:00  INFO 5416 --- [POCEmpleado] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-11-09T18:56:52.428-05:00  INFO 5416 --- [POCEmpleado] [           main] c.e.POCEmpleado.EmpresarialesProyecto    : Started EmpresarialesProyecto in 12.328 seconds (process running for 13.224)
+2025-11-09T18:57:18.976-05:00  INFO 5416 --- [POCEmpleado] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-09T18:57:18.976-05:00  INFO 5416 --- [POCEmpleado] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-09T18:57:18.976-05:00  INFO 5416 --- [POCEmpleado] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+2025-11-09T18:57:49.267-05:00  WARN 5416 --- [POCEmpleado] [nio-8080-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected end-of-input in field name]
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        carro c1_0 
+    left join
+        mantenimiento m1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=?
+Hibernate: 
+    insert 
+    into
+        carro
+        (anio, color, combustible, estado, fecha_registro, marca, modelo, numero_puertas, precio, tiene_aire_acondicionado, tipo_transmision, placa) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    insert 
+    into
+        mantenimiento
+        (placa_carro, completado, costo, descripcion, fecha_mantenimiento, fecha_registro, kilometraje, proximo_mantenimiento, tipo_mantenimiento, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        carro c1_0 
+    left join
+        mantenimiento m1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=?
+Hibernate: 
+    insert 
+    into
+        carro
+        (anio, color, combustible, estado, fecha_registro, marca, modelo, numero_puertas, precio, tiene_aire_acondicionado, tipo_transmision, placa) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    update
+        carro 
+    set
+        anio=?,
+        color=?,
+        combustible=?,
+        estado=?,
+        fecha_registro=?,
+        marca=?,
+        modelo=?,
+        numero_puertas=?,
+        precio=?,
+        tiene_aire_acondicionado=?,
+        tipo_transmision=? 
+    where
+        placa=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    delete 
+    from
+        carro 
+    where
+        placa=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    insert 
+    into
+        mantenimiento
+        (placa_carro, completado, costo, descripcion, fecha_mantenimiento, fecha_registro, kilometraje, proximo_mantenimiento, tipo_mantenimiento, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    update
+        mantenimiento 
+    set
+        placa_carro=?,
+        completado=?,
+        costo=?,
+        descripcion=?,
+        fecha_mantenimiento=?,
+        fecha_registro=?,
+        kilometraje=?,
+        proximo_mantenimiento=?,
+        tipo_mantenimiento=? 
+    where
+        id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    update
+        mantenimiento 
+    set
+        placa_carro=?,
+        completado=?,
+        costo=?,
+        descripcion=?,
+        fecha_mantenimiento=?,
+        fecha_registro=?,
+        kilometraje=?,
+        proximo_mantenimiento=?,
+        tipo_mantenimiento=? 
+    where
+        id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    delete 
+    from
+        carro 
+    where
+        placa=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        carro c1_0 
+    left join
+        mantenimiento m1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=?
+Hibernate: 
+    insert 
+    into
+        carro
+        (anio, color, combustible, estado, fecha_registro, marca, modelo, numero_puertas, precio, tiene_aire_acondicionado, tipo_transmision, placa) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    insert 
+    into
+        mantenimiento
+        (placa_carro, completado, costo, descripcion, fecha_mantenimiento, fecha_registro, kilometraje, proximo_mantenimiento, tipo_mantenimiento, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    delete 
+    from
+        mantenimiento 
+    where
+        id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    select
+        m1_0.placa_carro,
+        m1_0.id,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.placa_carro=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+2025-11-09T19:18:16.178-05:00  WARN 5416 --- [POCEmpleado] [nio-8080-exec-8] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.Long` from String "0791892f-bc5d-4bc4-8fa2-3f7414e4d4fe": not a valid `java.lang.Long` value]
+2025-11-09T19:18:20.204-05:00  WARN 5416 --- [POCEmpleado] [nio-8080-exec-9] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.Long` from String "a2f64e16-8b6e-4f5e-a932-3bb5c4493688": not a valid `java.lang.Long` value]
+2025-11-09T19:18:23.202-05:00  WARN 5416 --- [POCEmpleado] [io-8080-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.Long` from String "bed2736e-a591-4e7b-8fd3-51b5c1d4db09": not a valid `java.lang.Long` value]
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    join
+        carro c1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=? 
+    order by
+        m1_0.fecha_mantenimiento desc
+2025-11-09T19:18:46.963-05:00  WARN 5416 --- [POCEmpleado] [nio-8080-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.Long` from String "dae903d2-c304-4a92-8d51-ee923914b9e3": not a valid `java.lang.Long` value]
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    join
+        carro c1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=? 
+    order by
+        m1_0.fecha_mantenimiento desc
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    join
+        carro c1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=? 
+    order by
+        m1_0.fecha_mantenimiento desc
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    join
+        carro c1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=? 
+    order by
+        m1_0.fecha_mantenimiento desc
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    join
+        carro c1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=? 
+    order by
+        m1_0.fecha_mantenimiento desc
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    join
+        carro c1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=? 
+    order by
+        m1_0.fecha_mantenimiento desc
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    join
+        carro c1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=? 
+    order by
+        m1_0.fecha_mantenimiento desc
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    join
+        carro c1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=? 
+    order by
+        m1_0.fecha_mantenimiento desc
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    where
+        m1_0.id=?
+Hibernate: 
+    select
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision 
+    from
+        carro c1_0 
+    where
+        c1_0.placa=?
+Hibernate: 
+    update
+        mantenimiento 
+    set
+        placa_carro=?,
+        completado=?,
+        costo=?,
+        descripcion=?,
+        fecha_mantenimiento=?,
+        fecha_registro=?,
+        kilometraje=?,
+        proximo_mantenimiento=?,
+        tipo_mantenimiento=? 
+    where
+        id=?
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0
+Hibernate: 
+    select
+        m1_0.id,
+        m1_0.placa_carro,
+        c1_0.placa,
+        c1_0.anio,
+        c1_0.color,
+        c1_0.combustible,
+        c1_0.estado,
+        c1_0.fecha_registro,
+        c1_0.marca,
+        c1_0.modelo,
+        c1_0.numero_puertas,
+        c1_0.precio,
+        c1_0.tiene_aire_acondicionado,
+        c1_0.tipo_transmision,
+        m1_0.completado,
+        m1_0.costo,
+        m1_0.descripcion,
+        m1_0.fecha_mantenimiento,
+        m1_0.fecha_registro,
+        m1_0.kilometraje,
+        m1_0.proximo_mantenimiento,
+        m1_0.tipo_mantenimiento 
+    from
+        mantenimiento m1_0 
+    join
+        carro c1_0 
+            on c1_0.placa=m1_0.placa_carro 
+    where
+        c1_0.placa=? 
+    order by
+        m1_0.fecha_mantenimiento desc
+2025-11-09T19:21:16.143-05:00  WARN 5416 --- [POCEmpleado] [nio-8080-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.Long` from String "a215b74e-8ea4-43ca-aa07-453a56ec3662": not a valid `java.lang.Long` value]

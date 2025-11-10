@@ -97,15 +97,6 @@ export default function SearchListCarros() {
     }).format(value);
   };
 
-  const formatDate = (dateString?: string): string => {
-    if (!dateString) return 'N/A';
-    try {
-      return new Date(dateString).toLocaleDateString('es-CO');
-    } catch {
-      return dateString;
-    }
-  };
-
   const getActiveFiltersText = (): string => {
     const filters = [];
     if (marcaFilter.trim()) filters.push(`Marca: ${marcaFilter}`);

@@ -14,9 +14,34 @@ export interface Mantenimiento {
   costoConImpuesto?: number;            // optional/read-only
 }
 
-export type MantenimientoCreateData = Omit<Mantenimiento, 'id' | 'fechaRegistro' | 'estadoMantenimiento' | 'esUrgente' | 'costoConImpuesto'>;
+// Data para crear mantenimiento - el backend espera un objeto carro con placa
+export interface MantenimientoCreateData {
+  carro: {
+    placa: string;
+  };
+  fechaMantenimiento: string;
+  kilometraje: number;
+  tipoMantenimiento: string;
+  costo: number;
+  descripcion: string;
+  proximoMantenimiento: string | null;
+  completado: boolean;
+}
 
-export type MantenimientoUpdateData = Omit<Mantenimiento, 'fechaRegistro' | 'estadoMantenimiento' | 'esUrgente' | 'costoConImpuesto'>;
+// Data para actualizar mantenimiento - incluye id y carro
+export interface MantenimientoUpdateData {
+  id: string;
+  carro: {
+    placa: string;
+  };
+  fechaMantenimiento: string;
+  kilometraje: number;
+  tipoMantenimiento: string;
+  costo: number;
+  descripcion: string;
+  proximoMantenimiento: string | null;
+  completado: boolean;
+}
 
 export type MantenimientoFilter = {
   id?: string;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import type { Mantenimiento, MantenimientoCreateData } from '../types/Mantenimiento';
+import type { Mantenimiento, MantenimientoUpdateData } from '../types/Mantenimiento';
 import { getMantenimientoById, updateMantenimiento } from '../services/mantenimientoApi';
 import { TIPOS_MANTENIMIENTO } from '../types/Mantenimiento';
 
@@ -12,9 +12,9 @@ export default function ActualizarMantenimiento() {
   const [mantenimiento, setMantenimiento] = useState<Mantenimiento | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
+  const [placa, setPlaca] = useState('');
 
-  const [formData, setFormData] = useState<MantenimientoCreateData>({
-    placaCarro: '',
+  const [formData, setFormData] = useState<Omit<MantenimientoUpdateData, 'id' | 'carro'>>({
     fechaMantenimiento: '',
     kilometraje: 0,
     tipoMantenimiento: 'PREVENTIVO',
@@ -45,8 +45,8 @@ export default function ActualizarMantenimiento() {
       const data = await getMantenimientoById(id);
       if (data) {
         setMantenimiento(data);
+        setPlaca(data.placaCarro);
         setFormData({
-          placaCarro: data.placaCarro,
           fechaMantenimiento: data.fechaMantenimiento,
           kilometraje: data.kilometraje,
           tipoMantenimiento: data.tipoMantenimiento,
@@ -103,7 +103,7 @@ export default function ActualizarMantenimiento() {
     setIsSubmitting(true);
 
     // Validaciones
-    if (!formData.placaCarro.match(/^[A-Z]{3}-[0-9]{3}$/)) {
+    if (!placa.match(/^[A-Z]{3}-[0-9]{3}$/)) {
       setError('La placa debe tener el formato ABC-123');
       setIsSubmitting(false);
       return;
@@ -134,7 +134,15 @@ export default function ActualizarMantenimiento() {
     }
 
     try {
-      await updateMantenimiento(id, { ...formData, id });
+      // Construir el objeto completo con el formato que espera el backend
+      const dataToSend: MantenimientoUpdateData = {
+        id,
+        carro: {
+          placa: placa
+        },
+        ...formData
+      };
+      await updateMantenimiento(id, dataToSend);
       alert('Mantenimiento actualizado exitosamente');
       navigate('/mantenimientos');
     } catch (err) {
@@ -259,8 +267,8 @@ export default function ActualizarMantenimiento() {
                     type="text"
                     id="placaCarro"
                     name="placaCarro"
-                    value={formData.placaCarro}
-                    onChange={handleChange}
+                    value={placa}
+                    onChange={(e) => setPlaca(e.target.value.toUpperCase())}
                     disabled
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed uppercase"
                   />

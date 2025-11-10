@@ -179,4 +179,66 @@ Mantenimientos urgentes: {MantenimientosUrgentes}
 ";
         }
     }
+
+    /// <summary>
+    /// DTO para crear y actualizar mantenimientos
+    /// El backend espera un objeto "carro" con la placa, no solo "placaCarro"
+    /// </summary>
+    public class MantenimientoRequestDto
+    {
+        [JsonProperty("id")]
+        public string? Id { get; set; }
+
+        [JsonProperty("carro")]
+        public CarroRef Carro { get; set; } = new CarroRef();
+
+        [JsonProperty("fechaMantenimiento")]
+        public DateTime? FechaMantenimiento { get; set; }
+
+        [JsonProperty("kilometraje")]
+        public int Kilometraje { get; set; }
+
+        [JsonProperty("tipoMantenimiento")]
+        public string TipoMantenimiento { get; set; } = string.Empty;
+
+        [JsonProperty("costo")]
+        public double Costo { get; set; }
+
+        [JsonProperty("descripcion")]
+        public string Descripcion { get; set; } = string.Empty;
+
+        [JsonProperty("proximoMantenimiento")]
+        public DateTime? ProximoMantenimiento { get; set; }
+
+        [JsonProperty("completado")]
+        public bool Completado { get; set; }
+
+        /// <summary>
+        /// Clase interna para la referencia al carro
+        /// </summary>
+        public class CarroRef
+        {
+            [JsonProperty("placa")]
+            public string Placa { get; set; } = string.Empty;
+        }
+
+        /// <summary>
+        /// Convierte un Mantenimiento a MantenimientoRequestDto
+        /// </summary>
+        public static MantenimientoRequestDto FromMantenimiento(Mantenimiento mantenimiento)
+        {
+            return new MantenimientoRequestDto
+            {
+                Id = mantenimiento.Id,
+                Carro = new CarroRef { Placa = mantenimiento.PlacaCarro },
+                FechaMantenimiento = mantenimiento.FechaMantenimiento,
+                Kilometraje = mantenimiento.Kilometraje,
+                TipoMantenimiento = mantenimiento.TipoMantenimiento,
+                Costo = mantenimiento.Costo,
+                Descripcion = mantenimiento.Descripcion,
+                ProximoMantenimiento = mantenimiento.ProximoMantenimiento,
+                Completado = mantenimiento.Completado
+            };
+        }
+    }
 }

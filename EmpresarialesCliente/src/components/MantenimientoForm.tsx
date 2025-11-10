@@ -9,8 +9,8 @@ interface MantenimientoFormProps {
 }
 
 export default function MantenimientoForm({ onSubmit, initialData, isEditing = false }: MantenimientoFormProps) {
-  const [formData, setFormData] = useState<MantenimientoCreateData>({
-    placaCarro: initialData?.placaCarro || '',
+  const [placa, setPlaca] = useState(initialData?.placaCarro || '');
+  const [formData, setFormData] = useState<Omit<MantenimientoCreateData, 'carro'>>({
     fechaMantenimiento: initialData?.fechaMantenimiento || '',
     kilometraje: initialData?.kilometraje || 0,
     tipoMantenimiento: initialData?.tipoMantenimiento || 'PREVENTIVO',
@@ -25,8 +25,8 @@ export default function MantenimientoForm({ onSubmit, initialData, isEditing = f
 
   useEffect(() => {
     if (initialData) {
+      setPlaca(initialData.placaCarro);
       setFormData({
-        placaCarro: initialData.placaCarro,
         fechaMantenimiento: initialData.fechaMantenimiento,
         kilometraje: initialData.kilometraje,
         tipoMantenimiento: initialData.tipoMantenimiento,
@@ -44,7 +44,7 @@ export default function MantenimientoForm({ onSubmit, initialData, isEditing = f
     setIsSubmitting(true);
 
     // Validaciones
-    if (!formData.placaCarro.match(/^[A-Z]{3}-[0-9]{3}$/)) {
+    if (!placa.match(/^[A-Z]{3}-[0-9]{3}$/)) {
       setError('La placa debe tener el formato ABC-123');
       setIsSubmitting(false);
       return;
@@ -69,7 +69,14 @@ export default function MantenimientoForm({ onSubmit, initialData, isEditing = f
     }
 
     try {
-      await onSubmit(formData);
+      // Construir el objeto completo con el formato que espera el backend
+      const dataToSend: MantenimientoCreateData = {
+        carro: {
+          placa: placa
+        },
+        ...formData
+      };
+      await onSubmit(dataToSend);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al enviar el formulario');
     } finally {
@@ -133,8 +140,8 @@ export default function MantenimientoForm({ onSubmit, initialData, isEditing = f
           type="text"
           id="placaCarro"
           name="placaCarro"
-          value={formData.placaCarro}
-          onChange={handleChange}
+          value={placa}
+          onChange={(e) => setPlaca(e.target.value.toUpperCase())}
           placeholder="ABC-123"
           pattern="[A-Z]{3}-[0-9]{3}"
           required

@@ -6,8 +6,8 @@ import { TIPOS_MANTENIMIENTO } from '../types/Mantenimiento';
 
 export default function CrearMantenimiento() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<MantenimientoCreateData>({
-    placaCarro: '',
+  const [placa, setPlaca] = useState('');
+  const [formData, setFormData] = useState<Omit<MantenimientoCreateData, 'carro'>>({
     fechaMantenimiento: '',
     kilometraje: 0,
     tipoMantenimiento: 'PREVENTIVO',
@@ -58,7 +58,7 @@ export default function CrearMantenimiento() {
     setIsSubmitting(true);
 
     // Validaciones
-    if (!formData.placaCarro.match(/^[A-Z]{3}-[0-9]{3}$/)) {
+    if (!placa.match(/^[A-Z]{3}-[0-9]{3}$/)) {
       setError('La placa debe tener el formato ABC-123');
       setIsSubmitting(false);
       return;
@@ -83,7 +83,14 @@ export default function CrearMantenimiento() {
     }
 
     try {
-      await createMantenimiento(formData);
+      // Construir el objeto completo con el formato que espera el backend
+      const dataToSend: MantenimientoCreateData = {
+        carro: {
+          placa: placa
+        },
+        ...formData
+      };
+      await createMantenimiento(dataToSend);
       alert('Mantenimiento creado exitosamente');
       navigate('/mantenimientos');
     } catch (err) {
@@ -153,8 +160,8 @@ export default function CrearMantenimiento() {
                     type="text"
                     id="placaCarro"
                     name="placaCarro"
-                    value={formData.placaCarro}
-                    onChange={handleChange}
+                    value={placa}
+                    onChange={(e) => setPlaca(e.target.value.toUpperCase())}
                     placeholder="ABC-123"
                     pattern="[A-Z]{3}-[0-9]{3}"
                     required

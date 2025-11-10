@@ -10,8 +10,10 @@ export default function ListarCarros() {
   const [error, setError] = useState<string>('');
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' }>({ text: '', type: 'success' });
 
-  // UN SOLO FILTRO: por marca
+  // FILTROS MÚLTIPLES: marca, color, modelo
   const [filtroMarca, setFiltroMarca] = useState<string>('');
+  const [filtroColor, setFiltroColor] = useState<string>('');
+  const [filtroModelo, setFiltroModelo] = useState<string>('');
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,10 +36,10 @@ export default function ListarCarros() {
     cargarCarros();
   }, []);
 
-  // Apply filter whenever filtroMarca changes
+  // Apply filter whenever any filter changes
   useEffect(() => {
     aplicarFiltro();
-  }, [filtroMarca, carros]);
+  }, [filtroMarca, filtroColor, filtroModelo, carros]);
 
   const cargarCarros = async () => {
     setIsLoading(true);
@@ -56,19 +58,45 @@ export default function ListarCarros() {
   };
 
   const aplicarFiltro = () => {
-    if (!filtroMarca.trim()) {
+    // Si no hay filtros, mostrar todos
+    if (!filtroMarca.trim() && !filtroColor.trim() && !filtroModelo.trim()) {
       setFilteredCarros(carros);
       return;
     }
 
-    const filtered = carros.filter(carro =>
-      carro.marca?.toLowerCase().includes(filtroMarca.toLowerCase())
-    );
+    // Aplicar filtros combinados (AND)
+    const filtered = carros.filter(carro => {
+      const cumpleMarca = !filtroMarca.trim() ||
+        carro.marca?.toLowerCase().includes(filtroMarca.toLowerCase());
+
+      const cumpleColor = !filtroColor.trim() ||
+        carro.color?.toLowerCase().includes(filtroColor.toLowerCase());
+
+      const cumpleModelo = !filtroModelo.trim() ||
+        carro.modelo?.toLowerCase().includes(filtroModelo.toLowerCase());
+
+      return cumpleMarca && cumpleColor && cumpleModelo;
+    });
+
     setFilteredCarros(filtered);
   };
 
   const limpiarFiltro = () => {
     setFiltroMarca('');
+    setFiltroColor('');
+    setFiltroModelo('');
+  };
+
+  const hayFiltrosActivos = () => {
+    return filtroMarca.trim() || filtroColor.trim() || filtroModelo.trim();
+  };
+
+  const getFiltrosAplicados = (): string[] => {
+    const filtros = [];
+    if (filtroMarca.trim()) filtros.push(`Marca: ${filtroMarca}`);
+    if (filtroColor.trim()) filtros.push(`Color: ${filtroColor}`);
+    if (filtroModelo.trim()) filtros.push(`Modelo: ${filtroModelo}`);
+    return filtros;
   };
 
   const getSortedCarros = (carrosList: Carro[]): Carro[] => {
@@ -169,26 +197,79 @@ export default function ListarCarros() {
           </div>
         )}
 
-        {/* FILTRO SIMPLE - UN SOLO PARÁMETRO */}
+        {/* FILTROS AVANZADOS - MARCA, COLOR, MODELO */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 mb-6 p-6">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-6">
             <div className="p-2 bg-blue-100 rounded-lg">
               <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-gray-900">Filtrar por Marca</h3>
+            <h3 className="text-xl font-bold text-gray-900">Filtros Avanzados</h3>
           </div>
 
-          <div className="flex gap-3">
-            <input
-              type="text"
-              value={filtroMarca}
-              onChange={(e) => setFiltroMarca(e.target.value)}
-              placeholder="Ingrese marca del vehículo (ej: Toyota, Mazda, Chevrolet...)"
-              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            />
-            {filtroMarca && (
+          {/* Inputs de filtros */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label htmlFor="filtroMarca" className="block text-sm font-medium text-gray-700 mb-2">
+                Marca
+              </label>
+              <input
+                id="filtroMarca"
+                type="text"
+                value={filtroMarca}
+                onChange={(e) => setFiltroMarca(e.target.value)}
+                placeholder="Ej: Toyota, Mazda..."
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="filtroColor" className="block text-sm font-medium text-gray-700 mb-2">
+                Color
+              </label>
+              <input
+                id="filtroColor"
+                type="text"
+                value={filtroColor}
+                onChange={(e) => setFiltroColor(e.target.value)}
+                placeholder="Ej: Blanco, Negro..."
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="filtroModelo" className="block text-sm font-medium text-gray-700 mb-2">
+                Modelo
+              </label>
+              <input
+                id="filtroModelo"
+                type="text"
+                value={filtroModelo}
+                onChange={(e) => setFiltroModelo(e.target.value)}
+                placeholder="Ej: Corolla, Civic..."
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Botón limpiar y mensaje de filtros activos */}
+          <div className="flex items-center justify-between">
+            {hayFiltrosActivos() ? (
+              <div className="flex-1">
+                <p className="text-sm text-gray-600">
+                  Filtros activos: <strong className="text-blue-600">{getFiltrosAplicados().join(', ')}</strong>
+                </p>
+              </div>
+            ) : (
+              <div className="flex-1">
+                <p className="text-sm text-gray-500 italic">
+                  Sin filtros aplicados - mostrando todos los vehículos
+                </p>
+              </div>
+            )}
+
+            {hayFiltrosActivos() && (
               <button
                 onClick={limpiarFiltro}
                 className="inline-flex items-center gap-2 px-6 py-2.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all font-medium"
@@ -196,16 +277,10 @@ export default function ListarCarros() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                Limpiar
+                Limpiar Filtros
               </button>
             )}
           </div>
-
-          {filtroMarca && (
-            <p className="mt-3 text-sm text-gray-600">
-              Filtrado por marca: <strong className="text-blue-600">{filtroMarca}</strong>
-            </p>
-          )}
         </div>
 
         {/* Results Section */}
@@ -244,7 +319,9 @@ export default function ListarCarros() {
                 <>
                   <div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">No se encontraron resultados</h3>
-                    <p className="text-gray-600 mb-4">No hay vehículos con la marca: <strong>{filtroMarca}</strong></p>
+                    <p className="text-gray-600 mb-4">
+                      No hay vehículos que coincidan con los filtros: <strong>{getFiltrosAplicados().join(', ')}</strong>
+                    </p>
                   </div>
                   <button
                     onClick={limpiarFiltro}
@@ -253,7 +330,7 @@ export default function ListarCarros() {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    Limpiar Filtro
+                    Limpiar Filtros
                   </button>
                 </>
               )}

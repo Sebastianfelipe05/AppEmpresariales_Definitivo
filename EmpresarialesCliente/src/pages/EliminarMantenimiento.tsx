@@ -54,7 +54,7 @@ export default function EliminarMantenimiento() {
     try {
       setLoading(true);
       setError('');
-      await deleteMantenimiento(mantenimiento.id);
+      await deleteMantenimiento(String(mantenimiento.id));
       alert('Mantenimiento eliminado exitosamente');
       setMantenimiento(null);
       setId('');
