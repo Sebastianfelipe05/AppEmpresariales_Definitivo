@@ -36,11 +36,6 @@ export default function ListarCarros() {
     cargarCarros();
   }, []);
 
-  // Apply filter whenever any filter changes
-  useEffect(() => {
-    aplicarFiltro();
-  }, [filtroMarca, filtroColor, filtroModelo, carros]);
-
   const cargarCarros = async () => {
     setIsLoading(true);
     setError('');
@@ -85,6 +80,13 @@ export default function ListarCarros() {
     setFiltroMarca('');
     setFiltroColor('');
     setFiltroModelo('');
+    setFilteredCarros(carros);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      aplicarFiltro();
+    }
   };
 
   const hayFiltrosActivos = () => {
@@ -219,6 +221,7 @@ export default function ListarCarros() {
                 type="text"
                 value={filtroMarca}
                 onChange={(e) => setFiltroMarca(e.target.value)}
+                onKeyPress={handleKeyPress}
                 placeholder="Ej: Toyota, Mazda..."
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
@@ -233,6 +236,7 @@ export default function ListarCarros() {
                 type="text"
                 value={filtroColor}
                 onChange={(e) => setFiltroColor(e.target.value)}
+                onKeyPress={handleKeyPress}
                 placeholder="Ej: Blanco, Negro..."
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
@@ -247,38 +251,46 @@ export default function ListarCarros() {
                 type="text"
                 value={filtroModelo}
                 onChange={(e) => setFiltroModelo(e.target.value)}
+                onKeyPress={handleKeyPress}
                 placeholder="Ej: Corolla, Civic..."
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
           </div>
 
-          {/* Botón limpiar y mensaje de filtros activos */}
-          <div className="flex items-center justify-between">
-            {hayFiltrosActivos() ? (
-              <div className="flex-1">
-                <p className="text-sm text-gray-600">
-                  Filtros activos: <strong className="text-blue-600">{getFiltrosAplicados().join(', ')}</strong>
-                </p>
-              </div>
-            ) : (
-              <div className="flex-1">
-                <p className="text-sm text-gray-500 italic">
-                  Sin filtros aplicados - mostrando todos los vehículos
-                </p>
-              </div>
-            )}
+          {/* Botones de acción */}
+          <div className="flex flex-wrap gap-3 mb-4">
+            <button
+              onClick={aplicarFiltro}
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all font-medium shadow-sm"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              Aplicar Filtros
+            </button>
 
-            {hayFiltrosActivos() && (
-              <button
-                onClick={limpiarFiltro}
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all font-medium"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                Limpiar Filtros
-              </button>
+            <button
+              onClick={limpiarFiltro}
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all font-medium"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Limpiar Filtros
+            </button>
+          </div>
+
+          {/* Mensaje de filtros activos */}
+          <div>
+            {hayFiltrosActivos() ? (
+              <p className="text-sm text-gray-600">
+                Filtros activos: <strong className="text-blue-600">{getFiltrosAplicados().join(', ')}</strong>
+              </p>
+            ) : (
+              <p className="text-sm text-gray-500 italic">
+                Sin filtros aplicados - mostrando todos los vehículos
+              </p>
             )}
           </div>
         </div>
