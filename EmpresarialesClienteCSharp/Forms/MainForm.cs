@@ -97,6 +97,9 @@ namespace EmpresarialesClienteCSharp.Forms
             conductoresMenu.DropDownItems.Add(new ToolStripSeparator());
             conductoresMenu.DropDownItems.Add("📋 Listar Conductores", null, AbrirFormListarConductores);
             conductoresMenu.DropDownItems.Add("🔍 Buscar por Cédula", null, AbrirFormBuscarConductor);
+            conductoresMenu.DropDownItems.Add(new ToolStripSeparator());
+            conductoresMenu.DropDownItems.Add("✏️ Actualizar Conductor", null, AbrirFormActualizarConductor);
+            conductoresMenu.DropDownItems.Add("🗑️ Eliminar Conductor", null, AbrirFormEliminarConductor);
 
             // Menú Ayuda
             var ayudaMenu = new ToolStripMenuItem("❓ Ayuda");
@@ -556,6 +559,36 @@ namespace EmpresarialesClienteCSharp.Forms
         {
             var formBuscar = new BuscarConductorForm();
             formBuscar.ShowDialog();
+        }
+
+        private void AbrirFormActualizarConductor(object? sender, EventArgs e)
+        {
+            // Solicitar la cédula del conductor a actualizar
+            string cedula = Microsoft.VisualBasic.Interaction.InputBox(
+                "Ingrese la cédula del conductor a actualizar:",
+                "Actualizar Conductor",
+                "");
+
+            if (!string.IsNullOrWhiteSpace(cedula))
+            {
+                var formActualizar = new ActualizarConductorForm(cedula.Trim());
+                formActualizar.ShowDialog();
+            }
+        }
+
+        private void AbrirFormEliminarConductor(object? sender, EventArgs e)
+        {
+            // Solicitar la cédula del conductor a eliminar
+            string cedula = Microsoft.VisualBasic.Interaction.InputBox(
+                "Ingrese la cédula del conductor a eliminar:",
+                "Eliminar Conductor",
+                "");
+
+            if (!string.IsNullOrWhiteSpace(cedula))
+            {
+                var formEliminar = new EliminarConductorForm(cedula.Trim());
+                formEliminar.ShowDialog();
+            }
         }
         #endregion
 

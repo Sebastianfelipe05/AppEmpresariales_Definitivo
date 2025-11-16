@@ -165,7 +165,7 @@ namespace EmpresarialesClienteCSharp.Forms
                 Font = new Font("Segoe UI", 10),
                 Location = new Point(200, 310),
                 Size = new Size(350, 25),
-                Minimum = 0,
+                Minimum = 1,
                 Maximum = 999999999,
                 DecimalPlaces = 0,
                 ThousandsSeparator = true,
@@ -273,6 +273,51 @@ namespace EmpresarialesClienteCSharp.Forms
                 MessageBox.Show("El número de licencia es obligatorio", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtLicencia.Focus();
+                return;
+            }
+
+            // Validar formato de cédula (solo números, 6-20 dígitos)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtCedula.Text, @"^\d{6,20}$"))
+            {
+                MessageBox.Show("La cédula debe contener solo números (entre 6 y 20 dígitos)", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtCedula.Focus();
+                return;
+            }
+
+            // Validar formato de teléfono (solo números, 7-20 dígitos)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtTelefono.Text, @"^\d{7,20}$"))
+            {
+                MessageBox.Show("El teléfono debe contener solo números (entre 7 y 20 dígitos)", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTelefono.Focus();
+                return;
+            }
+
+            // Validar longitud de licencia (5-50 caracteres)
+            if (txtLicencia.Text.Length < 5 || txtLicencia.Text.Length > 50)
+            {
+                MessageBox.Show("El número de licencia debe tener entre 5 y 50 caracteres", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtLicencia.Focus();
+                return;
+            }
+
+            // Validar fecha de nacimiento (debe ser en el pasado)
+            if (dtpFechaNacimiento.Value >= DateTime.Now)
+            {
+                MessageBox.Show("La fecha de nacimiento debe ser en el pasado", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dtpFechaNacimiento.Focus();
+                return;
+            }
+
+            // Validar salario (debe ser mayor a 0)
+            if (numSalario.Value <= 0)
+            {
+                MessageBox.Show("El salario debe ser mayor a 0", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                numSalario.Focus();
                 return;
             }
 

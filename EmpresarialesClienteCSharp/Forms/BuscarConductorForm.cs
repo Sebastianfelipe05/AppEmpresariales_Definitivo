@@ -232,7 +232,6 @@ namespace EmpresarialesClienteCSharp.Forms
 
             txtEstado = new TextBox
             {
-                Font = new Font("Segoe UI", 10),
                 Location = new Point(180, 245),
                 Size = new Size(380, 25),
                 ReadOnly = true,

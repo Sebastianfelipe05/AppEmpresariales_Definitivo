@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\EmpresarialesClienteCSharp.csproj": {}
+    "c:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\EmpresarialesClienteCSharp.csproj": {}
   },
   "projects": {
-    "C:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\EmpresarialesClienteCSharp.csproj": {
+    "c:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\EmpresarialesClienteCSharp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\EmpresarialesClienteCSharp.csproj",
+        "projectUniqueName": "c:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\EmpresarialesClienteCSharp.csproj",
         "projectName": "EmpresarialesClienteCSharp",
-        "projectPath": "C:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\EmpresarialesClienteCSharp.csproj",
+        "projectPath": "c:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\EmpresarialesClienteCSharp.csproj",
         "packagesPath": "C:\\Users\\Sebastian\\.nuget\\packages\\",
-        "outputPath": "C:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\obj\\",
+        "outputPath": "c:\\src\\EmpresarialesProyecto\\EmpresarialesClienteCSharp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Sebastian\\AppData\\Roaming\\NuGet\\NuGet.Config"

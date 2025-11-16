@@ -24,8 +24,11 @@ export default function ActualizarConductor() {
   });
 
   useEffect(() => {
-    if (cedula) {
+    if (cedula && cedula.trim() !== '') {
       loadConductor(cedula);
+    } else if (!cedula) {
+      setIsFetching(false);
+      setError('No se especificó una cédula válida en la URL');
     }
   }, [cedula]);
 

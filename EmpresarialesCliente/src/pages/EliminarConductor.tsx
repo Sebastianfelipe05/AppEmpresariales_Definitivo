@@ -13,8 +13,11 @@ export default function EliminarConductor() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (cedula) {
+    if (cedula && cedula.trim() !== '') {
       loadConductor(cedula);
+    } else if (!cedula) {
+      setIsFetching(false);
+      setError('No se especificó una cédula válida en la URL');
     }
   }, [cedula]);
 

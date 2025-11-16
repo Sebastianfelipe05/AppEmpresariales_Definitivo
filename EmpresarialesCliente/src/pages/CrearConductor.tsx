@@ -16,7 +16,7 @@ export default function CrearConductor() {
     telefono: '',
     licenciaNumero: '',
     fechaNacimiento: '',
-    salario: 0,
+    salario: 1000000, // Valor inicial válido
     activo: true
   });
 
@@ -88,12 +88,15 @@ export default function CrearConductor() {
 
         {/* Messages */}
         {error && (
-          <div className="rounded-xl p-4 mb-6 bg-red-50 border border-red-200">
+          <div className="rounded-xl p-5 mb-6 bg-red-50 border-2 border-red-300 shadow-lg animate-shake">
             <div className="flex items-start gap-3">
-              <svg className="w-5 h-5 text-red-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg className="w-6 h-6 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <p className="text-red-800 font-medium">{error}</p>
+              <div className="flex-1">
+                <p className="text-red-900 font-bold text-lg mb-1">Error al crear conductor</p>
+                <p className="text-red-800">{error}</p>
+              </div>
             </div>
           </div>
         )}
@@ -124,9 +127,12 @@ export default function CrearConductor() {
                   value={formData.cedula}
                   onChange={handleChange}
                   required
+                  pattern="[0-9]{6,20}"
+                  title="Solo números, entre 6 y 20 dígitos"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Ej: 1098765432"
                 />
+                <p className="text-xs text-gray-500 mt-1">Solo números, entre 6 y 20 dígitos</p>
               </div>
 
               {/* Nombre */}
@@ -172,9 +178,12 @@ export default function CrearConductor() {
                   value={formData.telefono}
                   onChange={handleChange}
                   required
+                  pattern="[0-9]{7,20}"
+                  title="Solo números, entre 7 y 20 dígitos"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Ej: 3201234567"
                 />
+                <p className="text-xs text-gray-500 mt-1">Solo números, entre 7 y 20 dígitos</p>
               </div>
 
               {/* Licencia */}
@@ -188,9 +197,12 @@ export default function CrearConductor() {
                   value={formData.licenciaNumero}
                   onChange={handleChange}
                   required
+                  minLength={5}
+                  maxLength={50}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Ej: LIC-2024-001"
                 />
+                <p className="text-xs text-gray-500 mt-1">Entre 5 y 50 caracteres</p>
               </div>
 
               {/* Fecha Nacimiento */}
@@ -220,11 +232,12 @@ export default function CrearConductor() {
                   value={formData.salario}
                   onChange={handleChange}
                   required
-                  min="0"
-                  step="0.01"
+                  min="1"
+                  step="1"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="Ej: 2500000"
                 />
+                <p className="text-xs text-gray-500 mt-1">Debe ser mayor que 0</p>
               </div>
 
               {/* Activo */}

@@ -32,8 +32,8 @@ public class ConductorProxyService {
 
     private final RestTemplate restTemplate;
 
-    public ConductorProxyService() {
-        this.restTemplate = new RestTemplate();
+    public ConductorProxyService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -258,11 +258,12 @@ public class ConductorProxyService {
             HttpHeaders headers = createHeaders();
             HttpEntity<String> request = new HttpEntity<>(headers);
 
+            // El microservicio devuelve JSON, no String simple
             restTemplate.exchange(
                 conductorServiceUrl + "/" + cedula,
                 HttpMethod.DELETE,
                 request,
-                String.class
+                Object.class  // Cambiar de String.class a Object.class para manejar JSON
             );
 
             log.info("Proxy: Conductor eliminado exitosamente - {}", cedula);
@@ -272,7 +273,12 @@ public class ConductorProxyService {
             throw new RuntimeException("Conductor no encontrado: " + cedula);
         } catch (Exception e) {
             log.error("Proxy: Error al eliminar conductor: {}", e.getMessage());
-            throw new RuntimeException("Error al eliminar conductor: " + e.getMessage());
+            // No lanzar error si el status code fue exitoso
+            if (!e.getMessage().contains("Error while extracting response")) {
+                throw new RuntimeException("Error al eliminar conductor: " + e.getMessage());
+            }
+            // Si es solo un error de extracción pero se eliminó, continuar
+            log.warn("Proxy: Conductor eliminado pero hubo error al extraer respuesta");
         }
     }
 

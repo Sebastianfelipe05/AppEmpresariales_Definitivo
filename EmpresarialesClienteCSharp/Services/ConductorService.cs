@@ -55,7 +55,45 @@ namespace EmpresarialesClienteCSharp.Services
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Error al crear conductor: {response.StatusCode} - {errorContent}");
+
+                    // Mejorar mensajes de error específicos
+                    string errorMessage = errorContent;
+
+                    if (errorContent.Contains("CEDULA") || errorContent.Contains("cedula") || errorContent.Contains("ConstraintViolation"))
+                    {
+                        errorMessage = "❌ Esta cédula ya está registrada en el sistema";
+                    }
+                    else if (errorContent.Contains("LICENCIA") || errorContent.Contains("licencia"))
+                    {
+                        errorMessage = "❌ Este número de licencia ya está registrado en el sistema";
+                    }
+                    else if (errorContent.Contains("fechaNacimiento") || errorContent.Contains("debe ser en el pasado"))
+                    {
+                        errorMessage = "❌ La fecha de nacimiento debe ser en el pasado";
+                    }
+                    else if (errorContent.Contains("salario"))
+                    {
+                        errorMessage = "❌ El salario debe ser un valor positivo mayor a 0";
+                    }
+                    else if (errorContent.Contains("cédula debe contener"))
+                    {
+                        errorMessage = "❌ La cédula debe contener solo números (6 a 20 dígitos)";
+                    }
+                    else if (errorContent.Contains("teléfono debe contener"))
+                    {
+                        errorMessage = "❌ El teléfono debe contener solo números (7 a 20 dígitos)";
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    {
+                        errorMessage = "❌ Los datos ingresados no cumplen con las validaciones requeridas. Verifique:\n" +
+                                      "• Cédula: solo números (6-20 dígitos), única\n" +
+                                      "• Teléfono: solo números (7-20 dígitos)\n" +
+                                      "• Licencia: 5-50 caracteres, única\n" +
+                                      "• Fecha nacimiento: debe ser en el pasado\n" +
+                                      "• Salario: mayor a 0";
+                    }
+
+                    throw new Exception($"Error al crear conductor: {errorMessage}");
                 }
             }
             catch (Exception ex)
@@ -190,7 +228,36 @@ namespace EmpresarialesClienteCSharp.Services
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Error al actualizar conductor: {response.StatusCode} - {errorContent}");
+
+                    // Mejorar mensajes de error específicos
+                    string errorMessage = errorContent;
+
+                    if (errorContent.Contains("LICENCIA") || errorContent.Contains("licencia"))
+                    {
+                        errorMessage = "❌ Este número de licencia ya está registrado en el sistema";
+                    }
+                    else if (errorContent.Contains("fechaNacimiento") || errorContent.Contains("debe ser en el pasado"))
+                    {
+                        errorMessage = "❌ La fecha de nacimiento debe ser en el pasado";
+                    }
+                    else if (errorContent.Contains("salario"))
+                    {
+                        errorMessage = "❌ El salario debe ser un valor positivo mayor a 0";
+                    }
+                    else if (errorContent.Contains("teléfono debe contener"))
+                    {
+                        errorMessage = "❌ El teléfono debe contener solo números (7 a 20 dígitos)";
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    {
+                        errorMessage = "❌ Los datos ingresados no cumplen con las validaciones requeridas. Verifique:\n" +
+                                      "• Teléfono: solo números (7-20 dígitos)\n" +
+                                      "• Licencia: 5-50 caracteres, única\n" +
+                                      "• Fecha nacimiento: debe ser en el pasado\n" +
+                                      "• Salario: mayor a 0";
+                    }
+
+                    throw new Exception($"Error al actualizar conductor: {errorMessage}");
                 }
             }
             catch (Exception ex)
