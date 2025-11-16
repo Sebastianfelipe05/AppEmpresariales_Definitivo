@@ -91,11 +91,18 @@ namespace EmpresarialesClienteCSharp.Forms
             mantenimientosMenu.DropDownItems.Add("✏️ Actualizar Mantenimiento", null, AbrirFormActualizarMantenimiento);
             mantenimientosMenu.DropDownItems.Add("🗑️ Eliminar Mantenimiento", null, AbrirFormEliminarMantenimiento);
 
+            // Menú Conductores
+            var conductoresMenu = new ToolStripMenuItem("👤 Conductores");
+            conductoresMenu.DropDownItems.Add("➕ Registrar Conductor", null, AbrirFormCrearConductor);
+            conductoresMenu.DropDownItems.Add(new ToolStripSeparator());
+            conductoresMenu.DropDownItems.Add("📋 Listar Conductores", null, AbrirFormListarConductores);
+            conductoresMenu.DropDownItems.Add("🔍 Buscar por Cédula", null, AbrirFormBuscarConductor);
+
             // Menú Ayuda
             var ayudaMenu = new ToolStripMenuItem("❓ Ayuda");
             ayudaMenu.DropDownItems.Add("ℹ️ Acerca de...", null, MostrarAcercaDe);
 
-            menuStrip.Items.AddRange(new[] { archivoMenu, carrosMenu, mantenimientosMenu, ayudaMenu });
+            menuStrip.Items.AddRange(new[] { archivoMenu, carrosMenu, mantenimientosMenu, conductoresMenu, ayudaMenu });
             this.Controls.Add(menuStrip);
             this.MainMenuStrip = menuStrip;
         }
@@ -529,6 +536,26 @@ namespace EmpresarialesClienteCSharp.Forms
         {
             var formAcercaDe = new AcercaDeForm();
             formAcercaDe.ShowDialog();
+        }
+        #endregion
+
+        #region Event Handlers - Conductores
+        private void AbrirFormCrearConductor(object? sender, EventArgs e)
+        {
+            var formCrear = new CrearConductorForm();
+            formCrear.ShowDialog();
+        }
+
+        private void AbrirFormListarConductores(object? sender, EventArgs e)
+        {
+            var formListar = new ListarConductoresForm();
+            formListar.ShowDialog();
+        }
+
+        private void AbrirFormBuscarConductor(object? sender, EventArgs e)
+        {
+            var formBuscar = new BuscarConductorForm();
+            formBuscar.ShowDialog();
         }
         #endregion
 

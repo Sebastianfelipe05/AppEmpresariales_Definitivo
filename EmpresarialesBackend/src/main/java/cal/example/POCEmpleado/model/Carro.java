@@ -34,6 +34,12 @@ public class Carro extends Vehiculo {
     @Pattern(regexp = "MANUAL|AUTOMATICA", message = "El tipo de transmisión debe ser MANUAL o AUTOMATICA")
     private String tipoTransmision;
 
+    // ===== REFERENCIA AL CONDUCTOR (MICROSERVICIO EXTERNO) =====
+    // Almacena la cédula del conductor como referencia lógica
+    // No es una relación JPA directa porque el conductor está en otra base de datos
+    @Column(name = "cedula_conductor", length = 20)
+    private String cedulaConductor;
+
     // ===== RELACIÓN @OneToMany CON MANTENIMIENTO =====
     // Un CARRO puede tener MUCHOS Mantenimientos
     @OneToMany(mappedBy = "carro", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -136,6 +142,14 @@ public class Carro extends Vehiculo {
 
     public void setTipoTransmision(String tipoTransmision) {
         this.tipoTransmision = tipoTransmision;
+    }
+
+    public String getCedulaConductor() {
+        return cedulaConductor;
+    }
+
+    public void setCedulaConductor(String cedulaConductor) {
+        this.cedulaConductor = cedulaConductor;
     }
 
     // Getters y Setters para la relación

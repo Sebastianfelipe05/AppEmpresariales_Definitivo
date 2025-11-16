@@ -61,7 +61,11 @@ CREATE TABLE CARRO (
     tiene_aire_acondicionado NUMBER(1) DEFAULT 0 CHECK (tiene_aire_acondicionado IN (0, 1)),
     precio NUMBER(15,2) CHECK (precio > 0),
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    tipo_transmision VARCHAR2(20) CHECK (tipo_transmision IN ('MANUAL', 'AUTOMATICA'))
+    tipo_transmision VARCHAR2(20) CHECK (tipo_transmision IN ('MANUAL', 'AUTOMATICA')),
+
+    -- Referencia al Conductor (Microservicio externo)
+    -- Almacena la cédula del conductor como referencia lógica
+    cedula_conductor VARCHAR2(20)
 );
 
 -- TABLA DETALLE: MANTENIMIENTO

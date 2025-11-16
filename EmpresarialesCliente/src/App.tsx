@@ -12,6 +12,11 @@ import ListarMantenimientos from './pages/ListarMantenimientos';
 import BuscarMantenimiento from './pages/BuscarMantenimiento';
 import ActualizarMantenimiento from './pages/ActualizarMantenimiento';
 import EliminarMantenimiento from './pages/EliminarMantenimiento';
+import CrearConductor from './pages/CrearConductor';
+import ListarConductores from './pages/ListarConductores';
+import BuscarConductor from './pages/BuscarConductor';
+import ActualizarConductor from './pages/ActualizarConductor';
+import EliminarConductor from './pages/EliminarConductor';
 
 // Home Page Component
 const HomePage = () => {
@@ -304,6 +309,63 @@ const HomePage = () => {
                 </button>
               </div>
             </div>
+
+            {/* Conductores Management Section */}
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900">Gestión de Conductores</h3>
+                  <p className="text-sm text-gray-500">Control de conductores del sistema</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button
+                  onClick={() => navigate('/conductores/listar')}
+                  className="group bg-white hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100 border-2 border-gray-200 hover:border-green-300 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-green-100 group-hover:bg-green-200 rounded-xl transition-colors">
+                      <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                    <div className="text-left flex-1">
+                      <h4 className="text-lg font-bold text-gray-900 mb-1">Ver Conductores</h4>
+                      <p className="text-sm text-gray-600">Listado de conductores</p>
+                    </div>
+                    <svg className="w-5 h-5 text-gray-400 group-hover:text-green-600 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => navigate('/conductores/crear')}
+                  className="group bg-white hover:bg-gradient-to-br hover:from-emerald-50 hover:to-emerald-100 border-2 border-gray-200 hover:border-emerald-300 rounded-2xl p-6 transition-all duration-300 hover:shadow-xl"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-emerald-100 group-hover:bg-emerald-200 rounded-xl transition-colors">
+                      <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                      </svg>
+                    </div>
+                    <div className="text-left flex-1">
+                      <h4 className="text-lg font-bold text-gray-900 mb-1">Registrar Conductor</h4>
+                      <p className="text-sm text-gray-600">Agregar nuevo conductor</p>
+                    </div>
+                    <svg className="w-5 h-5 text-gray-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -378,6 +440,20 @@ const AppNavigation = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <span className="hidden sm:inline">Mantenimiento</span>
+              </button>
+
+              <button
+                onClick={() => navigate('/conductores/listar')}
+                className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
+                  location.pathname.includes('/conductores')
+                    ? 'bg-green-50 text-green-600'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span className="hidden sm:inline">Conductores</span>
               </button>
 
               <button
@@ -521,6 +597,11 @@ function App() {
             <Route path="/mantenimientos/buscar" element={<BuscarMantenimiento />} />
             <Route path="/mantenimientos/actualizar" element={<ActualizarMantenimiento />} />
             <Route path="/mantenimientos/eliminar" element={<EliminarMantenimiento />} />
+            <Route path="/conductores/listar" element={<ListarConductores />} />
+            <Route path="/conductores/crear" element={<CrearConductor />} />
+            <Route path="/conductores/buscar" element={<BuscarConductor />} />
+            <Route path="/conductores/actualizar/:cedula" element={<ActualizarConductor />} />
+            <Route path="/conductores/eliminar/:cedula" element={<EliminarConductor />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
